@@ -3,7 +3,7 @@ import userDefaultImg from "../assets/images/user.png";
 import "../assets/styles/navbar.css";
 
 export default function navbar(header) {
-  const user = JSON.parse(localStorage.getItem("currentUser") || "true");
+  const user = JSON.parse(localStorage.getItem("currentUser") || "false");
   const isLoggedIn = !!user;
 
   let authLinks = "";
