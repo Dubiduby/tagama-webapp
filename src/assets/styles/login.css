@@ -23,6 +23,14 @@
   margin-bottom: 0.2rem;
 }
 
+.login-title {
+  text-align: center;
+  font-size: 2rem;
+  font-weight: 700;
+  color: #6c63ff;
+  margin-bottom: 18px;
+}
+
 .login-form input[type="email"],
 .login-form input[type="password"] {
   padding: 0.7rem 1rem;
