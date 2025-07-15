@@ -1,6 +1,6 @@
 import "../assets/styles/notFound.css";
 
 export default function notFound(container) {
-  //Dentro de esta función iría todo el contenido de not found
-  container.innerHTML = "This is the not found page";
+  container.innerHTML = `<h1>404 - Page not found</h1>
+  <h2>Comeback to <a href="/home" data-link/>Home</h2>`;
 }
