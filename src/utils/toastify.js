@@ -1,13 +1,7 @@
 import Toastify from "toastify-js";
 import "toastify-js/src/toastify.css";
 
-export function showToast({
-  text = "Something happened",
-  type = "success",
-  duration = 3000,
-  position = "right",
-  gravity = "top",
-} = {}) {
+export function showToast(text = "Something happened", type = "success") {
   const colors = {
     success: "linear-gradient(to right, #00b09b, #96c93d)",
     error: "linear-gradient(to right, #ff416c, #ff4b2b)",
@@ -17,10 +11,10 @@ export function showToast({
 
   Toastify({
     text,
-    duration,
+    duration: 3000,
     close: true,
-    gravity,
-    position,
+    gravity: "top",
+    position: "right",
     style: {
       background: colors[type] || colors.info,
     },

@@ -3,7 +3,7 @@ import userDefaultImg from "../assets/images/user.png";
 import "../assets/styles/navbar.css";
 
 export default function navbar(header) {
-  const user = JSON.parse(localStorage.getItem("currentUser") || "false");
+  const user = JSON.parse(localStorage.getItem("currentUser") || "null");
   const isLoggedIn = !!user;
 
   let authLinks = "";
@@ -70,7 +70,7 @@ export default function navbar(header) {
     const avatarCircle = header.querySelector(".navbar__avatar-circle");
     if (avatarCircle) {
       const img = document.createElement("img");
-      img.src = user.avatarUrl || userDefaultImg;
+      img.src = user.avatarUrl;
       img.alt = "User avatar";
       img.className = "navbar__avatar";
       avatarCircle.appendChild(img);

@@ -3,9 +3,7 @@ import { getUsers } from "../api/apiUsers";
 import { showToast } from "../utils/toastify";
 import { navigate } from "../router.js";
 
-
 export default function login(container) {
-
   container.innerHTML = "";
 
   const app = document.getElementById("app");
@@ -14,6 +12,11 @@ export default function login(container) {
   loginContainer.classList.add("login-container");
   const loginForm = document.createElement("form");
   loginForm.classList.add("login-form");
+
+  const h1 = document.createElement("h1");
+  h1.id = "login-h1";
+  h1.className = "login-title";
+  h1.textContent = "Login";
 
   //Email
 
@@ -45,6 +48,7 @@ export default function login(container) {
   signupText.classList.add("signup-text");
   signupText.innerHTML = `Don't have an account? <a href="/signup" data-link id="signup-link">Sign up!</a>`;
 
+  loginForm.appendChild(h1);
   loginForm.appendChild(emailLabel);
   loginForm.appendChild(loginEmail);
   loginForm.appendChild(passwordLabel);

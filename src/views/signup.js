@@ -4,7 +4,7 @@ import { showToast } from "../utils/toastify.js";
 import { navigate } from "../router.js";
 
 export default function signUp(container) {
- container.innerHTML = "";
+  container.innerHTML = "";
 
   const newUserDiv = document.createElement("div");
   newUserDiv.classList.add("divNewUser");
@@ -18,11 +18,11 @@ export default function signUp(container) {
   form.id = "divNewUserForm";
   formWrapper.appendChild(form);
 
-  const h2 = document.createElement("h2");
-  h2.id = "signupH2";
-  h2.className = "sign-up-title";
-  h2.textContent = "Sign Up ";
-  form.appendChild(h2);
+  const h1 = document.createElement("h1");
+  h1.id = "signup-h1";
+  h1.className = "sign-up-title";
+  h1.textContent = "Sign Up ";
+  form.appendChild(h1);
 
   const inputName = document.createElement("input");
   inputName.type = "text";
@@ -66,18 +66,17 @@ export default function signUp(container) {
   loginMsgDiv.style.margin = "16px 0 0 0";
   loginMsgDiv.style.textAlign = "center";
 
+  const button = document.createElement("button");
+  button.type = "submit";
+  button.className = "button-login-signup";
+  button.textContent = "Sign up";
+  form.appendChild(button);
+
   const loginText = document.createElement("p");
   loginText.classList.add("login-text");
   loginText.innerHTML = `Already have an account? <a href="/login" data-link id="login-link">Login!</a>`;
 
-
-form.appendChild(loginText);
-
-  const button = document.createElement("button");
-  button.type = "submit";
-  button.className = "button-large button-outline";
-  button.textContent = "SIGN UP";
-  form.appendChild(button);
+  form.appendChild(loginText);
 
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
@@ -90,17 +89,13 @@ form.appendChild(loginText);
       const newUser = {
         signupName,
         signupEmail,
-        signupPassword
+        signupPassword,
       };
-      showToast("Signup User", "success");
+      showToast("Signup successful", "success");
       await createNewUser(newUser);
       navigate("/login");
     } catch (error) {
       console.error("Error creating user:", error);
     }
   });
-
 }
-
-
-
