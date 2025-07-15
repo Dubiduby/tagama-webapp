@@ -42,13 +42,7 @@ export default function login(container) {
 
   const signupText = document.createElement("p");
   signupText.classList.add("signup-text");
-  signupText.innerHTML = `Don't have an account? <a href="#" id="signup-link">Sign up!</a>`;
-
-  const signupLink = signupText.querySelector("#signup-link");
-  signupLink.addEventListener("click", (e) => {
-    e.preventDefault();
-    navigate("/signup");
-  });
+  signupText.innerHTML = `Don't have an account? <a href="/signup" data-link id="signup-link">Sign up!</a>`;
 
   loginForm.appendChild(emailLabel);
   loginForm.appendChild(loginEmail);
