@@ -2,6 +2,8 @@ import "../assets/styles/signup.css";
 import { createNewUser } from "../api/apiUsers.js";
 import { showToast } from "../utils/toastify.js";
 import { navigate } from "../router.js";
+import { showSpinner, hideSpinner } from "../components/spinner.js";
+import { validation } from "../utils/validations.js";
 
 export default function signUp(container) {
   container.innerHTML = "";
@@ -84,16 +86,32 @@ export default function signUp(container) {
       const signupName = inputName.value.trim();
       const signupEmail = inputEmail.value.trim();
       const signupPassword = inputPassword.value.trim();
-      // const signupRepPassword = inputRepPassword.value.trim(para quitar espacios vacios);
+      const signupRepPassword = inputRepPassword.value.trim();
 
-      const newUser = {
-        signupName,
-        signupEmail,
-        signupPassword,
-      };
-      showToast("Signup successful", "success");
-      await createNewUser(newUser);
-      navigate("/login");
+      if (signupPassword !== signupRepPassword) {
+        showToast("Passwords do not match", "error");
+        return;
+      }
+      const isValid = validation({
+        name: signupName,
+        email: signupEmail,
+        password: signupPassword,
+      });
+
+      if (isValid) {
+        const newUser = {
+          signupName,
+          signupEmail,
+          signupPassword,
+        };
+        showSpinner(container);
+
+        await createNewUser(newUser);
+
+        showToast("Signup successful", "success");
+
+        navigate("/login");
+      }
     } catch (error) {
       console.error("Error creating user:", error);
     }
