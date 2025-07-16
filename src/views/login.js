@@ -2,6 +2,7 @@ import "../assets/styles/login.css";
 import { getUsers } from "../api/apiUsers";
 import { showToast } from "../utils/toastify";
 import { navigate } from "../router.js";
+import { showSpinner, hideSpinner } from "../components/spinner.js";
 
 export default function login(container) {
   container.innerHTML = "";
@@ -60,9 +61,15 @@ export default function login(container) {
 
   loginForm.addEventListener("submit", async (event) => {
     event.preventDefault();
+    // Mostrar spinner aquí
 
     const email = loginEmail.value;
     const password = loginPassword.value;
+
+    if (!email || !password) {
+      showToast("Please, complete all fields.", "error");
+      return;
+    }
 
     const users = await getUsers();
 

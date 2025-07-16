@@ -1,7 +1,7 @@
 import "../assets/styles/main.css"
 
 
-export function showSpinner(container, ) {
+export function showSpinner(container,) {
     container.innerHTML = `
     <div id="spinner-container">
     <div class="spinner"></div>
