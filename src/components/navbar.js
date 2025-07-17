@@ -10,6 +10,7 @@ export default function navbar(header) {
   if (isLoggedIn) {
     authLinks = `
       <li><a href="/workshops" data-link>My workshops</a></li>
+      <li><a href="/detail" data-link>Detail</a></li>
       <!-- Avatar y dropdown para desktop -->
       <li class="navbar__avatar-container">
         <button class="navbar__avatar-button" aria-label="User menu">
