@@ -41,3 +41,20 @@ export async function getUsers() {
     return null;
   }
 }
+
+export function getCurrentUser() {
+  try {
+    const loadUser = localStorage.getItem("currentUser");
+
+    if (!loadUser || loadUser === "null" || loadUser === "undefined") {
+      return null;
+    }
+
+    return JSON.parse(loadUser);
+  } catch (error) {
+    console.error("Error parsing currentUser from localStorage:", error);
+
+    localStorage.removeItem("currentUser");
+    return null;
+  }
+}
