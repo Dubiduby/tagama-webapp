@@ -100,12 +100,15 @@ if (currentUser && currentUser.savedWorkshops.includes(workshop.id)) {
 
         uploadUserArrays(currentUser);
     });
-    return card;
+  
+    //added so be able to go to the detail page
+    const cardLink = document.createElement("a");
+    cardLink.href = `/workshops/${workshop.id}`;
+    cardLink.setAttribute("data-link", "");
+    cardLink.appendChild(card);
 
-
-
-
-
+    return cardLink;
 
 
 }
+

@@ -1,28 +1,47 @@
 import "../assets/styles/detail.css";
+import {
+  getCachedWorkshops,
+  getCachedCategories,
+  getCachedSubcategories,
+} from "../utils/cache.js";
+import dayjs from "../utils/day.js";
 
-export default function detail(container) {
+export default async function detail(container, id) {
   // Limpia solo el container, no el body
   container.innerHTML = "";
 
+  const [workshopsCache, categories, subcategories] = await Promise.all([
+    getCachedWorkshops(),
+    getCachedCategories(),
+    getCachedSubcategories(),
+  ]);
+
+  const workshopDetail = workshopsCache.find((item) => item.id === id);
+  const category = categories.find(
+    (item) => Number(item.id) === Number(workshopDetail.categoryId)
+  );
+  const subcategory = subcategories.find(
+    (item) => Number(item.id) === Number(workshopDetail.subcategoryId)
+  );
+  const dateTime = dayjs.unix(workshopDetail.date);
+  const hours = Math.floor(workshopDetail.duration / 60);
+  const minutes = workshopDetail.duration % 60;
+  const formattedDuration =
+    minutes === 0 ? `${hours}h` : `${hours}h ${minutes}min`;
+
   const workshop = {
-    image: "src/assets/images/user.png",
-    price: "149€",
-    date: "Thursday, August 15, 2024",
-    time: "11:00 AM (2 hours)",
-    mode: "Online",
-    spots: "X spots left of X",
-    tags: ["Tech", "Online"],
-    title: "TITLE OF WORKSHOP",
-    instructor: "Name of instructor",
-    overview:
-      "Quodsi habent magnalia inter potentiam et divitias, et non illam quidem haec eo spectant haec quoque vos omnino desit illud quo solo felicitatis libertatisque perficiuntur.",
-    requirements: [
-      "Requirement 1",
-      "Requirement 2",
-      "Requirement 3",
-      "Requirement 4",
-    ],
-    location: "Dirección del workshop",
+    image: `${workshopDetail.imageUrl}`,
+    price: workshopDetail.price,
+    date: dateTime.format("dddd, D MMMM YYYY, HH:mm"),
+    duration: formattedDuration,
+    mode: workshopDetail.mode,
+    spots: `${workshopDetail.enrolled.length} spots left of ${workshopDetail.capacity}`,
+    tags: [subcategory.name, category.name],
+    title: workshopDetail.title,
+    instructor: workshopDetail.instructorName,
+    overview: workshopDetail.overview,
+    requirements: workshopDetail.requirements,
+    location: workshopDetail.address,
   };
 
   // Back link
@@ -107,13 +126,9 @@ export default function detail(container) {
   requirementsDiv.className = "workshop-tab-content";
   requirementsDiv.id = "requirements";
   requirementsDiv.style.display = "none";
-  const reqList = document.createElement("ul");
-  workshop.requirements.forEach((req) => {
-    const li = document.createElement("li");
-    li.textContent = req;
-    reqList.appendChild(li);
-  });
-  requirementsDiv.appendChild(reqList);
+  const reqP = document.createElement("p");
+  reqP.textContent = workshop.requirements;
+  requirementsDiv.appendChild(reqP);
   tabsBox.appendChild(requirementsDiv);
 
   // Añade el box al mainColumn
@@ -141,7 +156,7 @@ export default function detail(container) {
 
   const priceDiv = document.createElement("div");
   priceDiv.className = "workshop-price";
-  priceDiv.textContent = workshop.price;
+  priceDiv.textContent = workshop.price + " €";
   sidebar.appendChild(priceDiv);
 
   // Fecha con icono
@@ -168,7 +183,7 @@ export default function detail(container) {
   clockIcon.style.marginRight = "8px";
   timeDiv.appendChild(clockIcon);
   const timeText = document.createElement("span");
-  timeText.textContent = workshop.time;
+  timeText.textContent = workshop.duration;
   timeDiv.appendChild(timeText);
   sidebar.appendChild(timeDiv);
 

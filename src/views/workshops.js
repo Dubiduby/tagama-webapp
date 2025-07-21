@@ -1,4 +1,11 @@
 import "../assets/styles/workshops.css";
+import { getCurrentUser } from "../api/apiUsers";
+import {
+  getCachedWorkshops,
+  getCachedCategories,
+  getCachedSubcategories,
+} from "../utils/cache.js";
+import { renderWorkshops } from "../utils/renderCards.js";
 
 export default function workshops(container) {
   container.innerHTML = "";
@@ -39,14 +46,46 @@ export default function workshops(container) {
   // dinamic content container
   const tabContent = workshopsWrapper.querySelector("#workshops-tab-content");
 
-  //render the content of the tabs
-  function showTab(tab) {
+  //filter workshops depending of which tab you are
+  function filterWorkshopsByTab(workshops, currentUser, tab) {
     if (tab === "enrolled") {
-      tabContent.innerHTML = "list of enrolled workshops";
-    } else if (tab === "created") {
-      tabContent.innerHTML = "list of created workshops";
-    } else if (tab === "saved") {
-      tabContent.innerHTML = "list of saved workshops";
+      return workshops.filter((workshop) =>
+        currentUser.enrolledWorkshops?.includes(String(workshop.id))
+      );
+    }
+    if (tab === "created") {
+      return workshops.filter(
+        (workshop) => String(workshop.creatorId) === String(currentUser.id)
+      );
+    }
+    if (tab === "saved") {
+      return workshops.filter((workshop) =>
+        currentUser.savedWorkshops?.includes(String(workshop.id))
+      );
+    }
+  }
+
+  //render the content of the tabs
+  async function showTab(tab) {
+    const currentUser = getCurrentUser();
+
+    //It does all the request together so it takes less time
+    const [workshops, categories, subcategories] = await Promise.all([
+      getCachedWorkshops(),
+      getCachedCategories(),
+      getCachedSubcategories(),
+    ]);
+
+    const filteredWorkshops = filterWorkshopsByTab(workshops, currentUser, tab);
+
+    if (filteredWorkshops.length > 0) {
+      renderWorkshops(tabContent, filteredWorkshops, categories, subcategories);
+    } else {
+      let message = "";
+      if (tab === "enrolled") message = "You didn't enroll to any workshop yet";
+      if (tab === "created") message = "You haven't created any workshops yet";
+      if (tab === "saved") message = "You haven't saved any workshops yet";
+      tabContent.innerHTML = `<p>${message}</p>`;
     }
   }
 

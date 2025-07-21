@@ -78,3 +78,4 @@ export async function uploadUserArrays(ArraysToUpdate) {
     console.error("Error creating NewUser", error);
   }
 }
+
