@@ -1,4 +1,5 @@
 import "../assets/styles/main.css";
+import { getCurrentUser, uploadUserArrays } from "../api/apiUsers";
 
 export function workshopCards(workshop, subcategory, category ) {
     const card = document.createElement("div");
@@ -19,6 +20,15 @@ export function workshopCards(workshop, subcategory, category ) {
     buttonAdd.innerHTML = `<img src="${new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href}" alt="Add to the list">`;
     buttonAdd.setAttribute("data-workshop-id", workshop.id);
     buttonAdd.setAttribute("aria-label", "Add to the list");
+
+    const currentUser = getCurrentUser();
+if (currentUser && currentUser.savedWorkshops.includes(workshop.id)) {
+  // Si el workshop está guardado, muestra el icono de "Added"
+  buttonAdd.innerHTML = `<img src="${new URL("../assets/images/bookmark-check.svg", import.meta.url).href}" alt="Added to the list">`;
+} else {
+  // Si no está guardado, muestra el icono normal
+  buttonAdd.innerHTML = `<img src="${new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href}" alt="Add to the list">`;
+}
     
 
     const divCardInfo= document.createElement("div");
@@ -71,7 +81,25 @@ export function workshopCards(workshop, subcategory, category ) {
 
 
     //TODO:Add event listener icon saved
+    buttonAdd.addEventListener("click", ()=>{
+        const currentUser = getCurrentUser();
+        // Verifica si ya está guardado y en que posición se encuentra:
+  const position= currentUser.savedWorkshops.indexOf(workshop.id);
+        if(position === -1){
+            // No está guardado, entonces lo añadimos
+            currentUser.savedWorkshops.push(workshop.id);
+            buttonAdd.innerHTML = `<img src="${new URL("../assets/images/bookmark-check.svg", import.meta.url).href}" alt="Added to the list">`;
+            buttonAdd.setAttribute("data-workshop-id", workshop.id);
+        }else{
+            // Ya está guardado, entonces lo eliminamos
+            currentUser.savedWorkshops.splice(position, 1);
+            buttonAdd.innerHTML = `<img src="${new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href}" alt="Add to the list">`;
+            buttonAdd.setAttribute("data-workshop-id", workshop.id);  
+        }
+        localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
+        uploadUserArrays(currentUser);
+    });
     return card;
 
 
