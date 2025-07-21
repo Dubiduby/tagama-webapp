@@ -44,17 +44,38 @@ export async function getUsers() {
 
 export function getCurrentUser() {
   try {
-    const loadUser = localStorage.getItem("currentUser");
-
-    if (!loadUser || loadUser === "null" || loadUser === "undefined") {
-      return null;
-    }
-
-    return JSON.parse(loadUser);
+      const loadUser = localStorage.getItem("currentUser");
+      
+      if (!loadUser || loadUser === 'null' || loadUser === 'undefined') {
+          return null;
+      }
+      
+      return JSON.parse(loadUser);
   } catch (error) {
-    console.error("Error parsing currentUser from localStorage:", error);
-
-    localStorage.removeItem("currentUser");
-    return null;
+      console.error('Error parsing currentUser from localStorage:', error);
+      
+      localStorage.removeItem("currentUser");
+      return null;
   }
 }
+
+export async function uploadUserArrays(ArraysToUpdate) {
+  const currentUser = getCurrentUser();
+  const url = `${baseUrl}/${currentUser.id}`;
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(ArraysToUpdate),
+    });
+    if (!response.ok) {
+      throw new Error("Could not create user", response.status);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error creating NewUser", error);
+  }
+}
+
