@@ -15,3 +15,22 @@ export async function getWorkshops() {
     return null;
   }
 }
+
+export async function updateWorkshop(dataToUpdate) {
+  const url = `${baseUrl}/${dataToUpdate.id}`;
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToUpdate),
+    });
+    if (!response.ok) {
+      throw new Error("Could not update workshop", response.status);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating workshop", error);
+  }
+}

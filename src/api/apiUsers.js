@@ -44,22 +44,23 @@ export async function getUsers() {
 
 export function getCurrentUser() {
   try {
-      const loadUser = localStorage.getItem("currentUser");
-      
-      if (!loadUser || loadUser === 'null' || loadUser === 'undefined') {
-          return null;
-      }
-      
-      return JSON.parse(loadUser);
-  } catch (error) {
-      console.error('Error parsing currentUser from localStorage:', error);
-      
-      localStorage.removeItem("currentUser");
+    const loadUser = localStorage.getItem("currentUser");
+
+    if (!loadUser || loadUser === "null" || loadUser === "undefined") {
       return null;
+    }
+
+    return JSON.parse(loadUser);
+  } catch (error) {
+    console.error("Error parsing currentUser from localStorage:", error);
+
+    localStorage.removeItem("currentUser");
+    return null;
   }
 }
 
-export async function uploadUserArrays(ArraysToUpdate) {
+//Data to update has to be in this format: for example -> updateUser({name: currentUser.name})
+export async function updateUser(DataToUpdate) {
   const currentUser = getCurrentUser();
   const url = `${baseUrl}/${currentUser.id}`;
   try {
@@ -68,14 +69,13 @@ export async function uploadUserArrays(ArraysToUpdate) {
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(ArraysToUpdate),
+      body: JSON.stringify(DataToUpdate),
     });
     if (!response.ok) {
-      throw new Error("Could not create user", response.status);
+      throw new Error("Could not update user", response.status);
     }
     return await response.json();
   } catch (error) {
-    console.error("Error creating NewUser", error);
+    console.error("Error updating user", error);
   }
 }
-
