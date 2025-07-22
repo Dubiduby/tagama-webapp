@@ -9,70 +9,91 @@ export default function signUp(container) {
   container.innerHTML = "";
 
   const newUserDiv = document.createElement("div");
-  newUserDiv.classList.add("divNewUser");
+  newUserDiv.className = "divNewUser";
   container.appendChild(newUserDiv);
 
   const formWrapper = document.createElement("div");
-  formWrapper.classList.add("div-form-sign-up");
+  formWrapper.className = "div-form-sign-up";
   newUserDiv.appendChild(formWrapper);
 
   const form = document.createElement("form");
-  form.id = "divNewUserForm";
   formWrapper.appendChild(form);
 
+  // Título
   const h1 = document.createElement("h1");
-  h1.id = "signup-h1";
   h1.className = "sign-up-title";
-  h1.textContent = "Sign Up ";
+  h1.textContent = "Sign Up";
   form.appendChild(h1);
 
+  // Label y input para el nombre
+  const labelName = document.createElement("label");
+  labelName.htmlFor = "signup-name";
+  labelName.innerHTML = "Name <span style='color:#ef4444'>*</span>";
   const inputName = document.createElement("input");
   inputName.type = "text";
-  inputName.className = "signup-input";
-  inputName.id = "SignupFormName";
-  inputName.placeholder = "(*)Name";
+  inputName.id = "signup-name";
+  inputName.name = "name";
   inputName.required = true;
+  inputName.className = "signup-input";
+  form.appendChild(labelName);
   form.appendChild(inputName);
 
+  // Label y input para el email
+  const labelEmail = document.createElement("label");
+  labelEmail.htmlFor = "signup-email";
+  labelEmail.innerHTML = "Email <span style='color:#ef4444'>*</span>";
   const inputEmail = document.createElement("input");
   inputEmail.type = "email";
-  inputEmail.id = "signupFormEmail";
-  inputEmail.className = "signup-input";
-  inputEmail.placeholder = "(*)Email";
+  inputEmail.id = "signup-email";
+  inputEmail.name = "email";
   inputEmail.required = true;
+  inputEmail.className = "signup-input";
+  form.appendChild(labelEmail);
   form.appendChild(inputEmail);
 
+  // Label y input para la contraseña
+  const labelPassword = document.createElement("label");
+  labelPassword.htmlFor = "signup-password";
+  labelPassword.innerHTML = "Password <span style='color:#ef4444'>*</span>";
   const inputPassword = document.createElement("input");
   inputPassword.type = "password";
-  inputPassword.id = "sigupFormPassword";
-  inputPassword.className = "signup-input";
-  inputPassword.placeholder = "(*)Password";
+  inputPassword.id = "signup-password";
+  inputPassword.name = "password";
   inputPassword.required = true;
+  inputPassword.className = "signup-input";
+  form.appendChild(labelPassword);
   form.appendChild(inputPassword);
 
-  const inputRepPassword = document.createElement("input");
-  inputRepPassword.type = "password";
-  inputRepPassword.id = "signupFormRepPassword";
-  inputRepPassword.className = "signup-input";
-  inputRepPassword.placeholder = "(*)Repeat password";
-  inputRepPassword.required = true;
-  form.appendChild(inputRepPassword);
+  // Label y input para repetir contraseña
+  const labelRepeat = document.createElement("label");
+  labelRepeat.htmlFor = "signup-repeat";
+  labelRepeat.innerHTML = "Repeat password <span style='color:#ef4444'>*</span>";
+  const inputRepeat = document.createElement("input");
+  inputRepeat.type = "password";
+  inputRepeat.id = "signup-repeat";
+  inputRepeat.name = "repeat";
+  inputRepeat.required = true;
+  inputRepeat.className = "signup-input";
+  form.appendChild(labelRepeat);
+  form.appendChild(inputRepeat);
 
+  // Texto pequeño
   const small = document.createElement("small");
   small.className = "small-sign-up";
-  small.textContent = "(*)All fields are required.";
+  small.textContent = "(*) All fields are required.";
   form.appendChild(small);
 
-  const loginMsgDiv = document.createElement("div");
-  loginMsgDiv.className = "login-msg-signup";
-  loginMsgDiv.style.margin = "16px 0 0 0";
-  loginMsgDiv.style.textAlign = "center";
-
+  // Botón de registro
   const button = document.createElement("button");
   button.type = "submit";
   button.className = "button-login-signup";
   button.textContent = "Sign up";
   form.appendChild(button);
+
+  const loginMsgDiv = document.createElement("div");
+  loginMsgDiv.className = "login-msg-signup";
+  loginMsgDiv.style.margin = "16px 0 0 0";
+  loginMsgDiv.style.textAlign = "center";
 
   const loginText = document.createElement("p");
   loginText.classList.add("login-text");
@@ -86,7 +107,7 @@ export default function signUp(container) {
       const signupName = inputName.value.trim();
       const signupEmail = inputEmail.value.trim();
       const signupPassword = inputPassword.value.trim();
-      const signupRepPassword = inputRepPassword.value.trim();
+      const signupRepPassword = inputRepeat.value.trim();
 
       if (signupPassword !== signupRepPassword) {
         showToast("Passwords do not match", "error");
