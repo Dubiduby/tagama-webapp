@@ -1,5 +1,6 @@
 import "../assets/styles/main.css";
 import { getCurrentUser, uploadUserArrays } from "../api/apiUsers";
+import dayjs from "dayjs";
 
 export function workshopCards(workshop, subcategory, category ) {
     const card = document.createElement("div");
@@ -42,7 +43,7 @@ if (currentUser && currentUser.savedWorkshops.includes(workshop.id)) {
 
     const dateSpan = document.createElement("span");
     dateSpan.className = "date";
-    dateSpan.innerHTML =`<img src="${new URL("../assets/images/calendar.svg", import.meta.url).href}" alt="Calendar">  ${workshop.date}`;
+    dateSpan.innerHTML =`<img src="${new URL("../assets/images/calendar.svg", import.meta.url).href}" alt="Calendar">  ${dayjs.unix(workshop.date).format("DD/MM/YYYY")}`;
     //dateSpan.textContent= workshop.date;
 
     const locationSpan = document.createElement("span");
@@ -81,7 +82,9 @@ if (currentUser && currentUser.savedWorkshops.includes(workshop.id)) {
 
 
     //TODO:Add event listener icon saved
-    buttonAdd.addEventListener("click", ()=>{
+    buttonAdd.addEventListener("click", (event)=>{
+        event.preventDefault();
+       event.stopPropagation();
         const currentUser = getCurrentUser();
         // Verifica si ya está guardado y en que posición se encuentra:
   const position= currentUser.savedWorkshops.indexOf(workshop.id);
