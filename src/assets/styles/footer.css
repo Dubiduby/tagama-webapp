@@ -1,0 +1,19 @@
+.footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+  background: #f7f7fa;
+  color: #444;
+  font-size: 1rem;
+  border-top: 1px solid #e5e7eb;
+}
+.footer-contact-link {
+  color: #6366f1;
+  text-decoration: none;
+  font-weight: 500;
+  margin-left: 1rem;
+}
+.footer-contact-link:hover {
+  text-decoration: underline;
+} 
