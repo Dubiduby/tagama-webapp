@@ -79,3 +79,30 @@ export async function updateUser(DataToUpdate) {
     console.error("Error updating user", error);
   }
 }
+
+//profile
+
+//Fetches a user's data by their ID from MockAPI.
+export async function getUserById(id) {
+  const res = await fetch(`${baseUrl}/${id}`);
+  if (!res.ok) throw new Error("User not found");
+  return await res.json();
+}
+
+//Updates a user's data in MockAPI by their ID.
+export async function updateUserById(id, userData) {
+  const res = await fetch(`${baseUrl}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData)
+  });
+  if (!res.ok) throw new Error("Error updating user");
+  return await res.json();
+}
+
+//Deletes a user from MockAPI by their ID.
+export async function deleteUser(id) {
+  const res = await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Error deleting user");
+  return true;
+}
