@@ -8,6 +8,7 @@ const routes = {
   "/workshops": () => import("./views/workshops.js"),
   "/profile": () => import("./views/profile.js"),
   "/notfound": () => import("./views/notfound.js"),
+  "/contact": () => import("./views/contact.js"),
 };
 
 //routes that require login
@@ -76,6 +77,7 @@ export function handleLinks() {
   document.body.addEventListener("click", (event) => {
     const link = event.target.closest("a[data-link]"); //busca el evento más cercano al que se hizo click que sea un a con el atributo data-link
     if (link) {
+      console.log("SPA link clicked:", link.href);
       event.preventDefault();
       navigate(link.getAttribute("href"));
     }
