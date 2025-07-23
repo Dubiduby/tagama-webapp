@@ -55,7 +55,7 @@ export default function workshops(container) {
     }
     if (tab === "created") {
       return workshops.filter(
-        (workshop) => String(workshop.creatorId) === String(currentUser.id)
+        (workshop) => String(workshop.userId) === String(currentUser.id)
       );
     }
     if (tab === "saved") {
