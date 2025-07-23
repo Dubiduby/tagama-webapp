@@ -3,12 +3,18 @@ import {
   getCachedWorkshops,
   getCachedCategories,
   getCachedSubcategories,
+  updateWorkshopCache,
 } from "../utils/cache.js";
 import dayjs from "../utils/day.js";
+import { getCurrentUser, updateUser } from "../api/apiUsers.js";
+import { showToast } from "../utils/toastify.js";
+import { updateWorkshop } from "../api/apiWorkshops.js";
 
 export default async function detail(container, id) {
   // Limpia solo el container, no el body
   container.innerHTML = "";
+  const currentUser = getCurrentUser();
+  let isEnrolled = currentUser.enrolledWorkshops.includes(id);
 
   const [workshopsCache, categories, subcategories] = await Promise.all([
     getCachedWorkshops(),
@@ -218,7 +224,12 @@ export default async function detail(container, id) {
   // Botón
   const enrollBtn = document.createElement("button");
   enrollBtn.className = "enroll-btn";
-  enrollBtn.textContent = "Enroll/Cancel";
+  if (isEnrolled) {
+    enrollBtn.textContent = "Cancel";
+  } else {
+    enrollBtn.textContent = "Enroll";
+  }
+
   sidebar.appendChild(enrollBtn);
 
   detailContent.appendChild(sidebar);
@@ -234,5 +245,70 @@ export default async function detail(container, id) {
       requirementsDiv.style.display =
         tab.dataset.tab === "requirements" ? "block" : "none";
     });
+  });
+
+  enrollBtn.addEventListener("click", async () => {
+    enrollBtn.disabled = true;
+    enrollBtn.textContent = "Processing...";
+
+    isEnrolled = currentUser.enrolledWorkshops.includes(id);
+    const action = isEnrolled ? "cancel" : "enroll";
+
+    //We store in memory how we would like it to be when the button is click
+
+    if (isEnrolled) {
+      currentUser.enrolledWorkshops = currentUser.enrolledWorkshops.filter(
+        (workshopId) => workshopId !== id
+      );
+      workshopDetail.enrolled = workshopDetail.enrolled.filter(
+        (userId) => userId !== currentUser.id
+      );
+    } else {
+      currentUser.enrolledWorkshops.push(id);
+      workshopDetail.enrolled.push(currentUser.id);
+    }
+
+    //try catch just in case there is a problem updating, if there is then we leave it as it was
+
+    try {
+      const [updatedWorkshop, updatedUser] = await Promise.all([
+        updateWorkshop({ id: id, enrolled: workshopDetail.enrolled }),
+        updateUser({ enrolledWorkshops: currentUser.enrolledWorkshops }),
+      ]);
+
+      if (!updateWorkshop || !updateUser) {
+        throw new Error("Update workshop or user failed");
+      }
+      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      updateWorkshopCache(updatedWorkshop);
+
+      isEnrolled = !isEnrolled;
+
+      showToast(
+        action === "cancel"
+          ? "Your enroll was cancelled"
+          : "You enrolled successfully",
+        "success"
+      );
+
+      enrollBtn.textContent = isEnrolled ? "Cancel" : "Enroll";
+    } catch (error) {
+      showToast("Error updating user or workshop", "error");
+
+      //revert changes in memory (variables). Is exactly the same as before when we store in memory but the contrary (what is in the if is now in the else and viceversa)
+      if (action === "cancel") {
+        currentUser.enrolledWorkshops.push(id);
+        workshopDetail.enrolled.push(currentUser.id);
+      } else {
+        currentUser.enrolledWorkshops = currentUser.enrolledWorkshops.filter(
+          (workshopId) => workshopId !== id
+        );
+        workshopDetail.enrolled = workshopDetail.enrolled.filter(
+          (userId) => userId !== currentUser.id
+        );
+      }
+    }
+
+    enrollBtn.disabled = false;
   });
 }

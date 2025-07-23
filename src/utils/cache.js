@@ -64,3 +64,20 @@ export function clearCache() {
   clearCategoriesCache();
   clearSubcategoriesCache();
 }
+
+export function updateWorkshopCache(dataToUpdate) {
+  const workshopsCacheRaw = localStorage.getItem(CACHE_KEYS.workshops);
+  const workshopsCache = JSON.parse(workshopsCacheRaw);
+
+  const workshopIndex = workshopsCache.findIndex(
+    (workshop) => workshop.id === dataToUpdate.id
+  );
+
+  if (workshopIndex !== -1) {
+    workshopsCache[workshopIndex] = dataToUpdate;
+  } else {
+    workshopsCache.push(dataToUpdate);
+  }
+
+  localStorage.setItem("cache_workshops", JSON.stringify(workshopsCache));
+}
