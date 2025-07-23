@@ -87,7 +87,7 @@ export default async function profile(container) {
     return;
   }
 
-  // Solo actualiza los campos que han cambiado
+  // Solo actualiza los campos que han cambiado.
   const updatedUser = {};
   if (nameInput.value !== user.name) updatedUser.name = nameInput.value;
   if (emailInput.value !== user.email) updatedUser.email = emailInput.value;
