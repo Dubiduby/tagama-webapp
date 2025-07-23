@@ -2,9 +2,10 @@ import "../assets/styles/profile.css";
 import { getUserById, updateUserById, deleteUser } from "../api/apiUsers.js";
 import { validation } from "../utils/validations.js";
 import { showToast } from "../utils/toastify.js";
+import Toastify from "toastify-js"; // Si necesitas HTML personalizado
 
 export default async function profile(container) {
-  // Helper funcional para crear elementos
+  
   function $(tag, props = {}, ...children) {
     const el = document.createElement(tag);
     Object.entries(props).forEach(([k, v]) => {
@@ -33,17 +34,17 @@ export default async function profile(container) {
 
   container.innerHTML = "";
 
-  // Get current user from localStorage
+
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
     container.appendChild($("p", {}, "You are not logged in."));
     return;
   }
 
-  // Fetch updated user data from MockAPI
+
   const user = await getUserById(currentUser.id);
 
-  // Sidebar (avatar, name, email, logout)
+
   const avatar = $("img", {
     class: "profile-avatar",
     src: user.avatarUrl || "https://res.cloudinary.com/demo/image/upload/v1699999999/user.png",
@@ -68,7 +69,7 @@ export default async function profile(container) {
     }, "Logout")
   );
 
-  // Inputs con placeholder
+
   const nameInput = $("input", {
     type: "text",
     placeholder: user.name,
@@ -94,26 +95,26 @@ export default async function profile(container) {
     id: "profile-repeat"
   });
 
-  // Cancel button
+
   const cancelBtn = $("button", { type: "button", class: "cancel-btn" }, "Cancel");
   cancelBtn.addEventListener("click", () => {
     nameInput.value = "";
     emailInput.value = "";
     passInput.value = "";
     repeatInput.value = "";
+    showToast("Changes have been canceled.", "info");
   });
 
- 
   const form = $("form", { class: "profile-form", onsubmit: async e => {
     e.preventDefault();
 
-    // Toma el valor del input o el original si está vacío
+
     const newName = nameInput.value ? nameInput.value : user.name;
     const newEmail = emailInput.value ? emailInput.value : user.email;
     const newPassword = passInput.value ? passInput.value : user.password;
     const newRepeat = repeatInput.value ? repeatInput.value : user.password;
 
-    // Validación
+
     if (!validation({
       name: newName,
       email: newEmail,
@@ -122,7 +123,11 @@ export default async function profile(container) {
       return;
     }
 
-    // Solo actualiza los campos que han cambiado
+    if (passInput.value && passInput.value !== repeatInput.value) {
+      showToast("Passwords do not match.", "error");
+      return;
+    }
+
     const updatedUser = {
       ...user,
       name: newName,
@@ -133,7 +138,7 @@ export default async function profile(container) {
     if (
       newName === user.name &&
       newEmail === user.email &&
-      !passInput.value // Solo si la contraseña está vacía
+      !passInput.value
     ) {
       showToast("No changes to save.", "info");
       return;
@@ -148,7 +153,7 @@ export default async function profile(container) {
       showToast("Error updating profile.", "error");
     }
   }},
-  
+
     $("label", { for: "profile-name" }, "Name"),
     nameInput,
     $("label", { for: "profile-email" }, "Email"),
@@ -161,22 +166,47 @@ export default async function profile(container) {
     cancelBtn
   );
 
-  // Danger area
+  let deleteToastId = null;
+  const deleteBtn = $("button", {
+    class: "delete-btn",
+    onclick: () => {
+      if (deleteToastId) return;
+      deleteToastId = Toastify({
+        text: `
+          <span>Are you sure you want to delete your account?</span>
+          <button id="confirm-delete-btn" style="margin-left:10px;padding:4px 10px;background:#ef4444;color:#fff;border:none;border-radius:4px;cursor:pointer;">Yes, delete</button>
+        `,
+        duration: 3000,
+        gravity: "top",
+        position: "center",
+        close: true,
+        escapeMarkup: false,
+        backgroundColor: "#fff0f0",
+        stopOnFocus: true,
+        callback: () => { deleteToastId = null; }
+      }).showToast();
+
+      setTimeout(() => {
+        const confirmBtn = document.getElementById("confirm-delete-btn");
+        if (confirmBtn) {
+          confirmBtn.onclick = async (e) => {
+            e.stopPropagation();
+            await deleteUser(user.id);
+            localStorage.clear();
+            showToast("Account deleted!", "success");
+            setTimeout(() => window.location.href = "/login", 1200);
+          };
+        }
+      }, 100);
+    }
+  }, "DELETE ACCOUNT");
+
   const dangerArea = $("div", { class: "danger-area" },
     $("h4", {}, "Danger area"),
-    $("button", {
-      class: "delete-btn",
-      onclick: async () => {
-        if (window.confirm("Are you sure? This action will delete your account and is irreversible.")) {
-          await deleteUser(user.id);
-          localStorage.clear();
-          window.location.href = "/login";
-        }
-      }
-    }, "DELETE ACCOUNT")
+    deleteBtn
   );
 
-  // Layout principal
+
   const layout = $("div", { class: "profile-layout" },
     sidebar,
     $("main", { class: "profile-main" },
