@@ -162,7 +162,7 @@ export default async function detail(container, id) {
 
   const priceDiv = document.createElement("div");
   priceDiv.className = "workshop-price";
-  priceDiv.textContent = workshop.price + " €";
+  priceDiv.textContent = (workshop.price === 0)? "Free" : `${workshopPrice}`;
   sidebar.appendChild(priceDiv);
 
   // Fecha con icono
