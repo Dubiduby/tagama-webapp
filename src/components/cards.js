@@ -59,7 +59,7 @@ if (currentUser && currentUser.savedWorkshops.includes(workshop.id)) {
     spots.innerHTML =`<img src="${new URL("../assets/images/spots.svg", import.meta.url).href}" alt="Spots">  ${workshop.enrolled.length}/${workshop.capacity}`;
 
     const workshopPrice = document.createElement("p");
-    workshopPrice.textContent = `${workshop.price}€`;
+    workshopPrice.textContent = (workshop.price === 0)? "Free" : `${workshopPrice}`;
 
     const workshopTags = document.createElement("span");
     workshopTags.className = "tags";

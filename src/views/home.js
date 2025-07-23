@@ -8,6 +8,7 @@ import {
 import dayjs from "dayjs";
 
 export default async function home(container) {
+  container.innerHTML= "";
   const workshops = await getCachedWorkshops();
   const categories = await getCachedCategories();
   const subcategories = await getCachedSubcategories();
@@ -60,10 +61,10 @@ export default async function home(container) {
   const orderSelect = document.createElement("select");
   orderSelect.className = "order-filter";
   [
-    { value: "recent", text: "Más recientes" },
-    { value: "oldest", text: "Más antiguos" },
-    { value: "priceAsc", text: "Precio ascendente" },
-    { value: "priceDesc", text: "Precio descendente" },
+    { value: "recent", text: "Upcoming" },
+    { value: "oldest", text: "Farthest" },
+    { value: "priceAsc", text: "Cheapest" },
+    { value: "priceDesc", text: "Expensive" },
   ].forEach(opt => {
     const option = document.createElement("option");
     option.value = opt.value;
@@ -76,11 +77,16 @@ export default async function home(container) {
   spotsCheckbox.type = "checkbox";
   spotsCheckbox.className = "spots-filter";
   const spotsLabel = document.createElement("label");
-  spotsLabel.textContent = "Solo con plazas disponibles";
+  spotsLabel.textContent = "Only available spots";
   spotsLabel.appendChild(spotsCheckbox);
 
   const workshopsContainer = document.createElement("div");
   workshopsContainer.className = "workshops-list";
+
+  // Botón para resetear filtros
+const resetButton = document.createElement("button");
+resetButton.textContent = "Clear";
+resetButton.className = "reset-filters-btn";
 
   // Añadir filtros al contenedor
   filterContainer.appendChild(searchInput);
@@ -89,10 +95,38 @@ export default async function home(container) {
   filterContainer.appendChild(monthInput);
   filterContainer.appendChild(orderSelect);
   filterContainer.appendChild(spotsLabel);
+  filterContainer.appendChild(resetButton);
   container.appendChild(filterContainer);
   container.appendChild(workshopsContainer);
 
+ // Función para actualizar las subcategorías según la categoría seleccionada
+ function updateSubcategoriesOptions() {
+  // Limpia todas las opciones
+  subcategoriesFilter.innerHTML = "";
+  // Opción por defecto
+  const defaultSubcategoryOption = document.createElement("option");
+  defaultSubcategoryOption.value = "";
+  defaultSubcategoryOption.textContent = "All subcategories";
+  subcategoriesFilter.appendChild(defaultSubcategoryOption);
 
+  // Si hay una categoría seleccionada, filtra las subcategorías
+  const selectedCategoryId = categoriesFilter.value;
+  const filteredSubcategories = selectedCategoryId
+    ? subcategories.filter(sub => String(sub.categoryId) === String(selectedCategoryId))
+    : subcategories;
+
+  filteredSubcategories.forEach(subcategory => {
+    const option = document.createElement("option");
+    option.value = subcategory.id;
+    option.textContent = subcategory.name;
+    subcategoriesFilter.appendChild(option);
+  });
+  // Resetea el valor seleccionado
+  subcategoriesFilter.value = "";
+}
+
+// Inicializa las subcategorías
+updateSubcategoriesOptions();
 
   function filterAndRender() {
     let filtered = [...workshops];
@@ -139,11 +173,25 @@ export default async function home(container) {
     } else {
       renderWorkshops(workshopsContainer, filtered, categories, subcategories);
     }
+
+    resetButton.addEventListener("click", () => {
+      searchInput.value = "";
+      categoriesFilter.selectedIndex = 0;
+      updateSubcategoriesOptions(); // <-- Esto es importante
+      subcategoriesFilter.selectedIndex = 0;
+      monthInput.value = "";
+      orderSelect.selectedIndex = 0;
+      spotsCheckbox.checked = false;
+      filterAndRender();
+    });
   }
 
   // Events in each filter
   searchInput.addEventListener("input", filterAndRender);
-  categoriesFilter.addEventListener("change", filterAndRender);
+  categoriesFilter.addEventListener("change", () => {
+    updateSubcategoriesOptions();
+    filterAndRender();
+  });
   subcategoriesFilter.addEventListener("change", filterAndRender);
   monthInput.addEventListener("change", filterAndRender);
   orderSelect.addEventListener("change", filterAndRender);
