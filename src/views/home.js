@@ -13,15 +13,44 @@ export default async function home(container) {
   const categories = await getCachedCategories();
   const subcategories = await getCachedSubcategories();
 
-  // Filtros
-  const filterContainer = document.createElement("div");
-  filterContainer.className = "filter-container";
-
+ 
   // Search
   const searchInput = document.createElement("input");
   searchInput.type = "text";
   searchInput.placeholder = "Search workshop...";
   searchInput.className = "search-input";
+  container.appendChild(searchInput);
+
+   // Botón para mostrar/ocultar filtros
+   const filtersToggleBtn = document.createElement("button");
+   filtersToggleBtn.textContent = "Filters";
+   filtersToggleBtn.className = "filters-toggle-btn";
+   container.appendChild(filtersToggleBtn);
+
+   //Search an filters container
+   const searchContainer= document.createElement("div");
+   searchContainer.className= "search-container";
+   searchContainer.appendChild(searchInput);
+   searchContainer.appendChild(filtersToggleBtn);
+   container.appendChild(searchContainer);
+
+     // All filteers container
+  const allFiltersContainer = document.createElement("div");
+  allFiltersContainer.className= "all-filters-container";
+
+  allFiltersContainer.appendChild(searchContainer);
+  
+
+ 
+   // Mostrar/ocultar filtros al hacer click
+   filtersToggleBtn.addEventListener("click", () => {
+     filterContainer.classList.toggle("hidden");
+   });
+
+  // Filtros
+  const filterContainer = document.createElement("div");
+  filterContainer.className = "filter-container";
+
 
   // Categoría
   const categoriesFilter = document.createElement("select");
@@ -89,15 +118,18 @@ resetButton.textContent = "Clear";
 resetButton.className = "reset-filters-btn";
 
   // Añadir filtros al contenedor
-  filterContainer.appendChild(searchInput);
+  //filterContainer.appendChild(searchInput);
   filterContainer.appendChild(categoriesFilter);
   filterContainer.appendChild(subcategoriesFilter);
   filterContainer.appendChild(monthInput);
   filterContainer.appendChild(orderSelect);
   filterContainer.appendChild(spotsLabel);
   filterContainer.appendChild(resetButton);
-  container.appendChild(filterContainer);
+  allFiltersContainer.appendChild(filterContainer);
+  container.appendChild(allFiltersContainer);
   container.appendChild(workshopsContainer);
+
+   
 
  // Función para actualizar las subcategorías según la categoría seleccionada
  function updateSubcategoriesOptions() {
