@@ -1,4 +1,4 @@
-.divContact {
+.contact-layout {
   max-width: 400px;
   margin: 2rem auto;
   background: #fff;
@@ -9,7 +9,6 @@
   flex-direction: column;
   gap: 1rem;
 }
-
 .contact-title {
   text-align: center;
   font-size: 2rem;
@@ -17,25 +16,21 @@
   color: #6c63ff;
   margin-bottom: 0.5rem;
 }
-
 .contact-desc {
   color: #6b7280;
   margin-bottom: 1.5rem;
   text-align: center;
 }
-
 .contact-form {
   display: flex;
   flex-direction: column;
   gap: 0.7rem;
 }
-
 .contact-form label {
   font-weight: 500;
   color: #333;
   margin-bottom: 0.2rem;
 }
-
 .contact-input {
   padding: 10px;
   border: 1px solid #bbb;
@@ -45,8 +40,7 @@
   width: 100%;
   box-sizing: border-box;
 }
-
-.button-contact {
+.contact-btn {
   padding: 0.7rem 0;
   width: 100%;
   background: #6366f1;
@@ -58,11 +52,9 @@
   cursor: pointer;
   transition: background 0.2s;
 }
-
-.button-contact:hover {
+.contact-btn:hover {
   background: #4f46e5;
 }
-
 .contact-success {
   background: #10b981;
   color: white;
