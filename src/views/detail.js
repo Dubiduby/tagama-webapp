@@ -9,6 +9,7 @@ import dayjs from "../utils/day.js";
 import { getCurrentUser, updateUser } from "../api/apiUsers.js";
 import { showToast } from "../utils/toastify.js";
 import { updateWorkshop } from "../api/apiWorkshops.js";
+import { initMap } from "../utils/leaflet.js";
 
 export default async function detail(container, id) {
   // Limpia solo el container, no el body
@@ -47,7 +48,9 @@ export default async function detail(container, id) {
     instructor: workshopDetail.instructorName,
     overview: workshopDetail.overview,
     requirements: workshopDetail.requirements,
-    location: workshopDetail.address,
+    location: workshopDetail.location,
+    address: workshopDetail.address,
+    coordinates: workshopDetail.coordinates,
   };
 
   // Back link
@@ -146,14 +149,16 @@ export default async function detail(container, id) {
   const locationSpan = document.createElement("span");
   locationSpan.textContent = "Location";
   const locationP = document.createElement("p");
-  locationP.textContent = workshop.location;
+  locationP.textContent = workshop.address;
   locationDiv.appendChild(locationSpan);
   locationDiv.appendChild(locationP);
   mainColumn.appendChild(locationDiv);
 
   // Map
   const mapDiv = document.createElement("div");
+  mapDiv.id = "map";
   mapDiv.className = "workshop-map";
+  mapDiv.style.height = "50vh";
   mainColumn.appendChild(mapDiv);
 
   // Sidebar a la derecha
@@ -162,7 +167,7 @@ export default async function detail(container, id) {
 
   const priceDiv = document.createElement("div");
   priceDiv.className = "workshop-price";
-  priceDiv.textContent = (workshop.price === 0)? "Free" : `${workshopPrice}`;
+  priceDiv.textContent = workshop.price === 0 ? "Free" : `${workshopPrice}`;
   sidebar.appendChild(priceDiv);
 
   // Fecha con icono
@@ -246,6 +251,8 @@ export default async function detail(container, id) {
         tab.dataset.tab === "requirements" ? "block" : "none";
     });
   });
+
+  initMap(workshop.coordinates, workshop.location);
 
   enrollBtn.addEventListener("click", async () => {
     enrollBtn.disabled = true;
