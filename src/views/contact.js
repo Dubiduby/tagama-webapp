@@ -42,7 +42,7 @@ export default function contact(container)  {
     setTimeout(() => {
       successMsg.style.display = "none";
       form.reset();
-      navigate("/home"); // <-- Redirige a Home después de mostrar el mensaje
+      navigate("/home"); // <-- Redirige a Home después de mostrar el mensaje.
     }, 2500);
   }},
     $("label", { for: "contact-name" }, "Name"),
