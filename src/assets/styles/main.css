@@ -229,8 +229,13 @@ footer {
 }
 
 .tags {
-  margin-top: 0.5rem;
-  font-size: 0.9rem;
-  color: #7b5be6;
+  display: inline-block;
+  margin-top: 0.3rem;
+  background: #e0f2fe;
+  color: #0284c7;
+  border-radius: 12px;
+  padding: 2px 12px;
+  font-size: 0.8rem;
+  margin-right: 0;
   font-weight: 500;
 }

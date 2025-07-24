@@ -75,13 +75,14 @@ export function workshopCards(workshop, subcategory, category) {
 
   const workshopPrice = document.createElement("p");
   workshopPrice.textContent =
-    workshop.price === 0 ? "Free" : `${workshopPrice}`;
+    workshop.price === 0 ? "Free" : `${workshop.price}€`;
 
-  const workshopTags = document.createElement("span");
-  workshopTags.className = "tags";
-  workshopTags.textContent = `${subcategory?.name || ""}/ ${
-    category?.name || ""
-  }`;
+  const workshopTagCat = document.createElement("span");
+  workshopTagCat.className = "tags";
+  workshopTagCat.textContent = category && category.name ? category.name : "";
+  const workshopTagSub = document.createElement("span");
+  workshopTagSub.className = "tags";
+  workshopTagSub.textContent = subcategory && subcategory.name ? subcategory.name : "";
 
   card.appendChild(divCardImage);
   divCardImage.appendChild(img);
@@ -96,7 +97,8 @@ export function workshopCards(workshop, subcategory, category) {
   divCardDetails.appendChild(durationSpan);
   divCardDetails.appendChild(spots);
   divCardDetails.appendChild(workshopPrice);
-  divCardDetails.appendChild(workshopTags);
+  divCardDetails.appendChild(workshopTagCat);
+  divCardDetails.appendChild(workshopTagSub);
 
   //TODO:Add event listener icon saved
   buttonAdd.addEventListener("click", (event) => {
