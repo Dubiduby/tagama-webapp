@@ -143,24 +143,26 @@ export default async function detail(container, id) {
   // Añade el box al mainColumn
   mainColumn.appendChild(tabsBox);
 
-  // Location
-  const locationDiv = document.createElement("div");
-  locationDiv.className = "workshop-location";
-  const locationSpan = document.createElement("span");
-  locationSpan.textContent = "Location";
-  const locationP = document.createElement("p");
-  locationP.textContent = workshop.address;
-  locationDiv.appendChild(locationSpan);
-  locationDiv.appendChild(locationP);
-  mainColumn.appendChild(locationDiv);
+  if (workshop.mode === "On site") {
+    // Location
+    const locationDiv = document.createElement("div");
+    locationDiv.className = "workshop-location";
+    const locationSpan = document.createElement("span");
+    locationSpan.textContent = "Location";
+    const locationP = document.createElement("p");
+    locationP.textContent = workshop.address;
+    locationDiv.appendChild(locationSpan);
+    locationDiv.appendChild(locationP);
+    mainColumn.appendChild(locationDiv);
 
-  // Map
-  const mapDiv = document.createElement("div");
-  mapDiv.id = "map";
-  mapDiv.className = "workshop-map";
-  mapDiv.style.height = "50vh";
-  mainColumn.appendChild(mapDiv);
-  initMap(workshop.coordinates, workshop.location);
+    // Map
+    const mapDiv = document.createElement("div");
+    mapDiv.id = "map";
+    mapDiv.className = "workshop-map";
+    mapDiv.style.height = "50vh";
+    mainColumn.appendChild(mapDiv);
+    initMap(workshop.coordinates, workshop.location);
+  }
 
   // Sidebar a la derecha
   const sidebar = document.createElement("aside");
@@ -168,7 +170,7 @@ export default async function detail(container, id) {
 
   const priceDiv = document.createElement("div");
   priceDiv.className = "workshop-price";
-  priceDiv.textContent = workshop.price === 0 ? "Free" : `${workshopPrice}`;
+  priceDiv.textContent = workshop.price === 0 ? "Free" : `${workshop.price}`;
   sidebar.appendChild(priceDiv);
 
   // Fecha con icono
