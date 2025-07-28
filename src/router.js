@@ -9,6 +9,7 @@ const routes = {
   "/profile": () => import("./views/profile.js"),
   "/notfound": () => import("./views/notfound.js"),
   "/contact": () => import("./views/contact.js"),
+  "/": () => import("./views/landing.js"),
 };
 
 //routes that require login
@@ -47,6 +48,12 @@ export async function router() {
   const isPrivate = privatePages.some((page) => path.startsWith(page));
   if (isPrivate && !currentUser) {
     navigate("/login");
+    return;
+  }
+
+  //if user is logged in and wants to go to "/"
+  if (path === "/" && currentUser) {
+    navigate("/home");
     return;
   }
 
