@@ -90,7 +90,7 @@ export default function navbar(header) {
       event.preventDefault();
       localStorage.removeItem("currentUser");
       clearCache();
-      navigate("/login");
+      navigate("/");
     });
   }
   //Logout (mobile li)
@@ -100,7 +100,7 @@ export default function navbar(header) {
       event.preventDefault();
       localStorage.removeItem("currentUser");
       clearCache();
-      navigate("/login");
+      navigate("/");
     });
   }
 }

@@ -51,6 +51,12 @@ export async function router() {
     return;
   }
 
+  //if user is logged in and wants to go to "/"
+  if (path === "/" && currentUser) {
+    navigate("/home");
+    return;
+  }
+
   if (match) {
     const module = await match.view();
     // Pasa el parámetro id si existe
