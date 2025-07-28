@@ -1,12 +1,13 @@
 import "../assets/styles/workshops.css";
-import {
-  createWorkshop,
-  updateWorkshop,
-  deleteWorkshop,
-  getWorkshops,
-} from "../api/apiWorkshops";
 import { showToast } from "../utils/toastify";
 import { clearWorkshopsCache } from "../utils/cache";
+import { getCurrentUser } from "../api/apiUsers";
+import {
+  getCachedWorkshops,
+  getCachedCategories,
+  getCachedSubcategories,
+} from "../utils/cache.js";
+import { renderWorkshops } from "../utils/renderCards.js";
 
 export default function workshops(container) {
   container.innerHTML = "";
@@ -33,37 +34,74 @@ export default function workshops(container) {
       <span>Saved</span>
       </button></li>
     </ul>
+    <div id="workshops-tab-content-button" class="create-button"></div>
     <div id="workshops-tab-content" class="tab-content"></div>
   `;
 
   workshopsContainer.appendChild(workshopsWrapper);
   app.appendChild(workshopsContainer);
 
+  const tabCreateButton = workshopsWrapper.querySelector("#workshops-tab-content-button")
   const tabContent = workshopsWrapper.querySelector("#workshops-tab-content");
 
-  function showTab(tab) {
-    tabContent.innerHTML = "";
-
+  //filter workshops depending of which tab you are
+  function filterWorkshopsByTab(workshops, currentUser, tab) {
     if (tab === "enrolled") {
-      tabContent.textContent = "list of enrolled workshops";
-    } else if (tab === "created") {
+      return workshops.filter((workshop) =>
+        currentUser.enrolledWorkshops?.includes(String(workshop.id))
+      );
+    }
+    if (tab === "created") {
+      return workshops.filter(
+        (workshop) => String(workshop.userId) === String(currentUser.id)
+      );
+    }
+    if (tab === "saved") {
+      return workshops.filter((workshop) =>
+        currentUser.savedWorkshops?.includes(String(workshop.id))
+      );
+    }
+  }
+
+  //render the content of the tabs
+  async function showTab(tab) {
+    const currentUser = getCurrentUser();
+
+    //It does all the request together so it takes less time
+    const [workshops, categories, subcategories] = await Promise.all([
+      getCachedWorkshops(),
+      getCachedCategories(),
+      getCachedSubcategories(),
+    ]);
+
+    const filteredWorkshops = filterWorkshopsByTab(workshops, currentUser, tab);
+    
+    if (tab === "created") {
       const createBtn = document.createElement("button");
       createBtn.textContent = "+ New Workshop";
       createBtn.className = "btn-create-workshop styled-button";
-      tabContent.appendChild(createBtn);
+      tabCreateButton.appendChild(createBtn);
 
       const formContainer = document.createElement("div");
       formContainer.id = "workshop-form-container";
       formContainer.className = "form-wrapper";
-      tabContent.appendChild(formContainer);
+      tabCreateButton.appendChild(formContainer);
 
       createBtn.addEventListener("click", () => {
         renderWorkshopForm(formContainer);
       });
 
       loadCreatedWorkshops(tabContent);
-    } else if (tab === "saved") {
-      tabContent.textContent = "list of saved workshops";
+     }
+
+    if (filteredWorkshops.length > 0) {
+      renderWorkshops(tabContent, filteredWorkshops, categories, subcategories);
+    } else {
+      let message = "";
+      if (tab === "enrolled") message = "You didn't enroll to any workshop yet";
+      if (tab === "created") message = "You haven't created any workshops yet";
+      if (tab === "saved") message = "You haven't saved any workshops yet";
+      tabContent.innerHTML = `<p>${message}</p>`;
     }
   }
 

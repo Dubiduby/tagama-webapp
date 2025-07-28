@@ -42,19 +42,67 @@ export async function getUsers() {
   }
 }
 
-export async function updateUser(userId, updatedData) {
-  const url = `https://68760d8d814c0dfa653a6647.mockapi.io/final/users/${userId}`;
+export function getCurrentUser() {
+  try {
+    const loadUser = localStorage.getItem("currentUser");
+
+    if (!loadUser || loadUser === "null" || loadUser === "undefined") {
+      return null;
+    }
+
+    return JSON.parse(loadUser);
+  } catch (error) {
+    console.error("Error parsing currentUser from localStorage:", error);
+
+    localStorage.removeItem("currentUser");
+    return null;
+  }
+}
+
+//Data to update has to be in this format: for example -> updateUser({name: currentUser.name})
+export async function updateUser(DataToUpdate) {
+  const currentUser = getCurrentUser();
+  const url = `${baseUrl}/${currentUser.id}`;
   try {
     const response = await fetch(url, {
       method: "PUT",
       headers: {
         "Content-Type": "application/json",
       },
-      body: JSON.stringify(updatedData),
+      body: JSON.stringify(DataToUpdate),
     });
+    if (!response.ok) {
+      throw new Error("Could not update user", response.status);
+    }
     return await response.json();
   } catch (error) {
-    console.error("Failed to update user:", error);
-    return null;
+    console.error("Error updating user", error);
   }
+}
+
+//profile
+
+//Fetches a user's data by their ID from MockAPI.
+export async function getUserById(id) {
+  const res = await fetch(`${baseUrl}/${id}`);
+  if (!res.ok) throw new Error("User not found");
+  return await res.json();
+}
+
+//Updates a user's data in MockAPI by their ID.
+export async function updateUserById(id, userData) {
+  const res = await fetch(`${baseUrl}/${id}`, {
+    method: "PUT",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(userData)
+  });
+  if (!res.ok) throw new Error("Error updating user");
+  return await res.json();
+}
+
+//Deletes a user from MockAPI by their ID.
+export async function deleteUser(id) {
+  const res = await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
+  if (!res.ok) throw new Error("Error deleting user");
+  return true;
 }

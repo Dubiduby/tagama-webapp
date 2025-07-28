@@ -27,20 +27,29 @@ export async function createWorkshop(workshopData) {
   return response.json();
 }
 
-export async function updateWorkshop(id, workshopData) {
-  const response = await fetch(`${baseUrl}/${id}`, {
-    method: "PUT",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify(workshopData),
-  });
-  return response.json();
-}
-
 export async function deleteWorkshop(id) {
   const response = await fetch(`${baseUrl}/${id}`, {
     method: "DELETE",
   });
   return response.ok;
 }
+
+export async function updateWorkshop(dataToUpdate) {
+  const url = `${baseUrl}/${dataToUpdate.id}`;
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(dataToUpdate),
+    });
+    if (!response.ok) {
+      throw new Error("Could not update workshop", response.status);
+    }
+    return await response.json();
+  } catch (error) {
+    console.error("Error updating workshop", error);
+  }
+}
+

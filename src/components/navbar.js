@@ -1,6 +1,7 @@
 import { navigate } from "../router.js";
 import userDefaultImg from "../assets/images/user.png";
 import "../assets/styles/navbar.css";
+import { clearCache } from "../utils/cache.js";
 
 export default function navbar(header) {
   const user = JSON.parse(localStorage.getItem("currentUser") || "null");
@@ -10,7 +11,6 @@ export default function navbar(header) {
   if (isLoggedIn) {
     authLinks = `
       <li><a href="/workshops" data-link>My workshops</a></li>
-      <li><a href="/detail" data-link>Detail</a></li>
       <!-- Avatar y dropdown para desktop -->
       <li class="navbar__avatar-container">
         <button class="navbar__avatar-button" aria-label="User menu">
@@ -84,6 +84,7 @@ export default function navbar(header) {
     logout.addEventListener("click", (event) => {
       event.preventDefault();
       localStorage.removeItem("currentUser");
+      clearCache();
       navigate("/login");
     });
   }
@@ -93,6 +94,7 @@ export default function navbar(header) {
     logoutMobile.addEventListener("click", (event) => {
       event.preventDefault();
       localStorage.removeItem("currentUser");
+      clearCache();
       navigate("/login");
     });
   }

@@ -1,0 +1,206 @@
+/* Filtros - Mobile First Minimalista */
+.all-filters-container {
+  width: 100%;
+  padding-top: 24px;
+  max-width: 1100px;
+  margin: 0 auto 2rem auto;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.search-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 0.7rem;
+  margin-bottom: 0.7rem;
+}
+
+.search-input {
+  flex: 1 1 0;
+  padding: 8px;
+  min-width: 0;
+  max-width: 400px;
+  font-size: 1rem;
+}
+
+.filters-toggle-btn {
+  display: block;
+  padding: 0.3rem 0.7rem;
+  background: #6c2ccc;
+  color: #fafafa;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s;
+  margin-left: 0.5rem;
+  white-space: nowrap;
+}
+.filters-toggle-btn:hover {
+  background: #4c1b96;
+}
+
+.filter-container {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 0.7rem;
+  align-items: center;
+  background: #fff;
+  padding: 1rem 0.5rem;
+  border-radius: 10px;
+  margin-bottom: 1.5rem;
+  border: 1px solid #ececec;
+  box-shadow: none;
+  justify-content: stretch;
+}
+
+.filter-container.hidden {
+  display: none;
+}
+
+.filter-container select,
+.filter-container input[type="month"] {
+  min-width: 160px;
+  max-width: 220px;
+  flex: 1 1 160px;
+  font-size: 1rem;
+}
+
+.filter-container .reset-filters-btn {
+  min-width: 120px;
+  flex: 1 1 120px;
+}
+
+.filter-container input[type="month"],
+.filter-container select {
+  padding: 0.45rem 0.7rem;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  font-size: 1rem;
+  background: #fafbfc;
+  transition: border 0.2s;
+  width: 100%;
+  box-sizing: border-box;
+  color: #222;
+}
+
+.filter-container input[type="text"]:focus,
+.filter-container input[type="month"]:focus,
+.filter-container select:focus {
+  border-color: #a78bfa;
+  outline: none;
+}
+
+.filter-container label {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  cursor: pointer;
+  user-select: none;
+  color: #444;
+}
+
+.reset-filters-btn {
+  padding: 0.45rem 1rem;
+  background: #6c2ccc;
+  color: #fafafa;
+  border: 1px solid #e5e7eb;
+  border-radius: 5px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+  width: 100%;
+  font-weight: 500;
+  margin-top: 0.2rem;
+}
+
+.reset-filters-btn:hover {
+  background: #4c1b96;
+  color: #f4f3f7;
+  border-color: #c4b5fd;
+}
+
+/* --- Paginación --- */
+.pagination-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 12px;
+  margin: 32px 0 0 0;
+}
+
+.pagination-container button {
+  background: #fff;
+  border: 1.5px solid #2563eb;
+  color: #2563eb;
+  padding: 6px 18px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-size: 1rem;
+  font-weight: 500;
+  transition: background 0.2s, color 0.2s, border 0.2s;
+}
+
+.pagination-container button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.pagination-container button:hover:not(:disabled),
+.pagination-container button:focus-visible:not(:disabled) {
+  background: #2563eb;
+  color: #fff;
+  border-color: #2563eb;
+}
+
+.pagination-container span {
+  font-size: 1rem;
+  color: #222;
+  font-weight: 500;
+}
+/* --- Fin paginación --- */
+
+@media (min-width: 600px) {
+  .all-filters-container {
+    max-width: 900px;
+    display: flex;
+  }
+  .search-container {
+    max-width: 900px;
+    justify-content: center;
+    align-items: center;
+  }
+  .filter-container {
+    max-width: 900px;
+    gap: 0.8rem;
+    padding: 1.2rem 1rem;
+  }
+}
+
+@media (min-width: 900px) {
+  .all-filters-container {
+    max-width: 1100px;
+  }
+  .search-container {
+    max-width: 1100px;
+  }
+  .filter-container {
+    max-width: 1100px;
+    gap: 1.2rem;
+    padding: 1.5rem 2rem;
+    border-radius: 12px;
+  }
+}
+/* Pantallas grandes */
+@media (min-width: 1200px) {
+  .filter-container {
+    display: flex;
+  }
+}
