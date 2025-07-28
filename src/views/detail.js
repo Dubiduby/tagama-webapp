@@ -12,7 +12,7 @@ import { updateWorkshop } from "../api/apiWorkshops.js";
 import { initMap } from "../utils/leaflet.js";
 
 export default async function detail(container, id) {
-  // Limpia solo el container, no el body
+  // Limpia solo el container, no el body.
   container.innerHTML = "";
   const currentUser = getCurrentUser();
   let isEnrolled = currentUser.enrolledWorkshops.includes(id);
