@@ -160,6 +160,7 @@ export default async function detail(container, id) {
   mapDiv.className = "workshop-map";
   mapDiv.style.height = "50vh";
   mainColumn.appendChild(mapDiv);
+  initMap(workshop.coordinates, workshop.location);
 
   // Sidebar a la derecha
   const sidebar = document.createElement("aside");
@@ -251,8 +252,6 @@ export default async function detail(container, id) {
         tab.dataset.tab === "requirements" ? "block" : "none";
     });
   });
-
-  initMap(workshop.coordinates, workshop.location);
 
   enrollBtn.addEventListener("click", async () => {
     enrollBtn.disabled = true;
