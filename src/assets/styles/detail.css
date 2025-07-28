@@ -223,6 +223,124 @@ body {
   border-top: 1px solid #cbd5e1;
 }
 
+/* Payment Modal Overlay */
+.payment-modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.5);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 10000;
+}
+
+/* Payment Modal Card */
+.payment-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 4px 32px rgba(0,0,0,0.18);
+  padding: 2.5rem 2rem 2rem 2rem;
+  min-width: 340px;
+  max-width: 95vw;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 1.2rem;
+  font-family: inherit;
+}
+
+.payment-card h1 {
+  font-size: 1.5rem;
+  margin-bottom: 0.5rem;
+  color: #2563eb;
+  text-align: center;
+}
+
+.payment-form label {
+  font-weight: 500;
+  margin-bottom: 0.2rem;
+  color: #222;
+}
+
+.payment-form input,
+.payment-form select {
+  width: 100%;
+  padding: 0.5rem 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 6px;
+  font-size: 1rem;
+  margin-bottom: 0.7rem;
+  background: #f9fafb;
+  transition: border 0.2s;
+}
+
+.payment-form input:focus,
+.payment-form select:focus {
+  border: 1.5px solid #2563eb;
+  outline: none;
+}
+
+.payment-form .row {
+  display: flex;
+  gap: 1rem;
+}
+
+.payment-form .row > div {
+  flex: 1;
+}
+
+.payment-fields {
+  margin-bottom: 0.7rem;
+}
+
+.payment-info {
+  font-size: 0.92rem;
+  color: #666;
+  margin-top: 0.3rem;
+}
+
+#pagar {
+  background: #2563eb;
+  color: #fff;
+  border: none;
+  border-radius: 6px;
+  padding: 0.7rem 1.5rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  margin-top: 0.5rem;
+  transition: background 0.2s;
+}
+#pagar:disabled {
+  background: #b3c6f7;
+  cursor: not-allowed;
+}
+
+#status {
+  min-height: 1.2em;
+  font-size: 1rem;
+  color: #2563eb;
+  text-align: center;
+  margin-top: 0.5rem;
+}
+
+.payment-card button[style*="position: absolute"] {
+  top: 10px;
+  right: 10px;
+  background: transparent;
+  border: none;
+  font-size: 1.7rem;
+  color: #888;
+  cursor: pointer;
+  transition: color 0.2s;
+}
+.payment-card button[style*="position: absolute"]:hover {
+  color: #2563eb;
+}
+
 /* Responsive */
 @media (max-width: 900px) {
   .workshop-detail-content {
@@ -298,5 +416,16 @@ body {
   .back-link {
     margin: 12px 0 0 8px;
     font-size: 0.95rem;
+  }
+}
+
+@media (max-width: 500px) {
+  .payment-card {
+    min-width: 90vw;
+    padding: 1.2rem 0.5rem 1.5rem 0.5rem;
+  }
+  .payment-form .row {
+    flex-direction: column;
+    gap: 0.5rem;
   }
 }
