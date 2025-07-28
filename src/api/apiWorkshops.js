@@ -15,3 +15,32 @@ export async function getWorkshops() {
     return null;
   }
 }
+
+export async function createWorkshop(workshopData) {
+  const response = await fetch(baseUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(workshopData),
+  });
+  return response.json();
+}
+
+export async function updateWorkshop(id, workshopData) {
+  const response = await fetch(`${baseUrl}/${id}`, {
+    method: "PUT",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(workshopData),
+  });
+  return response.json();
+}
+
+export async function deleteWorkshop(id) {
+  const response = await fetch(`${baseUrl}/${id}`, {
+    method: "DELETE",
+  });
+  return response.ok;
+}

@@ -41,3 +41,20 @@ export async function getUsers() {
     return null;
   }
 }
+
+export async function updateUser(userId, updatedData) {
+  const url = `https://68760d8d814c0dfa653a6647.mockapi.io/final/users/${userId}`;
+  try {
+    const response = await fetch(url, {
+      method: "PUT",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(updatedData),
+    });
+    return await response.json();
+  } catch (error) {
+    console.error("Failed to update user:", error);
+    return null;
+  }
+}
