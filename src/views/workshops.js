@@ -1,13 +1,16 @@
 import "../assets/styles/workshops.css";
 import { showToast } from "../utils/toastify";
-import { clearWorkshopsCache } from "../utils/cache";
-import { getCurrentUser } from "../api/apiUsers";
+import { getCurrentUser, updateUser } from "../api/apiUsers";
 import {
   getCachedWorkshops,
   getCachedCategories,
   getCachedSubcategories,
+  updateWorkshopCache,
+  clearWorkshopsCache,
 } from "../utils/cache.js";
 import { renderWorkshops } from "../utils/renderCards.js";
+import { createWorkshop, updateWorkshop } from "../api/apiWorkshops.js";
+import dayjs from "dayjs";
 
 export default function workshops(container) {
   container.innerHTML = "";
@@ -41,7 +44,9 @@ export default function workshops(container) {
   workshopsContainer.appendChild(workshopsWrapper);
   app.appendChild(workshopsContainer);
 
-  const tabCreateButton = workshopsWrapper.querySelector("#workshops-tab-content-button")
+  const tabCreateButton = workshopsWrapper.querySelector(
+    "#workshops-tab-content-button"
+  );
   const tabContent = workshopsWrapper.querySelector("#workshops-tab-content");
 
   //filter workshops depending of which tab you are
@@ -75,24 +80,47 @@ export default function workshops(container) {
     ]);
 
     const filteredWorkshops = filterWorkshopsByTab(workshops, currentUser, tab);
-    
+
     if (tab === "created") {
+      tabCreateButton.innerHTML = "";
       const createBtn = document.createElement("button");
       createBtn.textContent = "+ New Workshop";
       createBtn.className = "btn-create-workshop styled-button";
       tabCreateButton.appendChild(createBtn);
 
-      const formContainer = document.createElement("div");
-      formContainer.id = "workshop-form-container";
-      formContainer.className = "form-wrapper";
-      tabCreateButton.appendChild(formContainer);
-
       createBtn.addEventListener("click", () => {
-        renderWorkshopForm(formContainer);
-      });
+        showModal(renderWorkshopFormHtml());
+        handleWorkshopFormSubmit(async (formData) => {
+          // 1. Create the workshop and obtain id
+          const newWorkshop = await createWorkshop(formData);
 
-      loadCreatedWorkshops(tabContent);
-     }
+          // add the new workshop to the currentUser
+          currentUser.createdWorkshops.push(String(newWorkshop.id));
+
+          // 3. updateUser with the new workshop and update localStorage
+          const updatedUser = await updateUser({
+            createdWorkshops: currentUser.createdWorkshops,
+          });
+          if (updatedUser) {
+            localStorage.setItem(
+              "currentUser",
+              JSON.stringify({ ...currentUser, ...updatedUser })
+            );
+          }
+
+          // Update local cache workshop
+          updateWorkshopCache(newWorkshop);
+
+          // close modal, show toastify and refresh the tab
+          closeModal();
+
+          showToast("Workshop created succesfully", "success");
+          showTab("created");
+        });
+      });
+    } else {
+      tabCreateButton.innerHTML = "";
+    }
 
     if (filteredWorkshops.length > 0) {
       renderWorkshops(tabContent, filteredWorkshops, categories, subcategories);
@@ -116,134 +144,151 @@ export default function workshops(container) {
     });
   }
 
-  workshopsWrapper.querySelector("#tab-enrolled").addEventListener("click", (e) => {
-    e.preventDefault();
-    showTab("enrolled");
-    setActiveTab("enrolled");
-  });
+  workshopsWrapper
+    .querySelector("#tab-enrolled")
+    .addEventListener("click", (e) => {
+      e.preventDefault();
+      showTab("enrolled");
+      setActiveTab("enrolled");
+    });
 
-  workshopsWrapper.querySelector("#tab-created").addEventListener("click", (e) => {
-    e.preventDefault();
-    showTab("created");
-    setActiveTab("created");
-  });
+  workshopsWrapper
+    .querySelector("#tab-created")
+    .addEventListener("click", (e) => {
+      e.preventDefault();
+      showTab("created");
+      setActiveTab("created");
+    });
 
-  workshopsWrapper.querySelector("#tab-saved").addEventListener("click", (e) => {
-    e.preventDefault();
-    showTab("saved");
-    setActiveTab("saved");
-  });
+  workshopsWrapper
+    .querySelector("#tab-saved")
+    .addEventListener("click", (e) => {
+      e.preventDefault();
+      showTab("saved");
+      setActiveTab("saved");
+    });
 
   showTab("enrolled");
   setActiveTab("enrolled");
 }
 
-async function loadCreatedWorkshops(container) {
-  const user = JSON.parse(localStorage.getItem("currentUser"));
-  const workshops = await getWorkshops();
-  const created = workshops.filter((w) => w.instructor === user.name);
+//   const user = JSON.parse(localStorage.getItem("currentUser"));
+//   const workshops = await getWorkshops();
+//   const created = workshops.filter((w) => w.instructor === user.name);
 
-  const list = document.createElement("ul");
-  list.className = "created-list styled-list";
+//   const list = document.createElement("ul");
+//   list.className = "created-list styled-list";
 
-  created.forEach((w) => {
-    const item = document.createElement("li");
-    item.className = "created-item";
+//   created.forEach((w) => {
+//     const item = document.createElement("li");
+//     item.className = "created-item";
 
-    const info = document.createElement("div");
-    info.className = "created-item-info";
-    const enrolledCount = w.enrolled?.length || 0;
-    const capacity = w.capacity || "?";
+//     const info = document.createElement("div");
+//     info.className = "created-item-info";
+//     const enrolledCount = w.enrolled?.length || 0;
+//     const capacity = w.capacity || "?";
 
-    info.innerHTML = `
-      <strong>${w.title}</strong>
-      <small>
-        ${w.date || ""} • 
-        ${formatDuration(w.time)} • 
-        ${w.location || ""} • 
-        ${w.price || "Free"}€ • 
-        ${enrolledCount}/${capacity} spots
-      </small>
-    `;
+//     info.innerHTML = `
+//       <strong>${w.title}</strong>
+//       <small>
+//         ${w.date || ""} •
+//         ${formatDuration(w.time)} •
+//         ${w.location || ""} •
+//         ${w.price || "Free"}€ •
+//         ${enrolledCount}/${capacity} spots
+//       </small>
+//     `;
 
-    const actions = document.createElement("div");
-    actions.className = "action-buttons";
+//     const actions = document.createElement("div");
+//     actions.className = "action-buttons";
 
-    const editBtn = document.createElement("button");
-    editBtn.textContent = "Edit";
-    editBtn.className = "styled-button small";
-    editBtn.addEventListener("click", () => {
-      renderWorkshopForm(document.getElementById("workshop-form-container"), w);
-    });
+//     const editBtn = document.createElement("button");
+//     editBtn.textContent = "Edit";
+//     editBtn.className = "styled-button small";
+//     editBtn.addEventListener("click", () => {
+//       renderWorkshopForm(document.getElementById("workshop-form-container"), w);
+//     });
 
-    const deleteBtn = document.createElement("button");
-    deleteBtn.textContent = "Delete";
-    deleteBtn.className = "styled-button small danger";
-    deleteBtn.addEventListener("click", async () => {
-      if (confirm("Delete this workshop?")) {
-        await deleteWorkshop(w.id);
-        showToast("Deleted", "success");
-        clearWorkshopsCache();
-        loadCreatedWorkshops(container);
-      }
-    });
+//     const deleteBtn = document.createElement("button");
+//     deleteBtn.textContent = "Delete";
+//     deleteBtn.className = "styled-button small danger";
+//     deleteBtn.addEventListener("click", async () => {
+//       if (confirm("Delete this workshop?")) {
+//         await deleteWorkshop(w.id);
+//         showToast("Deleted", "success");
+//         clearWorkshopsCache();
+//         loadCreatedWorkshops(container);
+//       }
+//     });
 
-    actions.appendChild(editBtn);
-    actions.appendChild(deleteBtn);
-    item.appendChild(info);
-    item.appendChild(actions);
-    list.appendChild(item);
-  });
+//     actions.appendChild(editBtn);
+//     actions.appendChild(deleteBtn);
+//     item.appendChild(info);
+//     item.appendChild(actions);
+//     list.appendChild(item);
+//   });
 
-  container.appendChild(list);
-}
+//   container.appendChild(list);
+// }
 
-function renderWorkshopForm(container, data = {}) {
+//new version-------------------
+function renderWorkshopFormHtml(data = {}) {
   const isEdit = Boolean(data.id);
-  container.innerHTML = `
-    <h3 class="form-title">${isEdit ? "Edit" : "Create"} Workshop</h3>
+  return `
+    <div class="workshop-modal__header">
+      <h3>${isEdit ? "Editar" : "Crear"} Workshop</h3>
+      <button class="workshop-modal__close" aria-label="Close" type="button">&times;</button>
+    </div>
     <form id="workshop-form" class="workshop-form">
-      <input name="title" value="${data.title || ""}" placeholder="Title" required />
-      <input name="imageUrl" value="${data.imageUrl || ""}" placeholder="Image URL" />
+      <input name="title" value="${
+        data.title || ""
+      }" placeholder="Title" required />
+      <input name="imageUrl" value="${
+        data.imageUrl || ""
+      }" placeholder="Image URL" />
       <input name="price" value="${data.price || ""}" placeholder="Price (€)" />
-      <input name="time" value="${data.time || ""}" placeholder="Duration (e.g. 90 or 2h)" />
-      <input name="capacity" value="${data.capacity || ""}" placeholder="Capacity (max people)" />
-      <input name="date" value="${data.date || ""}" placeholder="Start Date (e.g. 2025-08-10)" />
-      <input name="location" value="${data.location || ""}" placeholder="Location (Online or On-Site)" />
-      <textarea name="overview" placeholder="Overview">${data.overview || ""}</textarea>
-      <button type="submit">${isEdit ? "Update" : "Create"}</button>
+      <input name="duration" value="${
+        formatDuration(data.duration) || ""
+      }" placeholder="Duration (e.g. 90 or 2h)" />
+      <input name="capacity" value="${
+        data.capacity || ""
+      }" placeholder="Capacity (max people)" />
+      <input name="date" value="${
+        data.date || ""
+      }" placeholder="Start Date (e.g. 2025-08-10)" />
+      <input name="location" value="${
+        data.location || ""
+      }" placeholder="Location (Online or On-Site)" />
+      <textarea name="overview" placeholder="Overview">${
+        data.overview || ""
+      }</textarea>
+      <button type="submit">${isEdit ? "Editar" : "Crear"}</button>
     </form>
   `;
+}
 
-  const form = container.querySelector("#workshop-form");
-  form.addEventListener("submit", async (e) => {
+function handleWorkshopFormSubmit(onSubmit, data = {}) {
+  const modal = document.getElementById("workshop-modal");
+  const form = modal.querySelector("#workshop-form");
+  const closeBtn = modal.querySelector(".workshop-modal__close");
+  closeBtn.onclick = closeModal;
+
+  form.onsubmit = async (e) => {
     e.preventDefault();
-    const user = JSON.parse(localStorage.getItem("currentUser"));
+    const currentUser = getCurrentUser();
     const formData = Object.fromEntries(new FormData(form));
     const workshop = {
-      ...formData,
-      instructor: user.name,
+      ...data, //data from existing workshop (if editing)
+      ...formData, //data from de form
+      instructorName: currentUser.name,
       enrolled: data.enrolled || [],
       categoryId: 1,
       subcategoryId: 1,
       capacity: Number(formData.capacity || 0),
+      userId: currentUser.id,
     };
-
-    try {
-      if (isEdit) {
-        await updateWorkshop(data.id, workshop);
-        showToast("Workshop updated", "success");
-      } else {
-        await createWorkshop(workshop);
-        showToast("Workshop created", "success");
-      }
-      clearWorkshopsCache();
-      container.innerHTML = "";
-      loadCreatedWorkshops(container.parentElement);
-    } catch (err) {
-      showToast("Something went wrong", "error");
-    }
-  });
+    await onSubmit(workshop);
+  };
 }
 
 function formatDuration(raw) {
@@ -252,6 +297,31 @@ function formatDuration(raw) {
   const minutes = parseInt(raw);
   if (isNaN(minutes)) return raw;
   return minutes >= 60
-    ? `${Math.floor(minutes / 60)}h ${minutes % 60 ? minutes % 60 + "min" : ""}`.trim()
+    ? `${Math.floor(minutes / 60)}h ${
+        minutes % 60 ? (minutes % 60) + "min" : ""
+      }`.trim()
     : `${minutes}min`;
+}
+
+//modal form
+function showModal(contentHtml) {
+  let modal = document.getElementById("workshop-modal");
+  if (!modal) {
+    modal = document.createElement("div");
+    modal.id = "workshop-modal";
+    modal.className = "workshop-modal";
+    modal.innerHTML = `
+      <div class="workshop-modal__overlay"></div>
+      <div class="workshop-modal__content"></div>
+    `;
+    document.body.appendChild(modal);
+    modal.querySelector(".workshop-modal__overlay").onclick = closeModal;
+  }
+  modal.querySelector(".workshop-modal__content").innerHTML = contentHtml;
+  modal.style.display = "flex";
+}
+
+function closeModal() {
+  const modal = document.getElementById("workshop-modal");
+  if (modal) modal.style.display = "none";
 }

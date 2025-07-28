@@ -2,6 +2,8 @@ import { router } from "./router.js";
 import { handleLinks } from "./router.js";
 import "./assets/styles/main.css";
 import "./assets/styles/footer.css";
+import "./assets/styles/main.css";
+import "./assets/styles/modal.css";
 
 //para que se cargue todo el html antes de redireccionar
 document.addEventListener("DOMContentLoaded", () => {
