@@ -39,6 +39,9 @@ export default async function home(container) {
   allFiltersContainer.className= "all-filters-container";
 
   allFiltersContainer.appendChild(searchContainer);
+  // --- Paginación: contenedor global ---
+const paginationContainer = document.createElement("div");
+paginationContainer.className = "pagination-container";
   
 
  
@@ -128,6 +131,7 @@ resetButton.className = "reset-filters-btn";
   allFiltersContainer.appendChild(filterContainer);
   container.appendChild(allFiltersContainer);
   container.appendChild(workshopsContainer);
+  container.appendChild(paginationContainer); 
 
    
 
@@ -160,6 +164,20 @@ resetButton.className = "reset-filters-btn";
 // Inicializa las subcategorías
 updateSubcategoriesOptions();
 
+// --- Paginación ---
+function getWorkshopsPerPage() {
+  if (window.innerWidth < 600) {
+    return 8; // Por ejemplo, 4 en móvil
+  } else if (window.innerWidth < 1000) {
+    return 10; // Por ejemplo, 8 en tablet
+  } else {
+    return 15; // 15 en escritorio
+  }
+}
+let currentPage = 1;
+let totalPages = 1;
+// --- Fin paginación ---
+
   function filterAndRender() {
     let filtered = [...workshops];
     //Search Filter
@@ -187,7 +205,7 @@ updateSubcategoriesOptions();
       filtered = filtered.filter(workshops => workshops.enrolled.length < workshops.capacity);
     }
 
-    // Order for:
+    // Ordenar por:
     const orderValue = orderSelect.value;
     if (orderValue === "recent") {
       filtered = filtered.sort((a, b) => dayjs.unix(a.date).diff(dayjs.unix(b.date)));
@@ -198,13 +216,26 @@ updateSubcategoriesOptions();
     } else if (orderValue === "priceDesc") {
       filtered = filtered.sort((a, b) => b.price - a.price);
     }
+
+    // --- Paginación ---
+    const workshopsPerPage = getWorkshopsPerPage();
+    totalPages = Math.ceil(filtered.length / workshopsPerPage);
+    if (currentPage > totalPages) currentPage = totalPages || 1;
+    const start = (currentPage - 1) * workshopsPerPage;
+    const end = start + workshopsPerPage;
+    const paginatedWorkshops = filtered.slice(start, end);
+    // --- Fin paginación ---
     // Render the workshopContainer
     workshopsContainer.innerHTML = "";
-    if (filtered.length === 0) {
+    if (paginatedWorkshops.length === 0) {
       workshopsContainer.innerHTML = "There are no workshops matching the filters."
     } else {
-      renderWorkshops(workshopsContainer, filtered, categories, subcategories);
+      renderWorkshops(workshopsContainer, paginatedWorkshops, categories, subcategories);
     }
+
+    // --- Paginación: renderizar controles ---
+    renderPaginationControls();
+    // --- Fin paginación ---
 
     resetButton.addEventListener("click", () => {
       searchInput.value = "";
@@ -214,21 +245,75 @@ updateSubcategoriesOptions();
       monthInput.value = "";
       orderSelect.selectedIndex = 0;
       spotsCheckbox.checked = false;
+      currentPage = 1; // Reinicia la página
       filterAndRender();
     });
   }
+  // --- Paginación: controles ---
+  function renderPaginationControls() {
+    paginationContainer.innerHTML = "";
+    if (totalPages <= 1) return;
+    // Botón anterior
+    const prevBtn = document.createElement("button");
+    prevBtn.textContent = "Anterior";
+    prevBtn.disabled = currentPage === 1;
+    prevBtn.onclick = () => {
+      currentPage--;
+      filterAndRender();
+    };
+    paginationContainer.appendChild(prevBtn);
 
+    // Texto de página actual
+    const pageInfo = document.createElement("span");
+    pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
+    pageInfo.style.margin = "0 12px";
+    paginationContainer.appendChild(pageInfo);
+
+    // Botón siguiente
+    const nextBtn = document.createElement("button");
+    nextBtn.textContent = "Siguiente";
+    nextBtn.disabled = currentPage === totalPages;
+    nextBtn.onclick = () => {
+      currentPage++;
+      filterAndRender();
+    };
+    paginationContainer.appendChild(nextBtn);
+  }
+  // --- Fin paginación ---
+  
   // Events in each filter
-  searchInput.addEventListener("input", filterAndRender);
-  categoriesFilter.addEventListener("change", () => {
-    updateSubcategoriesOptions();
+  // Cambia los listeners de filtros para reiniciar la página
+  searchInput.addEventListener("input", () => {
+    currentPage = 1;
     filterAndRender();
   });
-  subcategoriesFilter.addEventListener("change", filterAndRender);
-  monthInput.addEventListener("change", filterAndRender);
-  orderSelect.addEventListener("change", filterAndRender);
-  spotsCheckbox.addEventListener("change", filterAndRender);
+  categoriesFilter.addEventListener("change", () => {
+    updateSubcategoriesOptions();
+    currentPage = 1;
+    filterAndRender();
+  });
+  subcategoriesFilter.addEventListener("change", () => {
+    currentPage = 1;
+    filterAndRender();
+  });
+  monthInput.addEventListener("change", () => {
+    currentPage = 1;
+    filterAndRender();
+  });
+  orderSelect.addEventListener("change", () => {
+    currentPage = 1;
+    filterAndRender();
+  });
+  spotsCheckbox.addEventListener("change", () => {
+    currentPage = 1;
+    filterAndRender();
+  });
 
+  // Actualiza la paginación al cambiar el tamaño de la ventana
+  window.addEventListener('resize', () => {
+    currentPage = 1;
+    filterAndRender();
+  });
   
   filterAndRender();
 }
