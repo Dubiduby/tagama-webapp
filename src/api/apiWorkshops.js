@@ -16,6 +16,24 @@ export async function getWorkshops() {
   }
 }
 
+export async function createWorkshop(workshopData) {
+  const response = await fetch(baseUrl, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(workshopData),
+  });
+  return response.json();
+}
+
+export async function deleteWorkshop(id) {
+  const response = await fetch(`${baseUrl}/${id}`, {
+    method: "DELETE",
+  });
+  return response.ok;
+}
+
 export async function updateWorkshop(dataToUpdate) {
   const url = `${baseUrl}/${dataToUpdate.id}`;
   try {
@@ -34,3 +52,4 @@ export async function updateWorkshop(dataToUpdate) {
     console.error("Error updating workshop", error);
   }
 }
+
