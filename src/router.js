@@ -9,6 +9,7 @@ const routes = {
   "/profile": () => import("./views/profile.js"),
   "/notfound": () => import("./views/notfound.js"),
   "/contact": () => import("./views/contact.js"),
+  "/": () => import("./views/landing.js"),
 };
 
 //routes that require login

@@ -35,7 +35,12 @@ export default function navbar(header) {
   header.innerHTML = `
   <nav class="navbar">
     <div class="navbar__brand">
-        <a href="/home" data-link class="navbar__logo">Workshop Hub</a>
+        <a href="/home" data-link class="navbar__logo"><img src="${
+          new URL(
+            "../assets/images/logo/Tagama-light-background-horiz.svg",
+            import.meta.url
+          ).href
+        }" alt="Added to the list"></img></a>
         <button class="navbar__toggle" aria-label="Open menu">
           <span></span>
           <span></span>
