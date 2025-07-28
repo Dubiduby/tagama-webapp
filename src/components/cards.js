@@ -1,6 +1,15 @@
 import "../assets/styles/main.css";
 import { getCurrentUser, updateUser } from "../api/apiUsers";
 import dayjs from "dayjs";
+import { showToast } from "../utils/toastify";
+import { updateWorkshopCache } from "../utils/cache.js";
+import { updateWorkshop } from "../api/apiWorkshops.js";
+import {
+  showModal,
+  handleWorkshopFormSubmit,
+  renderWorkshopFormHtml,
+  closeModal,
+} from "../utils/formModal.js";
 
 export function workshopCards(workshop, subcategory, category) {
   const card = document.createElement("div");
@@ -27,13 +36,29 @@ export function workshopCards(workshop, subcategory, category) {
   buttonAdd.setAttribute("aria-label", "Add to the list");
 
   const currentUser = getCurrentUser();
-  if (currentUser && currentUser.savedWorkshops.includes(workshop.id)) {
-    // Si el workshop está guardado, muestra el icono de "Added"
+
+  // Check if workshop is created by current user
+  if (
+    currentUser &&
+    currentUser.createdWorkshops &&
+    currentUser.createdWorkshops.includes(String(workshop.id))
+  ) {
+    // If workshop is created by current user, show edit icon
+    buttonAdd.innerHTML = `<img src="${
+      new URL("../assets/images/select.svg", import.meta.url).href
+    }" alt="Edit workshop">`;
+    buttonAdd.setAttribute("aria-label", "Edit workshop");
+  } else if (
+    currentUser &&
+    currentUser.savedWorkshops &&
+    currentUser.savedWorkshops.includes(workshop.id)
+  ) {
+    // If workshop is saved, show the "Added" icon
     buttonAdd.innerHTML = `<img src="${
       new URL("../assets/images/bookmark-check.svg", import.meta.url).href
     }" alt="Added to the list">`;
   } else {
-    // Si no está guardado, muestra el icono normal
+    // If not saved, show the normal bookmark icon
     buttonAdd.innerHTML = `<img src="${
       new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
     }" alt="Add to the list">`;
@@ -82,7 +107,8 @@ export function workshopCards(workshop, subcategory, category) {
   workshopTagCat.textContent = category && category.name ? category.name : "";
   const workshopTagSub = document.createElement("span");
   workshopTagSub.className = "tags";
-  workshopTagSub.textContent = subcategory && subcategory.name ? subcategory.name : "";
+  workshopTagSub.textContent =
+    subcategory && subcategory.name ? subcategory.name : "";
 
   card.appendChild(divCardImage);
   divCardImage.appendChild(img);
@@ -105,26 +131,47 @@ export function workshopCards(workshop, subcategory, category) {
     event.preventDefault();
     event.stopPropagation();
     const currentUser = getCurrentUser();
-    // Verifica si ya está guardado y en que posición se encuentra:
-    const position = currentUser.savedWorkshops.indexOf(workshop.id);
-    if (position === -1) {
-      // No está guardado, entonces lo añadimos
-      currentUser.savedWorkshops.push(workshop.id);
-      buttonAdd.innerHTML = `<img src="${
-        new URL("../assets/images/bookmark-check.svg", import.meta.url).href
-      }" alt="Added to the list">`;
-      buttonAdd.setAttribute("data-workshop-id", workshop.id);
-    } else {
-      // Ya está guardado, entonces lo eliminamos
-      currentUser.savedWorkshops.splice(position, 1);
-      buttonAdd.innerHTML = `<img src="${
-        new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
-      }" alt="Add to the list">`;
-      buttonAdd.setAttribute("data-workshop-id", workshop.id);
-    }
-    localStorage.setItem("currentUser", JSON.stringify(currentUser));
 
-    updateUser(currentUser);
+    // Check if workshop is created by current user
+    if (
+      currentUser &&
+      currentUser.createdWorkshops &&
+      currentUser.createdWorkshops.includes(String(workshop.id))
+    ) {
+      // Handle edit workshop - open modal with workshop data
+      showModal(renderWorkshopFormHtml(workshop));
+      handleWorkshopFormSubmit(async (formData) => {
+        try {
+          const updatedWorkshop = await updateWorkshop(formData);
+          updateWorkshopCache(updatedWorkshop);
+          closeModal();
+          showToast("Workshop updated successfully", "success");
+          // Re-render the current page to show updated data
+          window.location.reload();
+        } catch (error) {
+          showToast("Error updating workshop", "error");
+          console.error("Error updating workshop:", error);
+        }
+      }, workshop);
+    } else {
+      // Handle save/unsave workshop (existing logic)
+      if (!currentUser.savedWorkshops) currentUser.savedWorkshops = [];
+
+      const position = currentUser.savedWorkshops.indexOf(workshop.id);
+      if (position === -1) {
+        currentUser.savedWorkshops.push(workshop.id);
+        buttonAdd.innerHTML = `<img src="${
+          new URL("../assets/images/bookmark-check.svg", import.meta.url).href
+        }" alt="Added to the list">`;
+      } else {
+        currentUser.savedWorkshops.splice(position, 1);
+        buttonAdd.innerHTML = `<img src="${
+          new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
+        }" alt="Add to the list">`;
+      }
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      updateUser(currentUser);
+    }
   });
 
   //added so be able to go to the detail page
