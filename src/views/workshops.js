@@ -30,15 +30,15 @@ export default function workshops(container) {
     <ul class="workshops-nav" role="tablist">
       <li><button id="tab-enrolled" role="tab" type="button">
       <img src="src/assets/images/ticket-alt.svg" alt="" class="tab-icon" />
-      <span>Enrolled</span>
+      <span>Inscritos</span>
       </button></li>
       <li><button id="tab-created" role="tab" type="button">
       <img src="src/assets/images/select.svg" alt="" class="tab-icon" />
-      <span>Created</span>
+      <span>Creados</span>
       </button></li>
       <li><button id="tab-saved" role="tab" type="button">
       <img src="src/assets/images/bookmark.svg" alt="" class="tab-icon" />
-      <span>Saved</span>
+      <span>Guardados</span>
       </button></li>
     </ul>
     <div id="workshops-tab-content-button" class="create-button"></div>
@@ -88,7 +88,7 @@ export default function workshops(container) {
     if (tab === "created") {
       tabCreateButton.innerHTML = "";
       const createBtn = document.createElement("button");
-      createBtn.textContent = "+ New Workshop";
+      createBtn.textContent = "+ Nuevo Taller";
       createBtn.className = "btn-create-workshop styled-button";
       tabCreateButton.appendChild(createBtn);
 
@@ -117,7 +117,7 @@ export default function workshops(container) {
 
           // close modal, show toastify and refresh the tab
           closeModal();
-          showToast("Workshop created successfully", "success");
+          showToast("Taller creado exitosamente", "success");
           showTab("created");
         });
       });
@@ -129,9 +129,10 @@ export default function workshops(container) {
       renderWorkshops(tabContent, filteredWorkshops, categories, subcategories);
     } else {
       let message = "";
-      if (tab === "enrolled") message = "You didn't enroll to any workshop yet";
-      if (tab === "created") message = "You haven't created any workshops yet";
-      if (tab === "saved") message = "You haven't saved any workshops yet";
+      if (tab === "enrolled")
+        message = "Aún no te has inscrito en ningún taller";
+      if (tab === "created") message = "Aún no has creado ningún taller";
+      if (tab === "saved") message = "Aún no has guardado ningún taller";
       tabContent.innerHTML = `<p>${message}</p>`;
     }
   }

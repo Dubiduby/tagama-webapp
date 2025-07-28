@@ -24,16 +24,16 @@ export function workshopCards(workshop, subcategory, category) {
 
   const img = document.createElement("img");
   img.src = imageUrl;
-  img.alt = "Workshop Image";
+  img.alt = "Imagen del Taller";
   //divCardImage.appendChild(img);
 
   const buttonAdd = document.createElement("button");
   buttonAdd.className = "add-btn";
   buttonAdd.innerHTML = `<img src="${
     new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
-  }" alt="Add to the list">`;
+  }" alt="Añadir a la lista">`;
   buttonAdd.setAttribute("data-workshop-id", workshop.id);
-  buttonAdd.setAttribute("aria-label", "Add to the list");
+  buttonAdd.setAttribute("aria-label", "Añadir a la lista");
 
   const currentUser = getCurrentUser();
 
@@ -46,8 +46,8 @@ export function workshopCards(workshop, subcategory, category) {
     // If workshop is created by current user, show edit icon
     buttonAdd.innerHTML = `<img src="${
       new URL("../assets/images/select.svg", import.meta.url).href
-    }" alt="Edit workshop">`;
-    buttonAdd.setAttribute("aria-label", "Edit workshop");
+    }" alt="Editar taller">`;
+    buttonAdd.setAttribute("aria-label", "Editar taller");
   } else if (
     currentUser &&
     currentUser.savedWorkshops &&
@@ -56,12 +56,12 @@ export function workshopCards(workshop, subcategory, category) {
     // If workshop is saved, show the "Added" icon
     buttonAdd.innerHTML = `<img src="${
       new URL("../assets/images/bookmark-check.svg", import.meta.url).href
-    }" alt="Added to the list">`;
+    }" alt="Añadido a la lista">`;
   } else {
     // If not saved, show the normal bookmark icon
     buttonAdd.innerHTML = `<img src="${
       new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
-    }" alt="Add to the list">`;
+    }" alt="Añadir a la lista">`;
   }
 
   const divCardInfo = document.createElement("div");
@@ -77,30 +77,30 @@ export function workshopCards(workshop, subcategory, category) {
   dateSpan.className = "date";
   dateSpan.innerHTML = `<img src="${
     new URL("../assets/images/calendar.svg", import.meta.url).href
-  }" alt="Calendar">  ${dayjs.unix(workshop.date).format("DD/MM/YYYY")}`;
+  }" alt="Calendario">  ${dayjs.unix(workshop.date).format("DD/MM/YYYY")}`;
   //dateSpan.textContent= workshop.date;
 
   const locationSpan = document.createElement("span");
   locationSpan.className = "location";
   locationSpan.innerHTML = `<img src="${
     new URL("../assets/images/location-pin.svg", import.meta.url).href
-  }" alt="Location">  ${workshop.mode}`;
+  }" alt="Ubicación">  ${workshop.mode}`;
 
   const durationSpan = document.createElement("span");
   durationSpan.className = "duration";
   durationSpan.innerHTML = `<img src="${
     new URL("../assets/images/time.svg", import.meta.url).href
-  }" alt="Duration">  ${workshop.duration} min`;
+  }" alt="Duración">  ${workshop.duration} min`;
 
   const spots = document.createElement("span");
   spots.className = "spots";
   spots.innerHTML = `<img src="${
     new URL("../assets/images/spots.svg", import.meta.url).href
-  }" alt="Spots">  ${workshop.enrolled.length}/${workshop.capacity}`;
+  }" alt="Plazas">  ${workshop.enrolled.length}/${workshop.capacity}`;
 
   const workshopPrice = document.createElement("p");
   workshopPrice.textContent =
-    workshop.price === 0 ? "Free" : `${workshop.price}€`;
+    workshop.price === 0 ? "Gratis" : `${workshop.price}€`;
 
   const workshopTagCat = document.createElement("span");
   workshopTagCat.className = "tags";
@@ -145,11 +145,13 @@ export function workshopCards(workshop, subcategory, category) {
           const updatedWorkshop = await updateWorkshop(formData);
           updateWorkshopCache(updatedWorkshop);
           closeModal();
-          showToast("Workshop updated successfully", "success");
-          // Re-render the current page to show updated data
-          window.location.reload();
+          showToast("Taller actualizado exitosamente", "success");
+          // Re-render the current page to show updated data after toast is shown
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000); // Wait 2 seconds for toast to be visible
         } catch (error) {
-          showToast("Error updating workshop", "error");
+          showToast("Error al actualizar el taller", "error");
           console.error("Error updating workshop:", error);
         }
       }, workshop);
@@ -162,12 +164,12 @@ export function workshopCards(workshop, subcategory, category) {
         currentUser.savedWorkshops.push(workshop.id);
         buttonAdd.innerHTML = `<img src="${
           new URL("../assets/images/bookmark-check.svg", import.meta.url).href
-        }" alt="Added to the list">`;
+        }" alt="Añadido a la lista">`;
       } else {
         currentUser.savedWorkshops.splice(position, 1);
         buttonAdd.innerHTML = `<img src="${
           new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
-        }" alt="Add to the list">`;
+        }" alt="Añadir a la lista">`;
       }
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
       updateUser(currentUser);

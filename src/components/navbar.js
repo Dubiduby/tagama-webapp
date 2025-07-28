@@ -10,45 +10,47 @@ export default function navbar(header) {
   let authLinks = "";
   if (isLoggedIn) {
     authLinks = `
-      <li><a href="/workshops" data-link>My workshops</a></li>
+      <li><a href="/workshops" data-link>Mis talleres</a></li>
       <!-- Avatar y dropdown para desktop -->
       <li class="navbar__avatar-container">
-        <button class="navbar__avatar-button" aria-label="User menu">
+        <button class="navbar__avatar-button" aria-label="Menú de usuario">
           <span class="navbar__avatar-circle"></span>
         </button>
         <ul class="navbar__dropdown">
-          <li><a href="/profile" data-link>Profile</a></li>
-          <li><a href="#" id="logout-link">Logout</a></li>
+          <li><a href="/profile" data-link>Perfil</a></li>
+          <li><a href="#" id="logout-link">Cerrar sesión</a></li>
         </ul>
       </li>
       <!-- Profile y Logout como li normales para mobile/burger abierto -->
-      <li class="navbar__profile-link"><a href="/profile" data-link>Profile</a></li>
-      <li class="navbar__logout-link"><a href="#" id="logout-link-mobile">Logout</a></li>
+      <li class="navbar__profile-link"><a href="/profile" data-link>Perfil</a></li>
+      <li class="navbar__logout-link"><a href="#" id="logout-link-mobile">Cerrar sesión</a></li>
     `;
   } else {
     authLinks = `
-      <li><a href="/login" data-link>Login</a></li>
-      <li><a href="/signup" data-link>Signup</a></li>
+      <li><a href="/login" data-link>Iniciar sesión</a></li>
+      <li><a href="/signup" data-link>Registrarse</a></li>
     `;
   }
 
   header.innerHTML = `
   <nav class="navbar">
     <div class="navbar__brand">
-        <a href="/home" data-link class="navbar__logo"><img src="${
-          new URL(
-            "../assets/images/logo/Tagama-light-background-horiz.svg",
-            import.meta.url
-          ).href
-        }" alt="Added to the list"></img></a>
-        <button class="navbar__toggle" aria-label="Open menu">
+        <a href="${
+          isLoggedIn ? "/home" : "/"
+        }" data-link class="navbar__logo"><img src="${
+    new URL(
+      "../assets/images/logo/Tagama-light-background-horiz.svg",
+      import.meta.url
+    ).href
+  }" alt="Añadido a la lista"></img></a>
+        <button class="navbar__toggle" aria-label="Abrir menú">
           <span></span>
           <span></span>
           <span></span>
         </button>
     </div>
     <ul class="navbar__links">
-        <li><a href="/home" data-link>Home</a></li>
+        <li><a href="${isLoggedIn ? "/home" : "/"}" data-link>Inicio</a></li>
         ${authLinks}
     </ul>
   </nav>
@@ -77,7 +79,7 @@ export default function navbar(header) {
     if (avatarCircle) {
       const img = document.createElement("img");
       img.src = user.avatarUrl;
-      img.alt = "User avatar";
+      img.alt = "Avatar del usuario";
       img.className = "navbar__avatar";
       avatarCircle.appendChild(img);
     }

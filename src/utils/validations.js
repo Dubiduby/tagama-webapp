@@ -1,12 +1,12 @@
 import { showToast } from "./toastify";
 
-
-
 export function validation({ name, email, password }) {
   if (name !== undefined) {
     const regexName = /^[A-Za-zÁÉÍÓÚáéíóúÜüÑñ\s]+$/;
     if (!name || name.length < 2 || name.length > 30 || !regexName.test(name)) {
-      showToast("The name must contain only letters and spaces, with a minimum of 2 letters.","error",
+      showToast(
+        "El nombre debe contener solo letras y espacios, con un mínimo de 2 letras.",
+        "error"
       );
 
       return false;
@@ -17,8 +17,7 @@ export function validation({ name, email, password }) {
     const regexEmail = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
 
     if (!regexEmail.test(email)) {
-      showToast("Invalid email.","error",
-      );
+      showToast("Email inválido.", "error");
 
       return false;
     }
@@ -28,7 +27,9 @@ export function validation({ name, email, password }) {
     const regexPassword = /^(?=.*[a-zA-Z])(?=.*\d).{6,}$/;
 
     if (!regexPassword.test(password)) {
-      showToast("The password must be longer than 6 characters and contain at least one number and one letter.","error",
+      showToast(
+        "La contraseña debe tener más de 6 caracteres y contener al menos un número y una letra.",
+        "error"
       );
 
       return false;

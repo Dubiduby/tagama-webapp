@@ -4,35 +4,35 @@ export function renderWorkshopFormHtml(data = {}) {
   const isEdit = Boolean(data.id);
   return `
       <div class="workshop-modal__header">
-        <h3>${isEdit ? "Edit" : "Create"} Workshop</h3>
-        <button class="workshop-modal__close" aria-label="Close" type="button">&times;</button>
+        <h3>${isEdit ? "Editar" : "Crear"} Taller</h3>
+        <button class="workshop-modal__close" aria-label="Cerrar" type="button">&times;</button>
       </div>
       <form id="workshop-form" class="workshop-form">
         <input name="title" value="${
           data.title || ""
-        }" placeholder="Title" required />
+        }" placeholder="Título" required />
         <input name="imageUrl" value="${
           data.imageUrl || ""
-        }" placeholder="Image URL" />
+        }" placeholder="URL de la imagen" />
         <input name="price" value="${
           data.price || ""
-        }" placeholder="Price (€)" />
+        }" placeholder="Precio (€)" />
         <input name="duration" value="${
           data.duration || ""
-        }" placeholder="Duration (e.g. 90 or 2h)" />
+        }" placeholder="Duración (ej. 90 o 2h)" />
         <input name="capacity" value="${
           data.capacity || ""
-        }" placeholder="Capacity (max people)" />
+        }" placeholder="Capacidad (máx. personas)" />
         <input name="date" value="${
           data.date || ""
-        }" placeholder="Start Date (e.g. 2025-08-10)" />
+        }" placeholder="Fecha de inicio (ej. 2025-08-10)" />
         <input name="location" value="${
           data.location || ""
-        }" placeholder="Location (Online or On-Site)" />
-        <textarea name="overview" placeholder="Overview">${
+        }" placeholder="Ubicación (Online o Presencial)" />
+        <textarea name="overview" placeholder="Descripción">${
           data.overview || ""
         }</textarea>
-        <button type="submit">${isEdit ? "Update" : "Create"}</button>
+        <button type="submit">${isEdit ? "Actualizar" : "Crear"}</button>
       </form>
     `;
 }
