@@ -8,62 +8,58 @@ import {
 import dayjs from "dayjs";
 
 export default async function home(container) {
-  container.innerHTML= "";
+  container.innerHTML = "";
   const workshops = await getCachedWorkshops();
   const categories = await getCachedCategories();
   const subcategories = await getCachedSubcategories();
 
- 
   // Search
   const searchInput = document.createElement("input");
   searchInput.type = "text";
-  searchInput.placeholder = "Search workshop...";
+  searchInput.placeholder = "Buscar taller...";
   searchInput.className = "search-input";
   container.appendChild(searchInput);
 
-   // Botón para mostrar/ocultar filtros
-   const filtersToggleBtn = document.createElement("button");
-   filtersToggleBtn.textContent = "Filters";
-   filtersToggleBtn.className = "filters-toggle-btn";
-   container.appendChild(filtersToggleBtn);
+  // Botón para mostrar/ocultar filtros
+  const filtersToggleBtn = document.createElement("button");
+  filtersToggleBtn.textContent = "Filtros";
+  filtersToggleBtn.className = "filters-toggle-btn";
+  container.appendChild(filtersToggleBtn);
 
-   //Search an filters container
-   const searchContainer= document.createElement("div");
-   searchContainer.className= "search-container";
-   searchContainer.appendChild(searchInput);
-   searchContainer.appendChild(filtersToggleBtn);
-   container.appendChild(searchContainer);
+  //Search an filters container
+  const searchContainer = document.createElement("div");
+  searchContainer.className = "search-container";
+  searchContainer.appendChild(searchInput);
+  searchContainer.appendChild(filtersToggleBtn);
+  container.appendChild(searchContainer);
 
-     // All filteers container
+  // All filteers container
   const allFiltersContainer = document.createElement("div");
-  allFiltersContainer.className= "all-filters-container";
+  allFiltersContainer.className = "all-filters-container";
 
   allFiltersContainer.appendChild(searchContainer);
   // --- Paginación: contenedor global ---
-const paginationContainer = document.createElement("div");
-paginationContainer.className = "pagination-container";
-  
+  const paginationContainer = document.createElement("div");
+  paginationContainer.className = "pagination-container";
 
- 
-   // Mostrar/ocultar filtros al hacer click
-   filtersToggleBtn.addEventListener("click", () => {
-     filterContainer.classList.toggle("hidden");
-   });
+  // Mostrar/ocultar filtros al hacer click
+  filtersToggleBtn.addEventListener("click", () => {
+    filterContainer.classList.toggle("hidden");
+  });
 
   // Filtros
   const filterContainer = document.createElement("div");
   filterContainer.className = "filter-container";
-
 
   // Categoría
   const categoriesFilter = document.createElement("select");
   categoriesFilter.className = "category-filter";
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
-  defaultOption.textContent = "All categories";
+  defaultOption.textContent = "Todas las categorías";
   categoriesFilter.appendChild(defaultOption);
 
-  categories.forEach(category => {
+  categories.forEach((category) => {
     const option = document.createElement("option");
     option.value = category.id;
     option.textContent = category.name;
@@ -75,9 +71,9 @@ paginationContainer.className = "pagination-container";
   subcategoriesFilter.className = "subcategory-filter";
   const defaultSubcategoryOption = document.createElement("option");
   defaultSubcategoryOption.value = "";
-  defaultSubcategoryOption.textContent = "All subcategories";
+  defaultSubcategoryOption.textContent = "Todas las subcategorías";
   subcategoriesFilter.appendChild(defaultSubcategoryOption);
-  subcategories.forEach(subcategory => {
+  subcategories.forEach((subcategory) => {
     const option = document.createElement("option");
     option.value = subcategory.id;
     option.textContent = subcategory.name;
@@ -93,11 +89,11 @@ paginationContainer.className = "pagination-container";
   const orderSelect = document.createElement("select");
   orderSelect.className = "order-filter";
   [
-    { value: "recent", text: "Upcoming" },
-    { value: "oldest", text: "Farthest" },
-    { value: "priceAsc", text: "Cheapest" },
-    { value: "priceDesc", text: "Expensive" },
-  ].forEach(opt => {
+    { value: "recent", text: "Próximos" },
+    { value: "oldest", text: "Más lejanos" },
+    { value: "priceAsc", text: "Más baratos" },
+    { value: "priceDesc", text: "Más caros" },
+  ].forEach((opt) => {
     const option = document.createElement("option");
     option.value = opt.value;
     option.textContent = opt.text;
@@ -109,16 +105,16 @@ paginationContainer.className = "pagination-container";
   spotsCheckbox.type = "checkbox";
   spotsCheckbox.className = "spots-filter";
   const spotsLabel = document.createElement("label");
-  spotsLabel.textContent = "Only available spots";
+  spotsLabel.textContent = "Solo con plazas disponibles";
   spotsLabel.appendChild(spotsCheckbox);
 
   const workshopsContainer = document.createElement("div");
   workshopsContainer.className = "workshops-list";
 
   // Botón para resetear filtros
-const resetButton = document.createElement("button");
-resetButton.textContent = "Clear";
-resetButton.className = "reset-filters-btn";
+  const resetButton = document.createElement("button");
+  resetButton.textContent = "Limpiar";
+  resetButton.className = "reset-filters-btn";
 
   // Añadir filtros al contenedor
   //filterContainer.appendChild(searchInput);
@@ -131,86 +127,101 @@ resetButton.className = "reset-filters-btn";
   allFiltersContainer.appendChild(filterContainer);
   container.appendChild(allFiltersContainer);
   container.appendChild(workshopsContainer);
-  container.appendChild(paginationContainer); 
+  container.appendChild(paginationContainer);
 
-   
+  // Función para actualizar las subcategorías según la categoría seleccionada
+  function updateSubcategoriesOptions() {
+    // Limpia todas las opciones
+    subcategoriesFilter.innerHTML = "";
+    // Opción por defecto
+    const defaultSubcategoryOption = document.createElement("option");
+    defaultSubcategoryOption.value = "";
+    defaultSubcategoryOption.textContent = "Todas las subcategorías";
+    subcategoriesFilter.appendChild(defaultSubcategoryOption);
 
- // Función para actualizar las subcategorías según la categoría seleccionada
- function updateSubcategoriesOptions() {
-  // Limpia todas las opciones
-  subcategoriesFilter.innerHTML = "";
-  // Opción por defecto
-  const defaultSubcategoryOption = document.createElement("option");
-  defaultSubcategoryOption.value = "";
-  defaultSubcategoryOption.textContent = "All subcategories";
-  subcategoriesFilter.appendChild(defaultSubcategoryOption);
+    // Si hay una categoría seleccionada, filtra las subcategorías
+    const selectedCategoryId = categoriesFilter.value;
+    const filteredSubcategories = selectedCategoryId
+      ? subcategories.filter(
+          (sub) => String(sub.categoryId) === String(selectedCategoryId)
+        )
+      : subcategories;
 
-  // Si hay una categoría seleccionada, filtra las subcategorías
-  const selectedCategoryId = categoriesFilter.value;
-  const filteredSubcategories = selectedCategoryId
-    ? subcategories.filter(sub => String(sub.categoryId) === String(selectedCategoryId))
-    : subcategories;
-
-  filteredSubcategories.forEach(subcategory => {
-    const option = document.createElement("option");
-    option.value = subcategory.id;
-    option.textContent = subcategory.name;
-    subcategoriesFilter.appendChild(option);
-  });
-  // Resetea el valor seleccionado
-  subcategoriesFilter.value = "";
-}
-
-// Inicializa las subcategorías
-updateSubcategoriesOptions();
-
-// --- Paginación ---
-function getWorkshopsPerPage() {
-  if (window.innerWidth < 600) {
-    return 8; // Por ejemplo, 4 en móvil
-  } else if (window.innerWidth < 1000) {
-    return 10; // Por ejemplo, 8 en tablet
-  } else {
-    return 15; // 15 en escritorio
+    filteredSubcategories.forEach((subcategory) => {
+      const option = document.createElement("option");
+      option.value = subcategory.id;
+      option.textContent = subcategory.name;
+      subcategoriesFilter.appendChild(option);
+    });
+    // Resetea el valor seleccionado
+    subcategoriesFilter.value = "";
   }
-}
-let currentPage = 1;
-let totalPages = 1;
-// --- Fin paginación ---
+
+  // Inicializa las subcategorías
+  updateSubcategoriesOptions();
+
+  // --- Paginación ---
+  function getWorkshopsPerPage() {
+    if (window.innerWidth < 600) {
+      return 8; // Por ejemplo, 4 en móvil
+    } else if (window.innerWidth < 1000) {
+      return 10; // Por ejemplo, 8 en tablet
+    } else {
+      return 15; // 15 en escritorio
+    }
+  }
+  let currentPage = 1;
+  let totalPages = 1;
+  // --- Fin paginación ---
 
   function filterAndRender() {
     let filtered = [...workshops];
     //Search Filter
     const searchValue = searchInput.value.toLowerCase();
     if (searchValue) {
-      filtered = filtered.filter(workshops => workshops.title.toLowerCase().includes(searchValue));
+      filtered = filtered.filter((workshops) =>
+        workshops.title.toLowerCase().includes(searchValue)
+      );
     }
     // Categories Filter
     const categoriesValue = categoriesFilter.value;
     if (categoriesValue) {
-      filtered = filtered.filter(workshops => workshops.categoryId === Number(categoriesValue));
+      filtered = filtered.filter(
+        (workshops) => workshops.categoryId === Number(categoriesValue)
+      );
     }
     // Subcategories Filter
     const subcategoriesValue = subcategoriesFilter.value;
     if (subcategoriesValue) {
-      filtered = filtered.filter(workshops => workshops.subcategoryId === Number(subcategoriesValue));
+      filtered = filtered.filter(
+        (workshops) => workshops.subcategoryId === Number(subcategoriesValue)
+      );
     }
     // Date Filter
     const monthValue = monthInput.value; // "YYYY-MM" format
     if (monthValue) {
-      filtered = filtered.filter(workshops => dayjs.unix(workshops.date).format("YYYY-MM") === monthValue);
+      filtered = filtered.filter(
+        (workshops) =>
+          dayjs.unix(workshops.date).format("YYYY-MM") === monthValue
+      );
     }
     // Spots Filter
     if (spotsCheckbox.checked) {
-      filtered = filtered.filter(workshops => workshops.enrolled.length < workshops.capacity);
+      filtered = filtered.filter(
+        (workshops) => workshops.enrolled.length < workshops.capacity
+      );
     }
 
     // Ordenar por:
     const orderValue = orderSelect.value;
     if (orderValue === "recent") {
-      filtered = filtered.sort((a, b) => dayjs.unix(a.date).diff(dayjs.unix(b.date)));
+      filtered = filtered.sort((a, b) =>
+        dayjs.unix(a.date).diff(dayjs.unix(b.date))
+      );
     } else if (orderValue === "oldest") {
-      filtered = filtered.sort((a, b) => dayjs.unix(b.date).diff(dayjs.unix(a.date)));
+      filtered = filtered.sort((a, b) =>
+        dayjs.unix(b.date).diff(dayjs.unix(a.date))
+      );
     } else if (orderValue === "priceAsc") {
       filtered = filtered.sort((a, b) => a.price - b.price);
     } else if (orderValue === "priceDesc") {
@@ -228,9 +239,15 @@ let totalPages = 1;
     // Render the workshopContainer
     workshopsContainer.innerHTML = "";
     if (paginatedWorkshops.length === 0) {
-      workshopsContainer.innerHTML = "There are no workshops matching the filters."
+      workshopsContainer.innerHTML =
+        "No hay talleres que coincidan con los filtros.";
     } else {
-      renderWorkshops(workshopsContainer, paginatedWorkshops, categories, subcategories);
+      renderWorkshops(
+        workshopsContainer,
+        paginatedWorkshops,
+        categories,
+        subcategories
+      );
     }
 
     // --- Paginación: renderizar controles ---
@@ -280,7 +297,7 @@ let totalPages = 1;
     paginationContainer.appendChild(nextBtn);
   }
   // --- Fin paginación ---
-  
+
   // Events in each filter
   // Cambia los listeners de filtros para reiniciar la página
   searchInput.addEventListener("input", () => {
@@ -310,10 +327,10 @@ let totalPages = 1;
   });
 
   // Actualiza la paginación al cambiar el tamaño de la ventana
-  window.addEventListener('resize', () => {
+  window.addEventListener("resize", () => {
     currentPage = 1;
     filterAndRender();
   });
-  
+
   filterAndRender();
 }

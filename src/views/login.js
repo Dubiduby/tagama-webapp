@@ -17,13 +17,13 @@ export default function login(container) {
   const h1 = document.createElement("h1");
   h1.id = "login-h1";
   h1.className = "login-title";
-  h1.textContent = "Login";
+  h1.textContent = "Inicio de sesión";
 
   //Email
 
   const loginEmail = document.createElement("input");
   loginEmail.type = "email";
-  loginEmail.placeholder = "Enter your best email";
+  loginEmail.placeholder = "Ingresa tu mejor email";
   loginEmail.name = "email";
   const emailLabel = document.createElement("label");
   emailLabel.textContent = "Email:";
@@ -34,20 +34,20 @@ export default function login(container) {
 
   const loginPassword = document.createElement("input");
   loginPassword.type = "password";
-  loginPassword.placeholder = "Enter a save password";
+  loginPassword.placeholder = "Ingresa una contraseña segura";
   loginPassword.name = "password";
   const passwordLabel = document.createElement("label");
-  passwordLabel.textContent = "Password:";
+  passwordLabel.textContent = "Contraseña:";
   passwordLabel.setAttribute("for", "login-password");
   loginPassword.id = "login-password";
 
   const submitButton = document.createElement("button");
   submitButton.type = "submit";
-  submitButton.textContent = "Log in";
+  submitButton.textContent = "Iniciar Sesión";
 
   const signupText = document.createElement("p");
   signupText.classList.add("signup-text");
-  signupText.innerHTML = `Don't have an account? <a href="/signup" data-link id="signup-link">Sign up!</a>`;
+  signupText.innerHTML = `¿No tienes una cuenta? <a href="/signup" data-link id="signup-link">¡Regístrate!</a>`;
 
   loginForm.appendChild(h1);
   loginForm.appendChild(emailLabel);
@@ -67,7 +67,7 @@ export default function login(container) {
     const password = loginPassword.value;
 
     if (!email || !password) {
-      showToast("Please, complete all fields.", "error");
+      showToast("Por favor, completa todos los campos.", "error");
       return;
     }
 
@@ -79,14 +79,14 @@ export default function login(container) {
       );
       if (isMatch) {
         localStorage.setItem("currentUser", JSON.stringify(isMatch));
-        showToast("Login successful", "success");
+        showToast("Inicio de sesión exitoso", "success");
         navigate("/home");
       } else {
-        showToast("Email or password incorrect", "error");
+        showToast("Email o contraseña incorrectos", "error");
         loginPassword.value = "";
       }
     } else {
-      showToast("Unexpected error in login", "error");
+      showToast("Error inesperado en el inicio de sesión", "error");
     }
   });
 }

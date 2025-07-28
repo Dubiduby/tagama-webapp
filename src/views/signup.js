@@ -22,13 +22,13 @@ export default function signUp(container) {
   // Título
   const h1 = document.createElement("h1");
   h1.className = "sign-up-title";
-  h1.textContent = "Sign Up";
+  h1.textContent = "Registro";
   form.appendChild(h1);
 
   // Label y input para el nombre
   const labelName = document.createElement("label");
   labelName.htmlFor = "signup-name";
-  labelName.innerHTML = "Name <span style='color:#ef4444'>*</span>";
+  labelName.innerHTML = "Nombre <span style='color:#ef4444'>*</span>";
   const inputName = document.createElement("input");
   inputName.type = "text";
   inputName.id = "signup-name";
@@ -54,7 +54,7 @@ export default function signUp(container) {
   // Label y input para la contraseña
   const labelPassword = document.createElement("label");
   labelPassword.htmlFor = "signup-password";
-  labelPassword.innerHTML = "Password <span style='color:#ef4444'>*</span>";
+  labelPassword.innerHTML = "Contraseña <span style='color:#ef4444'>*</span>";
   const inputPassword = document.createElement("input");
   inputPassword.type = "password";
   inputPassword.id = "signup-password";
@@ -67,7 +67,8 @@ export default function signUp(container) {
   // Label y input para repetir contraseña
   const labelRepeat = document.createElement("label");
   labelRepeat.htmlFor = "signup-repeat";
-  labelRepeat.innerHTML = "Repeat password <span style='color:#ef4444'>*</span>";
+  labelRepeat.innerHTML =
+    "Repetir contraseña <span style='color:#ef4444'>*</span>";
   const inputRepeat = document.createElement("input");
   inputRepeat.type = "password";
   inputRepeat.id = "signup-repeat";
@@ -80,14 +81,14 @@ export default function signUp(container) {
   // Texto pequeño
   const small = document.createElement("small");
   small.className = "small-sign-up";
-  small.textContent = "(*) All fields are required.";
+  small.textContent = "(*) Todos los campos son obligatorios.";
   form.appendChild(small);
 
   // Botón de registro
   const button = document.createElement("button");
   button.type = "submit";
   button.className = "button-login-signup";
-  button.textContent = "Sign up";
+  button.textContent = "Registrarse";
   form.appendChild(button);
 
   const loginMsgDiv = document.createElement("div");
@@ -97,7 +98,7 @@ export default function signUp(container) {
 
   const loginText = document.createElement("p");
   loginText.classList.add("login-text");
-  loginText.innerHTML = `Already have an account? <a href="/login" data-link id="login-link">Login!</a>`;
+  loginText.innerHTML = `¿Ya tienes una cuenta? <a href="/login" data-link id="login-link">¡Inicia sesión!</a>`;
 
   form.appendChild(loginText);
 
@@ -110,7 +111,7 @@ export default function signUp(container) {
       const signupRepPassword = inputRepeat.value.trim();
 
       if (signupPassword !== signupRepPassword) {
-        showToast("Passwords do not match", "error");
+        showToast("Las contraseñas no coinciden", "error");
         return;
       }
       const isValid = validation({
@@ -129,7 +130,7 @@ export default function signUp(container) {
 
         await createNewUser(newUser);
 
-        showToast("Signup successful", "success");
+        showToast("Registro exitoso", "success");
 
         navigate("/login");
       }

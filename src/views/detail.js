@@ -43,7 +43,7 @@ export default async function detail(container, id) {
     date: dateTime.format("dddd, D MMMM YYYY, HH:mm"),
     duration: formattedDuration,
     mode: workshopDetail.mode,
-    spots: `${workshopDetail.enrolled.length} spots left of ${workshopDetail.capacity}`,
+    spots: `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`,
     tags: [subcategory.name, category.name],
     title: workshopDetail.title,
     instructor: workshopDetail.instructorName,
@@ -58,7 +58,7 @@ export default async function detail(container, id) {
   const backLink = document.createElement("a");
   backLink.href = "/workshops";
   backLink.className = "back-link";
-  backLink.textContent = "< Back to Workshops";
+  backLink.textContent = "< Volver a Talleres";
   container.appendChild(backLink);
 
   // Contenedor principal
@@ -76,7 +76,7 @@ export default async function detail(container, id) {
   imageDiv.className = "workshop-image";
   const img = document.createElement("img");
   img.src = workshop.image;
-  img.alt = "Workshop image";
+  img.alt = "Imagen del taller";
   imageDiv.appendChild(img);
   mainColumn.appendChild(imageDiv);
 
@@ -113,11 +113,11 @@ export default async function detail(container, id) {
   const overviewTab = document.createElement("button");
   overviewTab.className = "tab active";
   overviewTab.dataset.tab = "overview";
-  overviewTab.textContent = "Overview";
+  overviewTab.textContent = "Descripción";
   const requirementsTab = document.createElement("button");
   requirementsTab.className = "tab";
   requirementsTab.dataset.tab = "requirements";
-  requirementsTab.textContent = "Requirements";
+  requirementsTab.textContent = "Requisitos";
   tabsDiv.appendChild(overviewTab);
   tabsDiv.appendChild(requirementsTab);
   tabsBox.appendChild(tabsDiv);
@@ -149,7 +149,7 @@ export default async function detail(container, id) {
     const locationDiv = document.createElement("div");
     locationDiv.className = "workshop-location";
     const locationSpan = document.createElement("span");
-    locationSpan.textContent = "Location";
+    locationSpan.textContent = "Ubicación";
     const locationP = document.createElement("p");
     locationP.textContent = workshop.address;
     locationDiv.appendChild(locationSpan);
@@ -171,7 +171,7 @@ export default async function detail(container, id) {
 
   const priceDiv = document.createElement("div");
   priceDiv.className = "workshop-price";
-  priceDiv.textContent = workshop.price === 0 ? "Free" : `${workshop.price}€`;
+  priceDiv.textContent = workshop.price === 0 ? "Gratis" : `${workshop.price}€`;
   sidebar.appendChild(priceDiv);
 
   // Fecha con icono
@@ -234,11 +234,11 @@ export default async function detail(container, id) {
   const enrollBtn = document.createElement("button");
   enrollBtn.className = "enroll-btn";
   if (isEnrolled) {
-    enrollBtn.textContent = "Cancel";
+    enrollBtn.textContent = "Cancelar";
     enrollBtn.style.background = "#e10505ff";
     enrollBtn.style.color = "#fff";
   } else {
-    enrollBtn.textContent = "Enroll";
+    enrollBtn.textContent = "Inscribirse";
     enrollBtn.style.background = "";
     enrollBtn.style.color = "";
   }
@@ -263,244 +263,253 @@ export default async function detail(container, id) {
   // Payment Modal logic
   function showPaymentModal(onSuccess, onCancel) {
     // Overlay
-    const overlay = document.createElement('div');
-    overlay.className = 'payment-modal-overlay';
-    overlay.style.position = 'fixed';
+    const overlay = document.createElement("div");
+    overlay.className = "payment-modal-overlay";
+    overlay.style.position = "fixed";
     overlay.style.top = 0;
     overlay.style.left = 0;
-    overlay.style.width = '100vw';
-    overlay.style.height = '100vh';
-    overlay.style.background = 'rgba(0,0,0,0.5)';
-    overlay.style.display = 'flex';
-    overlay.style.alignItems = 'center';
-    overlay.style.justifyContent = 'center';
+    overlay.style.width = "100vw";
+    overlay.style.height = "100vh";
+    overlay.style.background = "rgba(0,0,0,0.5)";
+    overlay.style.display = "flex";
+    overlay.style.alignItems = "center";
+    overlay.style.justifyContent = "center";
     overlay.style.zIndex = 10000;
 
     // Modal
-    const app = document.createElement('div');
-    app.className = 'payment-card';
-    app.style.position = 'relative';
+    const app = document.createElement("div");
+    app.className = "payment-card";
+    app.style.position = "relative";
 
     // Close button
-    const closeBtn = document.createElement('button');
-    closeBtn.textContent = '×';
-    closeBtn.style.position = 'absolute';
-    closeBtn.style.top = '10px';
-    closeBtn.style.right = '10px';
-    closeBtn.style.background = 'transparent';
-    closeBtn.style.border = 'none';
-    closeBtn.style.fontSize = '1.5rem';
-    closeBtn.style.cursor = 'pointer';
-    closeBtn.addEventListener('click', () => {
+    const closeBtn = document.createElement("button");
+    closeBtn.textContent = "×";
+    closeBtn.style.position = "absolute";
+    closeBtn.style.top = "10px";
+    closeBtn.style.right = "10px";
+    closeBtn.style.background = "transparent";
+    closeBtn.style.border = "none";
+    closeBtn.style.fontSize = "1.5rem";
+    closeBtn.style.cursor = "pointer";
+    closeBtn.addEventListener("click", () => {
       document.body.removeChild(overlay);
       if (onCancel) onCancel();
     });
     app.appendChild(closeBtn);
 
     // Formulario de pago (tu código adaptado)
-    const form = document.createElement('form');
-    form.className = 'payment-form';
+    const form = document.createElement("form");
+    form.className = "payment-form";
     // Título
-    const title = document.createElement('h1');
-    title.textContent = 'Pago de servicios';
+    const title = document.createElement("h1");
+    title.textContent = "Pago de servicios";
     form.appendChild(title);
     // Selector de proveedor
-    const label = document.createElement('label');
-    label.textContent = 'Elige tu método de pago: ';
-    label.setAttribute('for', 'proveedor');
+    const label = document.createElement("label");
+    label.textContent = "Elige tu método de pago: ";
+    label.setAttribute("for", "proveedor");
     form.appendChild(label);
-    const select = document.createElement('select');
-    select.id = 'proveedor';
-    const defaultOption = document.createElement('option');
-    defaultOption.value = '';
-    defaultOption.textContent = 'Selecciona un método de pago';
+    const select = document.createElement("select");
+    select.id = "proveedor";
+    const defaultOption = document.createElement("option");
+    defaultOption.value = "";
+    defaultOption.textContent = "Selecciona un método de pago";
     defaultOption.disabled = true;
     defaultOption.selected = true;
     select.appendChild(defaultOption);
-    ['Bizum', 'PayPal', 'Tarjeta'].forEach((prov) => {
-      const option = document.createElement('option');
+    ["Bizum", "PayPal", "Tarjeta"].forEach((prov) => {
+      const option = document.createElement("option");
       option.value = prov.toLowerCase();
       option.textContent = prov;
       select.appendChild(option);
     });
     form.appendChild(select);
     // Campos para datos de tarjeta
-    const cardFields = document.createElement('div');
-    cardFields.className = 'card-fields';
-    const cardNumberLabel = document.createElement('label');
-    cardNumberLabel.textContent = 'Número de tarjeta:';
-    cardNumberLabel.setAttribute('for', 'cardNumber');
+    const cardFields = document.createElement("div");
+    cardFields.className = "card-fields";
+    const cardNumberLabel = document.createElement("label");
+    cardNumberLabel.textContent = "Número de tarjeta:";
+    cardNumberLabel.setAttribute("for", "cardNumber");
     cardFields.appendChild(cardNumberLabel);
-    const cardNumber = document.createElement('input');
-    cardNumber.type = 'text';
-    cardNumber.id = 'cardNumber';
-    cardNumber.name = 'cardNumber';
-    cardNumber.placeholder = '1234 5678 9012 3456';
-    cardNumber.maxLength = '19';
+    const cardNumber = document.createElement("input");
+    cardNumber.type = "text";
+    cardNumber.id = "cardNumber";
+    cardNumber.name = "cardNumber";
+    cardNumber.placeholder = "1234 5678 9012 3456";
+    cardNumber.maxLength = "19";
     cardFields.appendChild(cardNumber);
-    const holderLabel = document.createElement('label');
-    holderLabel.textContent = 'Nombre del titular:';
-    holderLabel.setAttribute('for', 'cardHolder');
+    const holderLabel = document.createElement("label");
+    holderLabel.textContent = "Nombre del titular:";
+    holderLabel.setAttribute("for", "cardHolder");
     cardFields.appendChild(holderLabel);
-    const cardHolder = document.createElement('input');
-    cardHolder.type = 'text';
-    cardHolder.id = 'cardHolder';
-    cardHolder.name = 'cardHolder';
-    cardHolder.placeholder = 'Juan Pérez';
+    const cardHolder = document.createElement("input");
+    cardHolder.type = "text";
+    cardHolder.id = "cardHolder";
+    cardHolder.name = "cardHolder";
+    cardHolder.placeholder = "Juan Pérez";
     cardFields.appendChild(cardHolder);
-    const row = document.createElement('div');
-    row.className = 'row';
-    const expiryDiv = document.createElement('div');
-    const expiryLabel = document.createElement('label');
-    expiryLabel.textContent = 'Fecha de caducidad:';
-    expiryLabel.setAttribute('for', 'expiry');
+    const row = document.createElement("div");
+    row.className = "row";
+    const expiryDiv = document.createElement("div");
+    const expiryLabel = document.createElement("label");
+    expiryLabel.textContent = "Fecha de caducidad:";
+    expiryLabel.setAttribute("for", "expiry");
     expiryDiv.appendChild(expiryLabel);
-    const expiry = document.createElement('input');
-    expiry.type = 'text';
-    expiry.id = 'expiry';
-    expiry.name = 'expiry';
-    expiry.placeholder = 'MM/AA';
-    expiry.maxLength = '5';
+    const expiry = document.createElement("input");
+    expiry.type = "text";
+    expiry.id = "expiry";
+    expiry.name = "expiry";
+    expiry.placeholder = "MM/AA";
+    expiry.maxLength = "5";
     expiryDiv.appendChild(expiry);
     row.appendChild(expiryDiv);
-    const cvcDiv = document.createElement('div');
-    const cvcLabel = document.createElement('label');
-    cvcLabel.textContent = 'CVC:';
-    cvcLabel.setAttribute('for', 'cvc');
+    const cvcDiv = document.createElement("div");
+    const cvcLabel = document.createElement("label");
+    cvcLabel.textContent = "CVC:";
+    cvcLabel.setAttribute("for", "cvc");
     cvcDiv.appendChild(cvcLabel);
-    const cvc = document.createElement('input');
-    cvc.type = 'text';
-    cvc.id = 'cvc';
-    cvc.name = 'cvc';
-    cvc.placeholder = '123';
-    cvc.maxLength = '4';
+    const cvc = document.createElement("input");
+    cvc.type = "text";
+    cvc.id = "cvc";
+    cvc.name = "cvc";
+    cvc.placeholder = "123";
+    cvc.maxLength = "4";
     cvcDiv.appendChild(cvc);
     row.appendChild(cvcDiv);
     cardFields.appendChild(row);
-    cardFields.style.display = 'none';
+    cardFields.style.display = "none";
     form.appendChild(cardFields);
     // Bizum fields
-    const bizumFields = document.createElement('div');
-    bizumFields.className = 'payment-fields bizum-fields';
-    bizumFields.style.display = 'none';
-    const bizumLabel = document.createElement('label');
-    bizumLabel.textContent = 'Número de teléfono:';
-    bizumLabel.setAttribute('for', 'bizumPhone');
+    const bizumFields = document.createElement("div");
+    bizumFields.className = "payment-fields bizum-fields";
+    bizumFields.style.display = "none";
+    const bizumLabel = document.createElement("label");
+    bizumLabel.textContent = "Número de teléfono:";
+    bizumLabel.setAttribute("for", "bizumPhone");
     bizumFields.appendChild(bizumLabel);
-    const bizumPhone = document.createElement('input');
-    bizumPhone.type = 'tel';
-    bizumPhone.id = 'bizumPhone';
-    bizumPhone.name = 'bizumPhone';
-    bizumPhone.placeholder = '600 000 000';
-    bizumPhone.maxLength = '12';
+    const bizumPhone = document.createElement("input");
+    bizumPhone.type = "tel";
+    bizumPhone.id = "bizumPhone";
+    bizumPhone.name = "bizumPhone";
+    bizumPhone.placeholder = "600 000 000";
+    bizumPhone.maxLength = "12";
     bizumFields.appendChild(bizumPhone);
-    const bizumInfo = document.createElement('p');
-    bizumInfo.className = 'payment-info';
-    bizumInfo.textContent = 'Recibirás una notificación en tu app de Bizum para confirmar el pago.';
-    bizumInfo.style.fontSize = '0.9rem';
-    bizumInfo.style.color = '#666';
-    bizumInfo.style.marginTop = '0.5rem';
+    const bizumInfo = document.createElement("p");
+    bizumInfo.className = "payment-info";
+    bizumInfo.textContent =
+      "Recibirás una notificación en tu app de Bizum para confirmar el pago.";
+    bizumInfo.style.fontSize = "0.9rem";
+    bizumInfo.style.color = "#666";
+    bizumInfo.style.marginTop = "0.5rem";
     bizumFields.appendChild(bizumInfo);
     form.appendChild(bizumFields);
     // PayPal fields
-    const paypalFields = document.createElement('div');
-    paypalFields.className = 'payment-fields paypal-fields';
-    paypalFields.style.display = 'none';
-    const paypalEmailLabel = document.createElement('label');
-    paypalEmailLabel.textContent = 'Email de PayPal:';
-    paypalEmailLabel.setAttribute('for', 'paypalEmail');
+    const paypalFields = document.createElement("div");
+    paypalFields.className = "payment-fields paypal-fields";
+    paypalFields.style.display = "none";
+    const paypalEmailLabel = document.createElement("label");
+    paypalEmailLabel.textContent = "Email de PayPal:";
+    paypalEmailLabel.setAttribute("for", "paypalEmail");
     paypalFields.appendChild(paypalEmailLabel);
-    const paypalEmail = document.createElement('input');
-    paypalEmail.type = 'email';
-    paypalEmail.id = 'paypalEmail';
-    paypalEmail.name = 'paypalEmail';
-    paypalEmail.placeholder = 'tu@email.com';
+    const paypalEmail = document.createElement("input");
+    paypalEmail.type = "email";
+    paypalEmail.id = "paypalEmail";
+    paypalEmail.name = "paypalEmail";
+    paypalEmail.placeholder = "tu@email.com";
     paypalFields.appendChild(paypalEmail);
-    const paypalInfo = document.createElement('p');
-    paypalInfo.className = 'payment-info';
-    paypalInfo.textContent = 'Serás redirigido a PayPal para completar el pago de forma segura.';
-    paypalInfo.style.fontSize = '0.9rem';
-    paypalInfo.style.color = '#666';
-    paypalInfo.style.marginTop = '0.5rem';
+    const paypalInfo = document.createElement("p");
+    paypalInfo.className = "payment-info";
+    paypalInfo.textContent =
+      "Serás redirigido a PayPal para completar el pago de forma segura.";
+    paypalInfo.style.fontSize = "0.9rem";
+    paypalInfo.style.color = "#666";
+    paypalInfo.style.marginTop = "0.5rem";
     paypalFields.appendChild(paypalInfo);
     form.appendChild(paypalFields);
     // Toggle fields
     function togglePaymentFields() {
       const selectedMethod = select.value;
-      cardFields.style.display = 'none';
-      bizumFields.style.display = 'none';
-      paypalFields.style.display = 'none';
-      if (selectedMethod === 'tarjeta') cardFields.style.display = 'block';
-      else if (selectedMethod === 'bizum') bizumFields.style.display = 'block';
-      else if (selectedMethod === 'paypal') paypalFields.style.display = 'block';
+      cardFields.style.display = "none";
+      bizumFields.style.display = "none";
+      paypalFields.style.display = "none";
+      if (selectedMethod === "tarjeta") cardFields.style.display = "block";
+      else if (selectedMethod === "bizum") bizumFields.style.display = "block";
+      else if (selectedMethod === "paypal")
+        paypalFields.style.display = "block";
     }
     togglePaymentFields();
-    select.addEventListener('change', togglePaymentFields);
+    select.addEventListener("change", togglePaymentFields);
     // Format card number
-    cardNumber.addEventListener('input', (e) => {
-      let value = e.target.value.replace(/\s/g, '').replace(/[^0-9]/gi, '');
-      let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+    cardNumber.addEventListener("input", (e) => {
+      let value = e.target.value.replace(/\s/g, "").replace(/[^0-9]/gi, "");
+      let formattedValue = value.match(/.{1,4}/g)?.join(" ") || value;
       e.target.value = formattedValue;
     });
-    expiry.addEventListener('input', (e) => {
-      let value = e.target.value.replace(/\D/g, '');
-      if (value.length >= 2) value = value.slice(0, 2) + '/' + value.slice(2);
+    expiry.addEventListener("input", (e) => {
+      let value = e.target.value.replace(/\D/g, "");
+      if (value.length >= 2) value = value.slice(0, 2) + "/" + value.slice(2);
       e.target.value = value;
     });
-    cvc.addEventListener('input', (e) => {
-      e.target.value = e.target.value.replace(/\D/g, '');
+    cvc.addEventListener("input", (e) => {
+      e.target.value = e.target.value.replace(/\D/g, "");
     });
     // Pay button
-    const button = document.createElement('button');
-    button.id = 'pagar';
-    button.type = 'submit';
-    button.textContent = 'Pagar';
+    const button = document.createElement("button");
+    button.id = "pagar";
+    button.type = "submit";
+    button.textContent = "Pagar";
     form.appendChild(button);
     // Status
-    const status = document.createElement('div');
-    status.id = 'status';
+    const status = document.createElement("div");
+    status.id = "status";
     form.appendChild(status);
     // Lógica de pago
-    form.addEventListener('submit', async (e) => {
+    form.addEventListener("submit", async (e) => {
       e.preventDefault();
       const proveedor = select.value;
       if (!proveedor) {
-        status.textContent = 'Por favor, selecciona un método de pago.';
+        status.textContent = "Por favor, selecciona un método de pago.";
         return;
       }
       let isValid = true;
       let paymentData = {};
-      if (proveedor === 'tarjeta') {
+      if (proveedor === "tarjeta") {
         paymentData = {
-          number: cardNumber.value.replace(/\s/g, ''),
+          number: cardNumber.value.replace(/\s/g, ""),
           expiry: expiry.value,
           cvc: cvc.value,
-          holder: cardHolder.value
+          holder: cardHolder.value,
         };
-        if (!paymentData.number || !paymentData.expiry || !paymentData.cvc || !paymentData.holder) {
-          status.textContent = 'Por favor, completa todos los campos de la tarjeta.';
+        if (
+          !paymentData.number ||
+          !paymentData.expiry ||
+          !paymentData.cvc ||
+          !paymentData.holder
+        ) {
+          status.textContent =
+            "Por favor, completa todos los campos de la tarjeta.";
           isValid = false;
         }
-      } else if (proveedor === 'bizum') {
+      } else if (proveedor === "bizum") {
         paymentData = { phone: bizumPhone.value };
         if (!paymentData.phone) {
-          status.textContent = 'Por favor, introduce tu número de teléfono.';
+          status.textContent = "Por favor, introduce tu número de teléfono.";
           isValid = false;
         }
-      } else if (proveedor === 'paypal') {
+      } else if (proveedor === "paypal") {
         paymentData = { email: paypalEmail.value };
         if (!paymentData.email) {
-          status.textContent = 'Por favor, introduce tu email de PayPal.';
+          status.textContent = "Por favor, introduce tu email de PayPal.";
           isValid = false;
         }
       }
       if (!isValid) return;
       button.disabled = true;
-      button.textContent = 'Procesando...';
-      status.textContent = 'Procesando pago...';
+      button.textContent = "Procesando...";
+      status.textContent = "Procesando pago...";
       // Simulación de pago
       setTimeout(() => {
-        status.textContent = '¡Pago procesado correctamente!';
+        status.textContent = "¡Pago procesado correctamente!";
         setTimeout(() => {
           document.body.removeChild(overlay);
           if (onSuccess) onSuccess();
@@ -518,7 +527,7 @@ export default async function detail(container, id) {
       let cancelToastId = null;
       if (cancelToastId) return;
       cancelToastId = Toastify({
-        text: `\n          <span>Are you sure you want to cancel your subscription?</span>\n          <button id=\"confirm-cancel-btn\" style=\"margin-left:10px;padding:4px 10px;background:#e10505ff;color:#fff;border:none;border-radius:4px;cursor:pointer;\">Yes, cancel</button>\n        `,
+        text: `\n          <span>¿Estás seguro de que quieres cancelar tu inscripción?</span>\n          <button id=\"confirm-cancel-btn\" style=\"margin-left:10px;padding:4px 10px;background:#e10505ff;color:#fff;border:none;border-radius:4px;cursor:pointer;\">Sí, cancelar</button>\n        `,
         duration: -1, // Persistent: only closes on user action
         gravity: "top",
         position: "center",
@@ -526,7 +535,9 @@ export default async function detail(container, id) {
         escapeMarkup: false,
         backgroundColor: "#e10505ff",
         stopOnFocus: true,
-        callback: () => { cancelToastId = null; }
+        callback: () => {
+          cancelToastId = null;
+        },
       }).showToast();
 
       setTimeout(() => {
@@ -535,11 +546,12 @@ export default async function detail(container, id) {
           confirmBtn.onclick = async (e) => {
             e.stopPropagation();
             enrollBtn.disabled = true;
-            enrollBtn.textContent = "Processing...";
+            enrollBtn.textContent = "Procesando...";
             // Remove workshop from user's enrolledWorkshops
-            currentUser.enrolledWorkshops = currentUser.enrolledWorkshops.filter(
-              (workshopId) => workshopId !== id
-            );
+            currentUser.enrolledWorkshops =
+              currentUser.enrolledWorkshops.filter(
+                (workshopId) => workshopId !== id
+              );
             // Remove user from workshop's enrolled list
             workshopDetail.enrolled = workshopDetail.enrolled.filter(
               (userId) => userId !== currentUser.id
@@ -547,16 +559,18 @@ export default async function detail(container, id) {
             try {
               const [updatedWorkshop, updatedUser] = await Promise.all([
                 updateWorkshop({ id: id, enrolled: workshopDetail.enrolled }),
-                updateUser({ enrolledWorkshops: currentUser.enrolledWorkshops }),
+                updateUser({
+                  enrolledWorkshops: currentUser.enrolledWorkshops,
+                }),
               ]);
               localStorage.setItem("currentUser", JSON.stringify(updatedUser));
               updateWorkshopCache(updatedWorkshop);
-              showToast("Subscription cancelled!", "success");
+              showToast("¡Inscripción cancelada!", "success");
               setTimeout(() => window.location.reload(), 1200);
             } catch (error) {
-              showToast("Error cancelling subscription", "error");
+              showToast("Error al cancelar la inscripción", "error");
               enrollBtn.disabled = false;
-              enrollBtn.textContent = "Cancel";
+              enrollBtn.textContent = "Cancelar";
               enrollBtn.style.background = "#e10505ff";
               enrollBtn.style.color = "#fff";
             }
@@ -568,7 +582,7 @@ export default async function detail(container, id) {
     // Si el workshop es gratis, inscribe directamente
     if (workshop.price === 0) {
       enrollBtn.disabled = true;
-      enrollBtn.textContent = "Processing...";
+      enrollBtn.textContent = "Procesando...";
       isEnrolled = currentUser.enrolledWorkshops.includes(id);
       const action = isEnrolled ? "cancel" : "enroll";
       if (!isEnrolled) {
@@ -585,12 +599,12 @@ export default async function detail(container, id) {
           localStorage.setItem("currentUser", JSON.stringify(updatedUser));
           updateWorkshopCache(updatedWorkshop);
           isEnrolled = true;
-          showToast("You enrolled successfully", "success");
-          enrollBtn.textContent = "Cancel";
+          showToast("Te has inscrito exitosamente", "success");
+          enrollBtn.textContent = "Cancelar";
           enrollBtn.style.background = "#e10505ff";
           enrollBtn.style.color = "#fff";
         } catch (error) {
-          showToast("Error updating user or workshop", "error");
+          showToast("Error al actualizar usuario o taller", "error");
           currentUser.enrolledWorkshops = currentUser.enrolledWorkshops.filter(
             (workshopId) => workshopId !== id
           );
@@ -605,7 +619,7 @@ export default async function detail(container, id) {
     // Si el workshop es de pago, mostrar modal de pago
     showPaymentModal(async () => {
       enrollBtn.disabled = true;
-      enrollBtn.textContent = "Processing...";
+      enrollBtn.textContent = "Procesando...";
       isEnrolled = currentUser.enrolledWorkshops.includes(id);
       const action = isEnrolled ? "cancel" : "enroll";
       if (!isEnrolled) {
@@ -622,12 +636,12 @@ export default async function detail(container, id) {
           localStorage.setItem("currentUser", JSON.stringify(updatedUser));
           updateWorkshopCache(updatedWorkshop);
           isEnrolled = true;
-          showToast("You enrolled successfully", "success");
-          enrollBtn.textContent = "Cancel";
+          showToast("Te has inscrito exitosamente", "success");
+          enrollBtn.textContent = "Cancelar";
           enrollBtn.style.background = "#e10505ff";
           enrollBtn.style.color = "#fff";
         } catch (error) {
-          showToast("Error updating user or workshop", "error");
+          showToast("Error al actualizar usuario o taller", "error");
           currentUser.enrolledWorkshops = currentUser.enrolledWorkshops.filter(
             (workshopId) => workshopId !== id
           );
@@ -644,20 +658,20 @@ export default async function detail(container, id) {
   function $(tag, props = {}, ...children) {
     const el = document.createElement(tag);
     Object.entries(props).forEach(([k, v]) => {
-      if (k.startsWith('on') && typeof v === 'function') {
+      if (k.startsWith("on") && typeof v === "function") {
         el.addEventListener(k.slice(2).toLowerCase(), v);
-      } else if (k === 'class') {
+      } else if (k === "class") {
         el.className = v;
-      } else if (k === 'style' && typeof v === 'object') {
+      } else if (k === "style" && typeof v === "object") {
         Object.assign(el.style, v);
-      } else if (k === 'for') {
+      } else if (k === "for") {
         el.htmlFor = v;
       } else {
         el.setAttribute(k, v);
       }
     });
-    children.flat().forEach(child => {
-      if (typeof child === 'string' || typeof child === 'number') {
+    children.flat().forEach((child) => {
+      if (typeof child === "string" || typeof child === "number") {
         el.appendChild(document.createTextNode(child));
       } else if (child instanceof Node) {
         el.appendChild(child);
