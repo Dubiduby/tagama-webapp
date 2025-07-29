@@ -7,7 +7,7 @@ import {
   clearWorkshopsCache,
 } from "../utils/cache.js";
 import dayjs from "../utils/day.js";
-import { getCurrentUser, updateUser, deleteUser } from "../api/apiUsers.js";
+import { getCurrentUser, updateUser } from "../api/apiUsers.js";
 import { showToast } from "../utils/toastify.js";
 import Toastify from "toastify-js";
 import { updateWorkshop, deleteWorkshop } from "../api/apiWorkshops.js";
@@ -47,25 +47,6 @@ export default async function detail(container, id) {
   const formattedDuration =
     minutes === 0 ? `${hours}h` : `${hours}h ${minutes}min`;
 
-  const workshop = {
-    id: id,
-    imageUrl: `${workshopDetail.imageUrl}`,
-    price: workshopDetail.price,
-    date: dateTime.format("dddd, D MMMM YYYY, HH:mm"),
-    duration: formattedDuration,
-    mode: workshopDetail.mode,
-    spots: `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`,
-    capacity: workshopDetail.capacity,
-    tags: [subcategory.name, category.name],
-    title: workshopDetail.title,
-    instructor: workshopDetail.instructorName,
-    overview: workshopDetail.overview,
-    requirements: workshopDetail.requirements,
-    location: workshopDetail.location,
-    address: workshopDetail.address,
-    coordinates: workshopDetail.coordinates,
-  };
-
   // Back link
   const backLink = document.createElement("a");
   backLink.href = "/workshops";
@@ -87,7 +68,7 @@ export default async function detail(container, id) {
   const imageDiv = document.createElement("div");
   imageDiv.className = "workshop-image";
   const img = document.createElement("img");
-  img.src = workshop.imageUrl;
+  img.src = workshopDetail.imageUrl;
   img.alt = "Imagen del taller";
   imageDiv.appendChild(img);
   mainColumn.appendChild(imageDiv);
@@ -95,24 +76,28 @@ export default async function detail(container, id) {
   // Tags
   const tagsDiv = document.createElement("div");
   tagsDiv.className = "workshop-tags";
-  workshop.tags.forEach((tag) => {
-    const tagSpan = document.createElement("span");
-    tagSpan.className = "tag";
-    tagSpan.textContent = tag;
-    tagsDiv.appendChild(tagSpan);
-  });
+
+  const subcategoryTag = document.createElement("span");
+  subcategoryTag.className = "tag";
+  subcategoryTag.textContent = subcategory.name;
+  tagsDiv.appendChild(subcategoryTag);
+
+  const categoryTag = document.createElement("span");
+  categoryTag.className = "tag";
+  categoryTag.textContent = category.name;
+  tagsDiv.appendChild(categoryTag);
   mainColumn.appendChild(tagsDiv);
 
   // Title
   const title = document.createElement("h1");
   title.className = "workshop-title";
-  title.textContent = workshop.title;
+  title.textContent = workshopDetail.title;
   mainColumn.appendChild(title);
 
   // Instructor
   const instructor = document.createElement("div");
   instructor.className = "workshop-instructor";
-  instructor.textContent = workshop.instructor;
+  instructor.textContent = workshopDetail.instructorName;
   mainColumn.appendChild(instructor);
 
   // Tabs y contenido en un solo box
@@ -139,7 +124,7 @@ export default async function detail(container, id) {
   overviewDiv.className = "workshop-tab-content";
   overviewDiv.id = "overview";
   const overviewP = document.createElement("p");
-  overviewP.textContent = workshop.overview;
+  overviewP.textContent = workshopDetail.overview;
   overviewDiv.appendChild(overviewP);
   tabsBox.appendChild(overviewDiv);
 
@@ -149,21 +134,21 @@ export default async function detail(container, id) {
   requirementsDiv.id = "requirements";
   requirementsDiv.style.display = "none";
   const reqP = document.createElement("p");
-  reqP.textContent = workshop.requirements;
+  reqP.textContent = workshopDetail.requirements;
   requirementsDiv.appendChild(reqP);
   tabsBox.appendChild(requirementsDiv);
 
   // Añade el box al mainColumn
   mainColumn.appendChild(tabsBox);
 
-  if (workshop.mode === "On site") {
+  if (workshopDetail.mode === "Presencial") {
     // Location
     const locationDiv = document.createElement("div");
     locationDiv.className = "workshop-location";
     const locationSpan = document.createElement("span");
     locationSpan.textContent = "Ubicación";
     const locationP = document.createElement("p");
-    locationP.textContent = workshop.address;
+    locationP.textContent = workshopDetail.address;
     locationDiv.appendChild(locationSpan);
     locationDiv.appendChild(locationP);
     mainColumn.appendChild(locationDiv);
@@ -174,7 +159,7 @@ export default async function detail(container, id) {
     mapDiv.className = "workshop-map";
     mapDiv.style.height = "50vh";
     mainColumn.appendChild(mapDiv);
-    initMap(workshop.coordinates, workshop.location);
+    initMap(workshopDetail.coordinates, workshopDetail.location);
   }
 
   // Sidebar a la derecha
@@ -183,7 +168,8 @@ export default async function detail(container, id) {
 
   const priceDiv = document.createElement("div");
   priceDiv.className = "workshop-price";
-  priceDiv.textContent = workshop.price === 0 ? "Gratis" : `${workshop.price}€`;
+  priceDiv.textContent =
+    workshopDetail.price === 0 ? "Gratis" : `${workshopDetail.price}€`;
   sidebar.appendChild(priceDiv);
 
   // Fecha con icono
@@ -196,7 +182,7 @@ export default async function detail(container, id) {
   calendarIcon.style.marginRight = "8px";
   dateDiv.appendChild(calendarIcon);
   const dateText = document.createElement("span");
-  dateText.textContent = workshop.date;
+  dateText.textContent = dateTime.format("dddd, D MMMM YYYY, HH:mm");
   dateDiv.appendChild(dateText);
   sidebar.appendChild(dateDiv);
 
@@ -210,7 +196,7 @@ export default async function detail(container, id) {
   clockIcon.style.marginRight = "8px";
   timeDiv.appendChild(clockIcon);
   const timeText = document.createElement("span");
-  timeText.textContent = workshop.duration;
+  timeText.textContent = formattedDuration;
   timeDiv.appendChild(timeText);
   sidebar.appendChild(timeDiv);
 
@@ -238,7 +224,7 @@ export default async function detail(container, id) {
   peopleIcon.style.marginRight = "8px";
   spotsDiv.appendChild(peopleIcon);
   const spotsText = document.createElement("span");
-  spotsText.textContent = workshop.spots;
+  spotsText.textContent = `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`;
   spotsDiv.appendChild(spotsText);
   sidebar.appendChild(spotsDiv);
 
@@ -393,7 +379,7 @@ export default async function detail(container, id) {
   });
 
   editBtn.addEventListener("click", (event) => {
-    showModal(renderWorkshopFormHtml(workshop));
+    showModal(renderWorkshopFormHtml(workshopDetail));
     handleWorkshopFormSubmit(async (formData) => {
       try {
         const updatedWorkshop = await updateWorkshop(formData);
@@ -408,7 +394,7 @@ export default async function detail(container, id) {
         showToast("Error al actualizar el taller", "error");
         console.error("Error updating workshop:", error);
       }
-    }, workshop);
+    }, workshopDetail);
   });
 
   deleteBtn.addEventListener("click", () => {
