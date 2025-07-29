@@ -4,14 +4,23 @@ import {
   getCachedCategories,
   getCachedSubcategories,
   updateWorkshopCache,
+  clearWorkshopsCache,
 } from "../utils/cache.js";
 import dayjs from "../utils/day.js";
 import { getCurrentUser, updateUser, deleteUser } from "../api/apiUsers.js";
 import { showToast } from "../utils/toastify.js";
 import Toastify from "toastify-js";
-import { updateWorkshop } from "../api/apiWorkshops.js";
+import { updateWorkshop, deleteWorkshop } from "../api/apiWorkshops.js";
 import { initMap } from "../utils/leaflet.js";
-import { showPaymentModal } from "./components/modals/paymentModal.js";
+import { showPaymentModal } from "../components/modals/paymentModal.js";
+import {
+  renderWorkshopFormHtml,
+  handleWorkshopFormSubmit,
+  showModal,
+  closeModal,
+} from "../components/modals/formModal.js";
+import { showConfirmModal } from "../components/modals/confirmModal.js";
+import { navigate } from "../router.js";
 
 export default async function detail(container, id) {
   // Limpia solo el container, no el body
@@ -39,12 +48,14 @@ export default async function detail(container, id) {
     minutes === 0 ? `${hours}h` : `${hours}h ${minutes}min`;
 
   const workshop = {
-    image: `${workshopDetail.imageUrl}`,
+    id: id,
+    imageUrl: `${workshopDetail.imageUrl}`,
     price: workshopDetail.price,
     date: dateTime.format("dddd, D MMMM YYYY, HH:mm"),
     duration: formattedDuration,
     mode: workshopDetail.mode,
     spots: `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`,
+    capacity: workshopDetail.capacity,
     tags: [subcategory.name, category.name],
     title: workshopDetail.title,
     instructor: workshopDetail.instructorName,
@@ -76,7 +87,7 @@ export default async function detail(container, id) {
   const imageDiv = document.createElement("div");
   imageDiv.className = "workshop-image";
   const img = document.createElement("img");
-  img.src = workshop.image;
+  img.src = workshop.imageUrl;
   img.alt = "Imagen del taller";
   imageDiv.appendChild(img);
   mainColumn.appendChild(imageDiv);
@@ -250,10 +261,21 @@ export default async function detail(container, id) {
   const editBtn = document.createElement("button");
   editBtn.className = "edit-btn";
   editBtn.textContent = "Editar";
+  editBtn.style.display = "none";
   const deleteBtn = document.createElement("button");
   deleteBtn.className = "delete-btn";
   deleteBtn.textContent = "Eliminar";
+  deleteBtn.style.display = "none";
 
+  //if is created workshop then hide enroll btn
+  if (currentUser.createdWorkshops.includes(String(id))) {
+    enrollBtn.style.display = "none";
+    editBtn.style.display = "block";
+    deleteBtn.style.display = "block";
+  }
+
+  sidebar.appendChild(editBtn);
+  sidebar.appendChild(deleteBtn);
   detailContent.appendChild(sidebar);
 
   // Tabs logic
@@ -367,6 +389,50 @@ export default async function detail(container, id) {
         showToast("Error al actualizar usuario o taller", "error");
         updateButton(false);
       }
+    });
+  });
+
+  editBtn.addEventListener("click", (event) => {
+    showModal(renderWorkshopFormHtml(workshop));
+    handleWorkshopFormSubmit(async (formData) => {
+      try {
+        const updatedWorkshop = await updateWorkshop(formData);
+        updateWorkshopCache(updatedWorkshop);
+        closeModal();
+        showToast("Taller actualizado exitosamente", "success");
+        //       // Re-render the current page to show updated data after toast is shown
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000); // Wait 2 seconds for toast to be visible
+      } catch (error) {
+        showToast("Error al actualizar el taller", "error");
+        console.error("Error updating workshop:", error);
+      }
+    }, workshop);
+  });
+
+  deleteBtn.addEventListener("click", () => {
+    showConfirmModal({
+      message:
+        "¿Estás seguro de que quieres eliminar el workshop?<br><br>Esta acción no se puede deshacer.",
+      buttonText: "eliminar",
+      buttonColor: "red",
+      onConfirm: async () => {
+        try {
+          const workshopDeleted = await deleteWorkshop(id);
+
+          clearWorkshopsCache(),
+            getCachedWorkshops(),
+            showToast("Taller eliminado correctamente", "success");
+
+          setTimeout(() => {
+            navigate("/workshops");
+          }, 2000); // Wait 2 seconds for toast to be visible
+        } catch (error) {
+          showToast("Error al eliminar el taller", "error");
+          console.error("Error deleting workshop:", error);
+        }
+      },
     });
   });
 }
