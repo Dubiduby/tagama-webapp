@@ -59,7 +59,24 @@ export default async function profile(container) {
         "div",
         { class: "profile-user-data" },
         $("span", { class: "profile-user-label" }, user.name),
-        $("span", { class: "profile-user-value" }, user.email)
+        $("span", { class: "profile-user-value" }, user.email),
+        // Título de Talleres
+        $("h3", { class: "profile-workshop-title" }, "Talleres"),
+        // Contadores de workshops
+        $("div", { class: "profile-workshop-counts" },
+          $("div", { class: "profile-count" },
+            $("span", { class: "profile-count-number" }, user.enrolledWorkshops ? user.enrolledWorkshops.length : 0),
+            $("span", { class: "profile-count-label" }, " Inscritos")
+          ),
+          $("div", { class: "profile-count" },
+            $("span", { class: "profile-count-number" }, user.createdWorkshops ? user.createdWorkshops.length : 0),
+            $("span", { class: "profile-count-label" }, " Creados")
+          ),
+          $("div", { class: "profile-count" },
+            $("span", { class: "profile-count-number" }, user.savedWorkshops ? user.savedWorkshops.length : 0),
+            $("span", { class: "profile-count-label" }, " Guardados")
+          )
+        )
       )
     ),
     $(
