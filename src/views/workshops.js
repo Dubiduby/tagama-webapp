@@ -14,7 +14,7 @@ import {
   handleWorkshopFormSubmit,
   renderWorkshopFormHtml,
   closeModal,
-} from "../utils/formModal.js";
+} from "../components/modals/formModal.js";
 
 export default function workshops(container) {
   container.innerHTML = "";

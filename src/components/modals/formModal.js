@@ -1,4 +1,4 @@
-import { getCurrentUser } from "../api/apiUsers.js";
+import { getCurrentUser } from "../../api/apiUsers.js";
 
 export function renderWorkshopFormHtml(data = {}) {
   const isEdit = Boolean(data.id);

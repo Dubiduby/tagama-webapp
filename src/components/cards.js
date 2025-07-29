@@ -9,7 +9,7 @@ import {
   handleWorkshopFormSubmit,
   renderWorkshopFormHtml,
   closeModal,
-} from "../utils/formModal.js";
+} from "../components/modals/formModal.js";
 
 export function workshopCards(workshop, subcategory, category) {
   const card = document.createElement("div");
