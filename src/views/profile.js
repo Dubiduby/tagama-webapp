@@ -1,8 +1,7 @@
-import "../assets/styles/profile.css";
 import { getUserById, updateUserById, deleteUser } from "../api/apiUsers.js";
 import { validation } from "../utils/validations.js";
 import { showToast } from "../utils/toastify.js";
-import Toastify from "toastify-js"; // Si necesitas HTML personalizado
+import Toastify from "toastify-js";
 
 export default async function profile(container) {
   function $(tag, props = {}, ...children) {
@@ -34,14 +33,14 @@ export default async function profile(container) {
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
-    container.appendChild($("p", {}, "No has iniciado sesión."));
+    container.appendChild($("p", { class: "text-center text-gray-600 mt-8" }, "No has iniciado sesión."));
     return;
   }
 
   const user = await getUserById(currentUser.id);
 
   const avatar = $("img", {
-    class: "profile-avatar",
+    class: "w-32 h-32 rounded-full object-cover border-4 border-indigo-200 shadow-lg",
     src:
       user.avatarUrl ||
       "https://res.cloudinary.com/demo/image/upload/v1699999999/user.png",
@@ -52,25 +51,25 @@ export default async function profile(container) {
   const editAvatarBtn = $(
     "button",
     {
-      class: "edit-avatar-btn",
+      class: "absolute top-0 right-0 bg-indigo-600 text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-indigo-700 transition-colors shadow-md",
       onclick: () => {
         uploadSection.style.display = "flex";
       },
     },
-    "🖊️"
+    "✏️"
   );
 
   // Input y upload button
   const fileInput = $("input", {
     type: "file",
     accept: "image/*",
-    style: { marginTop: "10px" },
+    class: "mt-2 text-sm text-gray-600 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-indigo-50 file:text-indigo-700 hover:file:bg-indigo-100",
   });
 
   const uploadBtn = $(
     "button",
     {
-      class: "upload-btn",
+      class: "px-4 py-2 bg-indigo-600 text-white rounded-md text-sm font-medium hover:bg-indigo-700 transition-colors",
       onclick: async () => {
         const file = fileInput.files[0];
         if (!file) return showToast("Selecciona una imagen", "info");
@@ -114,8 +113,8 @@ export default async function profile(container) {
   const uploadSection = $(
     "div",
     {
-      class: "upload-avatar-section",
-      style: { display: "none", flexDirection: "column", gap: "10px" },
+      class: "flex flex-col gap-3 mt-4 p-4 bg-gray-50 rounded-lg",
+      style: { display: "none" },
     },
     fileInput,
     uploadBtn
@@ -123,53 +122,57 @@ export default async function profile(container) {
 
   const sidebar = $(
     "aside",
-    { class: "profile-sidebar" },
+    { class: "w-80 bg-white rounded-xl shadow-lg p-6 flex flex-col gap-6" },
     $(
       "div",
-      { class: "profile-avatar-box" },
-      avatar,
-      editAvatarBtn,
+      { class: "flex flex-col items-center" },
+      $(
+        "div",
+        { class: "relative" },
+        avatar,
+        editAvatarBtn
+      ),
       uploadSection,
       $(
         "div",
-        { class: "profile-user-data" },
-        $("span", { class: "profile-user-label" }, user.name),
-        $("span", { class: "profile-user-value" }, user.email),
+        { class: "w-full text-center" },
+        $("span", { class: "block text-xl font-bold text-gray-800 mb-1" }, user.name),
+        $("span", { class: "block text-gray-600 text-sm" }, user.email),
         // Título de Talleres
-        $("h3", { class: "profile-workshop-title" }, "Talleres"),
+        $("h3", { class: "text-lg font-semibold text-gray-800 mt-6 mb-4" }, "Talleres"),
         // Contadores de workshops
         $(
           "div",
-          { class: "profile-workshop-counts" },
+          { class: "grid grid-cols-3 gap-4" },
           $(
             "div",
-            { class: "profile-count" },
+            { class: "text-center" },
             $(
               "span",
-              { class: "profile-count-number" },
+              { class: "block text-2xl font-bold text-indigo-600" },
               user.enrolledWorkshops ? user.enrolledWorkshops.length : 0
             ),
-            $("span", { class: "profile-count-label" }, " Inscritos")
+            $("span", { class: "text-sm text-gray-600" }, "Inscritos")
           ),
           $(
             "div",
-            { class: "profile-count" },
+            { class: "text-center" },
             $(
               "span",
-              { class: "profile-count-number" },
+              { class: "block text-2xl font-bold text-green-600" },
               user.createdWorkshops ? user.createdWorkshops.length : 0
             ),
-            $("span", { class: "profile-count-label" }, " Creados")
+            $("span", { class: "text-sm text-gray-600" }, "Creados")
           ),
           $(
             "div",
-            { class: "profile-count" },
+            { class: "text-center" },
             $(
               "span",
-              { class: "profile-count-number" },
+              { class: "block text-2xl font-bold text-yellow-600" },
               user.savedWorkshops ? user.savedWorkshops.length : 0
             ),
-            $("span", { class: "profile-count-label" }, " Guardados")
+            $("span", { class: "text-sm text-gray-600" }, "Guardados")
           )
         )
       )
@@ -177,7 +180,7 @@ export default async function profile(container) {
     $(
       "button",
       {
-        class: "logout-btn",
+        class: "w-full px-4 py-3 bg-red-600 text-white rounded-md font-medium hover:bg-red-700 transition-colors",
         onclick: () => {
           localStorage.removeItem("currentUser");
           window.location.href = "/login";
@@ -187,34 +190,27 @@ export default async function profile(container) {
     )
   );
 
-  const nameInput = $("input", {
-    type: "text",
-    placeholder: user.name,
-    class: "profile-input",
-    id: "profile-name",
-  });
-  const emailInput = $("input", {
-    type: "email",
-    placeholder: user.email,
-    class: "profile-input",
-    id: "profile-email",
-  });
-  const passInput = $("input", {
-    type: "password",
-    placeholder: "********",
-    class: "profile-input",
-    id: "profile-password",
-  });
-  const repeatInput = $("input", {
-    type: "password",
-    placeholder: "Repetir contraseña",
-    class: "profile-input",
-    id: "profile-repeat",
-  });
+  // Función para crear inputs con estilos consistentes
+  function createInput(type, id, placeholder) {
+    return $("input", {
+      type: type,
+      placeholder: placeholder,
+      class: "w-full px-4 py-3 border border-gray-300 rounded-md text-base bg-gray-50 focus:border-indigo-500 focus:outline-none focus:bg-white transition-colors",
+      id: id,
+    });
+  }
+
+  const nameInput = createInput("text", "profile-name", user.name);
+  const emailInput = createInput("email", "profile-email", user.email);
+  const passInput = createInput("password", "profile-password", "********");
+  const repeatInput = createInput("password", "profile-repeat", "Repetir contraseña");
 
   const cancelBtn = $(
     "button",
-    { type: "button", class: "cancel-btn" },
+    { 
+      type: "button", 
+      class: "px-6 py-3 bg-gray-500 text-white rounded-md font-medium hover:bg-gray-600 transition-colors" 
+    },
     "Cancelar"
   );
   cancelBtn.addEventListener("click", () => {
@@ -228,7 +224,7 @@ export default async function profile(container) {
   const form = $(
     "form",
     {
-      class: "profile-form",
+      class: "space-y-6",
       onsubmit: async (e) => {
         e.preventDefault();
 
@@ -279,15 +275,15 @@ export default async function profile(container) {
       },
     },
 
-    $("label", { for: "profile-name" }, "Nombre"),
+    $("label", { for: "profile-name", class: "block text-base font-medium text-gray-700 mb-2" }, "Nombre"),
     nameInput,
-    $("label", { for: "profile-email" }, "Email"),
+    $("label", { for: "profile-email", class: "block text-base font-medium text-gray-700 mb-2" }, "Email"),
     emailInput,
-    $("label", { for: "profile-password" }, "Contraseña"),
+    $("label", { for: "profile-password", class: "block text-base font-medium text-gray-700 mb-2" }, "Contraseña"),
     passInput,
-    $("label", { for: "profile-repeat" }, "Repetir contraseña"),
+    $("label", { for: "profile-repeat", class: "block text-base font-medium text-gray-700 mb-2" }, "Repetir contraseña"),
     repeatInput,
-    $("button", { type: "submit", class: "save-btn" }, "Guardar cambios"),
+    $("button", { type: "submit", class: "w-full px-6 py-3 bg-indigo-600 text-white rounded-md text-lg font-semibold hover:bg-indigo-700 transition-colors" }, "Guardar cambios"),
     cancelBtn
   );
 
@@ -295,7 +291,7 @@ export default async function profile(container) {
   const deleteBtn = $(
     "button",
     {
-      class: "delete-user-btn",
+      class: "w-full px-6 py-3 bg-red-600 text-white rounded-md font-semibold hover:bg-red-700 transition-colors",
       onclick: () => {
         if (deleteToastId) return;
         deleteToastId = Toastify({
@@ -334,19 +330,19 @@ export default async function profile(container) {
 
   const dangerArea = $(
     "div",
-    { class: "danger-area" },
-    $("h4", {}, "Zona de peligro"),
+    { class: "mt-8 p-6 bg-red-50 border border-red-200 rounded-lg" },
+    $("h4", { class: "text-lg font-semibold text-red-800 mb-4" }, "Zona de peligro"),
     deleteBtn
   );
 
   const layout = $(
     "div",
-    { class: "profile-layout" },
+    { class: "max-w-6xl mx-auto p-6 grid grid-cols-1 lg:grid-cols-3 gap-8" },
     sidebar,
     $(
       "main",
-      { class: "profile-main" },
-      $("h2", {}, "Editar perfil"),
+      { class: "lg:col-span-2 bg-white rounded-xl shadow-lg p-8" },
+      $("h2", { class: "text-2xl font-bold text-gray-800 mb-6" }, "Editar perfil"),
       form,
       dangerArea
     )
