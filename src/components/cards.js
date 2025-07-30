@@ -208,6 +208,8 @@ export function workshopCards(workshop, subcategory, category) {
     buttonAdd.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
+      //always get de update user
+      let currentUser = JSON.parse(localStorage.getItem("currentUser"));
       if (!currentUser.savedWorkshops) currentUser.savedWorkshops = [];
       const idx = currentUser.savedWorkshops.indexOf(workshop.id);
       if (idx === -1) {
