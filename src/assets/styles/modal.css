@@ -161,10 +161,8 @@ textarea {
   background: #5b0f94;
 }
 
+
 .delete-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
   background: rgba(0, 0, 0, 0.6);
   border: none;
   border-radius: 50%;
@@ -176,6 +174,7 @@ textarea {
   cursor: pointer;
   transition: background 0.2s ease;
 }
+
 
 .delete-btn img {
   width: 14px;

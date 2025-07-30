@@ -238,17 +238,17 @@ export default async function detail(container, id) {
 
   sidebar.appendChild(enrollBtn);
 
-  //Edit and delete buttons
+  // Edit and delete buttons
   const editBtn = document.createElement("button");
   editBtn.className = "edit-btn";
   editBtn.textContent = "Editar";
   editBtn.style.display = "none";
   const deleteBtn = document.createElement("button");
-  deleteBtn.className = "delete-btn";
+  deleteBtn.className = "delete-workshop-button";
   deleteBtn.textContent = "Eliminar";
   deleteBtn.style.display = "none";
 
-  //if is created workshop then hide enroll btn
+  // if is created workshop then hide enroll btn
   if (currentUser.createdWorkshops.includes(String(id))) {
     enrollBtn.style.display = "none";
     editBtn.style.display = "block";
@@ -256,7 +256,7 @@ export default async function detail(container, id) {
   }
 
   sidebar.appendChild(editBtn);
-  sidebar.appendChild(deleteBtn);
+  sidebar.appendChild(deleteBtn); // Ahora el botón de eliminar está justo debajo del de editar
   detailContent.appendChild(sidebar);
 
   // Tabs logic
