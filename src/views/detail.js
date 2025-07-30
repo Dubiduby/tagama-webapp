@@ -4,13 +4,18 @@ import {
   getCachedCategories,
   getCachedSubcategories,
   updateWorkshopCache,
+  clearWorkshopsCache,
 } from "../utils/cache.js";
 import dayjs from "../utils/day.js";
-import { getCurrentUser, updateUser, deleteUser } from "../api/apiUsers.js";
+import { getCurrentUser, updateUser } from "../api/apiUsers.js";
 import { showToast } from "../utils/toastify.js";
 import Toastify from "toastify-js";
-import { updateWorkshop } from "../api/apiWorkshops.js";
+import { updateWorkshop, deleteWorkshop } from "../api/apiWorkshops.js";
 import { initMap } from "../utils/leaflet.js";
+import { showPaymentModal } from "../components/modals/paymentModal.js";
+import { createEditWorkshopModal } from "../components/modals/formModal.js";
+import { showConfirmModal } from "../components/modals/confirmModal.js";
+import { navigate } from "../router.js";
 
 export default async function detail(container, id) {
   // Limpia solo el container, no el body
@@ -37,23 +42,6 @@ export default async function detail(container, id) {
   const formattedDuration =
     minutes === 0 ? `${hours}h` : `${hours}h ${minutes}min`;
 
-  const workshop = {
-    image: `${workshopDetail.imageUrl}`,
-    price: workshopDetail.price,
-    date: dateTime.format("dddd, D MMMM YYYY, HH:mm"),
-    duration: formattedDuration,
-    mode: workshopDetail.mode,
-    spots: `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`,
-    tags: [subcategory.name, category.name],
-    title: workshopDetail.title,
-    instructor: workshopDetail.instructorName,
-    overview: workshopDetail.overview,
-    requirements: workshopDetail.requirements,
-    location: workshopDetail.location,
-    address: workshopDetail.address,
-    coordinates: workshopDetail.coordinates,
-  };
-
   // Back link
   const backLink = document.createElement("a");
   backLink.href = "/workshops";
@@ -75,7 +63,7 @@ export default async function detail(container, id) {
   const imageDiv = document.createElement("div");
   imageDiv.className = "workshop-image";
   const img = document.createElement("img");
-  img.src = workshop.image;
+  img.src = workshopDetail.imageUrl;
   img.alt = "Imagen del taller";
   imageDiv.appendChild(img);
   mainColumn.appendChild(imageDiv);
@@ -83,24 +71,28 @@ export default async function detail(container, id) {
   // Tags
   const tagsDiv = document.createElement("div");
   tagsDiv.className = "workshop-tags";
-  workshop.tags.forEach((tag) => {
-    const tagSpan = document.createElement("span");
-    tagSpan.className = "tag";
-    tagSpan.textContent = tag;
-    tagsDiv.appendChild(tagSpan);
-  });
+
+  const subcategoryTag = document.createElement("span");
+  subcategoryTag.className = "tag";
+  subcategoryTag.textContent = subcategory.name;
+  tagsDiv.appendChild(subcategoryTag);
+
+  const categoryTag = document.createElement("span");
+  categoryTag.className = "tag";
+  categoryTag.textContent = category.name;
+  tagsDiv.appendChild(categoryTag);
   mainColumn.appendChild(tagsDiv);
 
   // Title
   const title = document.createElement("h1");
   title.className = "workshop-title";
-  title.textContent = workshop.title;
+  title.textContent = workshopDetail.title;
   mainColumn.appendChild(title);
 
   // Instructor
   const instructor = document.createElement("div");
   instructor.className = "workshop-instructor";
-  instructor.textContent = workshop.instructor;
+  instructor.textContent = workshopDetail.instructorName;
   mainColumn.appendChild(instructor);
 
   // Tabs y contenido en un solo box
@@ -127,7 +119,7 @@ export default async function detail(container, id) {
   overviewDiv.className = "workshop-tab-content";
   overviewDiv.id = "overview";
   const overviewP = document.createElement("p");
-  overviewP.textContent = workshop.overview;
+  overviewP.textContent = workshopDetail.overview;
   overviewDiv.appendChild(overviewP);
   tabsBox.appendChild(overviewDiv);
 
@@ -137,21 +129,21 @@ export default async function detail(container, id) {
   requirementsDiv.id = "requirements";
   requirementsDiv.style.display = "none";
   const reqP = document.createElement("p");
-  reqP.textContent = workshop.requirements;
+  reqP.textContent = workshopDetail.requirements;
   requirementsDiv.appendChild(reqP);
   tabsBox.appendChild(requirementsDiv);
 
   // Añade el box al mainColumn
   mainColumn.appendChild(tabsBox);
 
-  if (workshop.mode === "On site") {
+  if (workshopDetail.mode === "Presencial") {
     // Location
     const locationDiv = document.createElement("div");
     locationDiv.className = "workshop-location";
     const locationSpan = document.createElement("span");
     locationSpan.textContent = "Ubicación";
     const locationP = document.createElement("p");
-    locationP.textContent = workshop.address;
+    locationP.textContent = workshopDetail.address;
     locationDiv.appendChild(locationSpan);
     locationDiv.appendChild(locationP);
     mainColumn.appendChild(locationDiv);
@@ -162,7 +154,7 @@ export default async function detail(container, id) {
     mapDiv.className = "workshop-map";
     mapDiv.style.height = "50vh";
     mainColumn.appendChild(mapDiv);
-    initMap(workshop.coordinates, workshop.location);
+    initMap(workshopDetail.coordinates, workshopDetail.location);
   }
 
   // Sidebar a la derecha
@@ -171,7 +163,8 @@ export default async function detail(container, id) {
 
   const priceDiv = document.createElement("div");
   priceDiv.className = "workshop-price";
-  priceDiv.textContent = workshop.price === 0 ? "Gratis" : `${workshop.price}€`;
+  priceDiv.textContent =
+    workshopDetail.price === 0 ? "Gratis" : `${workshopDetail.price}€`;
   sidebar.appendChild(priceDiv);
 
   // Fecha con icono
@@ -184,7 +177,7 @@ export default async function detail(container, id) {
   calendarIcon.style.marginRight = "8px";
   dateDiv.appendChild(calendarIcon);
   const dateText = document.createElement("span");
-  dateText.textContent = workshop.date;
+  dateText.textContent = dateTime.format("dddd, D MMMM YYYY, HH:mm");
   dateDiv.appendChild(dateText);
   sidebar.appendChild(dateDiv);
 
@@ -198,7 +191,7 @@ export default async function detail(container, id) {
   clockIcon.style.marginRight = "8px";
   timeDiv.appendChild(clockIcon);
   const timeText = document.createElement("span");
-  timeText.textContent = workshop.duration;
+  timeText.textContent = formattedDuration;
   timeDiv.appendChild(timeText);
   sidebar.appendChild(timeDiv);
 
@@ -212,7 +205,7 @@ export default async function detail(container, id) {
   locationIcon.style.marginRight = "8px";
   modeDiv.appendChild(locationIcon);
   const modeText = document.createElement("span");
-  modeText.textContent = workshop.mode;
+  modeText.textContent = workshopDetail.mode;
   modeDiv.appendChild(modeText);
   sidebar.appendChild(modeDiv);
 
@@ -226,11 +219,11 @@ export default async function detail(container, id) {
   peopleIcon.style.marginRight = "8px";
   spotsDiv.appendChild(peopleIcon);
   const spotsText = document.createElement("span");
-  spotsText.textContent = workshop.spots;
+  spotsText.textContent = `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`;
   spotsDiv.appendChild(spotsText);
   sidebar.appendChild(spotsDiv);
 
-  // Botón
+  // Botón enroll/cancel
   const enrollBtn = document.createElement("button");
   enrollBtn.className = "enroll-btn";
   if (isEnrolled) {
@@ -245,6 +238,25 @@ export default async function detail(container, id) {
 
   sidebar.appendChild(enrollBtn);
 
+  //Edit and delete buttons
+  const editBtn = document.createElement("button");
+  editBtn.className = "edit-btn";
+  editBtn.textContent = "Editar";
+  editBtn.style.display = "none";
+  const deleteBtn = document.createElement("button");
+  deleteBtn.className = "delete-btn";
+  deleteBtn.textContent = "Eliminar";
+  deleteBtn.style.display = "none";
+
+  //if is created workshop then hide enroll btn
+  if (currentUser.createdWorkshops.includes(String(id))) {
+    enrollBtn.style.display = "none";
+    editBtn.style.display = "block";
+    deleteBtn.style.display = "block";
+  }
+
+  sidebar.appendChild(editBtn);
+  sidebar.appendChild(deleteBtn);
   detailContent.appendChild(sidebar);
 
   // Tabs logic
@@ -260,275 +272,45 @@ export default async function detail(container, id) {
     });
   });
 
-  // Payment Modal logic
-  function showPaymentModal(onSuccess, onCancel) {
-    // Overlay
-    const overlay = document.createElement("div");
-    overlay.className = "payment-modal-overlay";
-    overlay.style.position = "fixed";
-    overlay.style.top = 0;
-    overlay.style.left = 0;
-    overlay.style.width = "100vw";
-    overlay.style.height = "100vh";
-    overlay.style.background = "rgba(0,0,0,0.5)";
-    overlay.style.display = "flex";
-    overlay.style.alignItems = "center";
-    overlay.style.justifyContent = "center";
-    overlay.style.zIndex = 10000;
-
-    // Modal
-    const app = document.createElement("div");
-    app.className = "payment-card";
-    app.style.position = "relative";
-
-    // Close button
-    const closeBtn = document.createElement("button");
-    closeBtn.textContent = "×";
-    closeBtn.style.position = "absolute";
-    closeBtn.style.top = "10px";
-    closeBtn.style.right = "10px";
-    closeBtn.style.background = "transparent";
-    closeBtn.style.border = "none";
-    closeBtn.style.fontSize = "1.5rem";
-    closeBtn.style.cursor = "pointer";
-    closeBtn.addEventListener("click", () => {
-      document.body.removeChild(overlay);
-      if (onCancel) onCancel();
-    });
-    app.appendChild(closeBtn);
-
-    // Formulario de pago (tu código adaptado)
-    const form = document.createElement("form");
-    form.className = "payment-form";
-    // Título
-    const title = document.createElement("h1");
-    title.textContent = "Pago de servicios";
-    form.appendChild(title);
-    // Selector de proveedor
-    const label = document.createElement("label");
-    label.textContent = "Elige tu método de pago: ";
-    label.setAttribute("for", "proveedor");
-    form.appendChild(label);
-    const select = document.createElement("select");
-    select.id = "proveedor";
-    const defaultOption = document.createElement("option");
-    defaultOption.value = "";
-    defaultOption.textContent = "Selecciona un método de pago";
-    defaultOption.disabled = true;
-    defaultOption.selected = true;
-    select.appendChild(defaultOption);
-    ["Bizum", "PayPal", "Tarjeta"].forEach((prov) => {
-      const option = document.createElement("option");
-      option.value = prov.toLowerCase();
-      option.textContent = prov;
-      select.appendChild(option);
-    });
-    form.appendChild(select);
-    // Campos para datos de tarjeta
-    const cardFields = document.createElement("div");
-    cardFields.className = "card-fields";
-    const cardNumberLabel = document.createElement("label");
-    cardNumberLabel.textContent = "Número de tarjeta:";
-    cardNumberLabel.setAttribute("for", "cardNumber");
-    cardFields.appendChild(cardNumberLabel);
-    const cardNumber = document.createElement("input");
-    cardNumber.type = "text";
-    cardNumber.id = "cardNumber";
-    cardNumber.name = "cardNumber";
-    cardNumber.placeholder = "1234 5678 9012 3456";
-    cardNumber.maxLength = "19";
-    cardFields.appendChild(cardNumber);
-    const holderLabel = document.createElement("label");
-    holderLabel.textContent = "Nombre del titular:";
-    holderLabel.setAttribute("for", "cardHolder");
-    cardFields.appendChild(holderLabel);
-    const cardHolder = document.createElement("input");
-    cardHolder.type = "text";
-    cardHolder.id = "cardHolder";
-    cardHolder.name = "cardHolder";
-    cardHolder.placeholder = "Juan Pérez";
-    cardFields.appendChild(cardHolder);
-    const row = document.createElement("div");
-    row.className = "row";
-    const expiryDiv = document.createElement("div");
-    const expiryLabel = document.createElement("label");
-    expiryLabel.textContent = "Fecha de caducidad:";
-    expiryLabel.setAttribute("for", "expiry");
-    expiryDiv.appendChild(expiryLabel);
-    const expiry = document.createElement("input");
-    expiry.type = "text";
-    expiry.id = "expiry";
-    expiry.name = "expiry";
-    expiry.placeholder = "MM/AA";
-    expiry.maxLength = "5";
-    expiryDiv.appendChild(expiry);
-    row.appendChild(expiryDiv);
-    const cvcDiv = document.createElement("div");
-    const cvcLabel = document.createElement("label");
-    cvcLabel.textContent = "CVC:";
-    cvcLabel.setAttribute("for", "cvc");
-    cvcDiv.appendChild(cvcLabel);
-    const cvc = document.createElement("input");
-    cvc.type = "text";
-    cvc.id = "cvc";
-    cvc.name = "cvc";
-    cvc.placeholder = "123";
-    cvc.maxLength = "4";
-    cvcDiv.appendChild(cvc);
-    row.appendChild(cvcDiv);
-    cardFields.appendChild(row);
-    cardFields.style.display = "none";
-    form.appendChild(cardFields);
-    // Bizum fields
-    const bizumFields = document.createElement("div");
-    bizumFields.className = "payment-fields bizum-fields";
-    bizumFields.style.display = "none";
-    const bizumLabel = document.createElement("label");
-    bizumLabel.textContent = "Número de teléfono:";
-    bizumLabel.setAttribute("for", "bizumPhone");
-    bizumFields.appendChild(bizumLabel);
-    const bizumPhone = document.createElement("input");
-    bizumPhone.type = "tel";
-    bizumPhone.id = "bizumPhone";
-    bizumPhone.name = "bizumPhone";
-    bizumPhone.placeholder = "600 000 000";
-    bizumPhone.maxLength = "12";
-    bizumFields.appendChild(bizumPhone);
-    const bizumInfo = document.createElement("p");
-    bizumInfo.className = "payment-info";
-    bizumInfo.textContent =
-      "Recibirás una notificación en tu app de Bizum para confirmar el pago.";
-    bizumInfo.style.fontSize = "0.9rem";
-    bizumInfo.style.color = "#666";
-    bizumInfo.style.marginTop = "0.5rem";
-    bizumFields.appendChild(bizumInfo);
-    form.appendChild(bizumFields);
-    // PayPal fields
-    const paypalFields = document.createElement("div");
-    paypalFields.className = "payment-fields paypal-fields";
-    paypalFields.style.display = "none";
-    const paypalEmailLabel = document.createElement("label");
-    paypalEmailLabel.textContent = "Email de PayPal:";
-    paypalEmailLabel.setAttribute("for", "paypalEmail");
-    paypalFields.appendChild(paypalEmailLabel);
-    const paypalEmail = document.createElement("input");
-    paypalEmail.type = "email";
-    paypalEmail.id = "paypalEmail";
-    paypalEmail.name = "paypalEmail";
-    paypalEmail.placeholder = "tu@email.com";
-    paypalFields.appendChild(paypalEmail);
-    const paypalInfo = document.createElement("p");
-    paypalInfo.className = "payment-info";
-    paypalInfo.textContent =
-      "Serás redirigido a PayPal para completar el pago de forma segura.";
-    paypalInfo.style.fontSize = "0.9rem";
-    paypalInfo.style.color = "#666";
-    paypalInfo.style.marginTop = "0.5rem";
-    paypalFields.appendChild(paypalInfo);
-    form.appendChild(paypalFields);
-    // Toggle fields
-    function togglePaymentFields() {
-      const selectedMethod = select.value;
-      cardFields.style.display = "none";
-      bizumFields.style.display = "none";
-      paypalFields.style.display = "none";
-      if (selectedMethod === "tarjeta") cardFields.style.display = "block";
-      else if (selectedMethod === "bizum") bizumFields.style.display = "block";
-      else if (selectedMethod === "paypal")
-        paypalFields.style.display = "block";
-    }
-    togglePaymentFields();
-    select.addEventListener("change", togglePaymentFields);
-    // Format card number
-    cardNumber.addEventListener("input", (e) => {
-      let value = e.target.value.replace(/\s/g, "").replace(/[^0-9]/gi, "");
-      let formattedValue = value.match(/.{1,4}/g)?.join(" ") || value;
-      e.target.value = formattedValue;
-    });
-    expiry.addEventListener("input", (e) => {
-      let value = e.target.value.replace(/\D/g, "");
-      if (value.length >= 2) value = value.slice(0, 2) + "/" + value.slice(2);
-      e.target.value = value;
-    });
-    cvc.addEventListener("input", (e) => {
-      e.target.value = e.target.value.replace(/\D/g, "");
-    });
-    // Pay button
-    const button = document.createElement("button");
-    button.id = "pagar";
-    button.type = "submit";
-    button.textContent = "Pagar";
-    form.appendChild(button);
-    // Status
-    const status = document.createElement("div");
-    status.id = "status";
-    form.appendChild(status);
-    // Lógica de pago
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const proveedor = select.value;
-      if (!proveedor) {
-        status.textContent = "Por favor, selecciona un método de pago.";
-        return;
-      }
-      let isValid = true;
-      let paymentData = {};
-      if (proveedor === "tarjeta") {
-        paymentData = {
-          number: cardNumber.value.replace(/\s/g, ""),
-          expiry: expiry.value,
-          cvc: cvc.value,
-          holder: cardHolder.value,
-        };
-        if (
-          !paymentData.number ||
-          !paymentData.expiry ||
-          !paymentData.cvc ||
-          !paymentData.holder
-        ) {
-          status.textContent =
-            "Por favor, completa todos los campos de la tarjeta.";
-          isValid = false;
-        }
-      } else if (proveedor === "bizum") {
-        paymentData = { phone: bizumPhone.value };
-        if (!paymentData.phone) {
-          status.textContent = "Por favor, introduce tu número de teléfono.";
-          isValid = false;
-        }
-      } else if (proveedor === "paypal") {
-        paymentData = { email: paypalEmail.value };
-        if (!paymentData.email) {
-          status.textContent = "Por favor, introduce tu email de PayPal.";
-          isValid = false;
-        }
-      }
-      if (!isValid) return;
-      button.disabled = true;
-      button.textContent = "Procesando...";
-      status.textContent = "Procesando pago...";
-      // Simulación de pago
-      setTimeout(() => {
-        status.textContent = "¡Pago procesado correctamente!";
-        setTimeout(() => {
-          document.body.removeChild(overlay);
-          if (onSuccess) onSuccess();
-        }, 1200);
-      }, 2000);
-    });
-    app.appendChild(form);
-    overlay.appendChild(app);
-    document.body.appendChild(overlay);
-  }
-
   enrollBtn.addEventListener("click", async () => {
+    // Función interna para actualizar usuario y taller
+    async function updateEnrollment(enroll) {
+      if (enroll) {
+        currentUser.enrolledWorkshops.push(id);
+        workshopDetail.enrolled.push(currentUser.id);
+      } else {
+        currentUser.enrolledWorkshops = currentUser.enrolledWorkshops.filter(
+          (wid) => wid !== id
+        );
+        workshopDetail.enrolled = workshopDetail.enrolled.filter(
+          (uid) => uid !== currentUser.id
+        );
+      }
+      const [updatedWorkshop, updatedUser] = await Promise.all([
+        updateWorkshop({ id: id, enrolled: workshopDetail.enrolled }),
+        updateUser({ enrolledWorkshops: currentUser.enrolledWorkshops }),
+      ]);
+      localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+      updateWorkshopCache(updatedWorkshop);
+      isEnrolled = enroll;
+    }
+
+    // Función interna para actualizar el botón
+    function updateButton(enrolled) {
+      enrollBtn.textContent = enrolled ? "Cancelar" : "Inscribirse";
+      enrollBtn.style.background = enrolled ? "#e10505ff" : "";
+      enrollBtn.style.color = enrolled ? "#fff" : "";
+      enrollBtn.disabled = false;
+    }
+
+    // Cancelar inscripción
     if (isEnrolled) {
-      // Show confirmation dialog before cancelling
       let cancelToastId = null;
       if (cancelToastId) return;
       cancelToastId = Toastify({
-        text: `\n          <span>¿Estás seguro de que quieres cancelar tu inscripción?</span>\n          <button id=\"confirm-cancel-btn\" style=\"margin-left:10px;padding:4px 10px;background:#e10505ff;color:#fff;border:none;border-radius:4px;cursor:pointer;\">Sí, cancelar</button>\n        `,
-        duration: -1, // Persistent: only closes on user action
+        text: `<span>¿Estás seguro de que quieres cancelar tu inscripción?</span>
+          <button id=\"confirm-cancel-btn\" style=\"margin-left:10px;padding:4px 10px;background:#e10505ff;color:#fff;border:none;border-radius:4px;cursor:pointer;\">Sí, cancelar</button>`,
+        duration: -1,
         gravity: "top",
         position: "center",
         close: true,
@@ -547,136 +329,91 @@ export default async function detail(container, id) {
             e.stopPropagation();
             enrollBtn.disabled = true;
             enrollBtn.textContent = "Procesando...";
-            // Remove workshop from user's enrolledWorkshops
-            currentUser.enrolledWorkshops =
-              currentUser.enrolledWorkshops.filter(
-                (workshopId) => workshopId !== id
-              );
-            // Remove user from workshop's enrolled list
-            workshopDetail.enrolled = workshopDetail.enrolled.filter(
-              (userId) => userId !== currentUser.id
-            );
             try {
-              const [updatedWorkshop, updatedUser] = await Promise.all([
-                updateWorkshop({ id: id, enrolled: workshopDetail.enrolled }),
-                updateUser({
-                  enrolledWorkshops: currentUser.enrolledWorkshops,
-                }),
-              ]);
-              localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-              updateWorkshopCache(updatedWorkshop);
+              await updateEnrollment(false);
               showToast("¡Inscripción cancelada!", "success");
               setTimeout(() => window.location.reload(), 1200);
-            } catch (error) {
+            } catch {
               showToast("Error al cancelar la inscripción", "error");
-              enrollBtn.disabled = false;
-              enrollBtn.textContent = "Cancelar";
-              enrollBtn.style.background = "#e10505ff";
-              enrollBtn.style.color = "#fff";
+              updateButton(true);
             }
           };
         }
       }, 100);
       return;
     }
-    // Si el workshop es gratis, inscribe directamente
+
+    // Inscripción gratuita
     if (workshop.price === 0) {
       enrollBtn.disabled = true;
       enrollBtn.textContent = "Procesando...";
-      isEnrolled = currentUser.enrolledWorkshops.includes(id);
-      const action = isEnrolled ? "cancel" : "enroll";
-      if (!isEnrolled) {
-        currentUser.enrolledWorkshops.push(id);
-        workshopDetail.enrolled.push(currentUser.id);
-        try {
-          const [updatedWorkshop, updatedUser] = await Promise.all([
-            updateWorkshop({ id: id, enrolled: workshopDetail.enrolled }),
-            updateUser({ enrolledWorkshops: currentUser.enrolledWorkshops }),
-          ]);
-          if (!updateWorkshop || !updateUser) {
-            throw new Error("Update workshop or user failed");
-          }
-          localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-          updateWorkshopCache(updatedWorkshop);
-          isEnrolled = true;
-          showToast("Te has inscrito exitosamente", "success");
-          enrollBtn.textContent = "Cancelar";
-          enrollBtn.style.background = "#e10505ff";
-          enrollBtn.style.color = "#fff";
-        } catch (error) {
-          showToast("Error al actualizar usuario o taller", "error");
-          currentUser.enrolledWorkshops = currentUser.enrolledWorkshops.filter(
-            (workshopId) => workshopId !== id
-          );
-          workshopDetail.enrolled = workshopDetail.enrolled.filter(
-            (userId) => userId !== currentUser.id
-          );
-        }
-        enrollBtn.disabled = false;
+      try {
+        await updateEnrollment(true);
+        showToast("Te has inscrito exitosamente", "success");
+        updateButton(true);
+      } catch {
+        showToast("Error al actualizar usuario o taller", "error");
+        updateButton(false);
       }
       return;
     }
-    // Si el workshop es de pago, mostrar modal de pago
+
+    // Inscripción de pago
     showPaymentModal(async () => {
       enrollBtn.disabled = true;
       enrollBtn.textContent = "Procesando...";
-      isEnrolled = currentUser.enrolledWorkshops.includes(id);
-      const action = isEnrolled ? "cancel" : "enroll";
-      if (!isEnrolled) {
-        currentUser.enrolledWorkshops.push(id);
-        workshopDetail.enrolled.push(currentUser.id);
-        try {
-          const [updatedWorkshop, updatedUser] = await Promise.all([
-            updateWorkshop({ id: id, enrolled: workshopDetail.enrolled }),
-            updateUser({ enrolledWorkshops: currentUser.enrolledWorkshops }),
-          ]);
-          if (!updateWorkshop || !updateUser) {
-            throw new Error("Update workshop or user failed");
-          }
-          localStorage.setItem("currentUser", JSON.stringify(updatedUser));
-          updateWorkshopCache(updatedWorkshop);
-          isEnrolled = true;
-          showToast("Te has inscrito exitosamente", "success");
-          enrollBtn.textContent = "Cancelar";
-          enrollBtn.style.background = "#e10505ff";
-          enrollBtn.style.color = "#fff";
-        } catch (error) {
-          showToast("Error al actualizar usuario o taller", "error");
-          currentUser.enrolledWorkshops = currentUser.enrolledWorkshops.filter(
-            (workshopId) => workshopId !== id
-          );
-          workshopDetail.enrolled = workshopDetail.enrolled.filter(
-            (userId) => userId !== currentUser.id
-          );
-        }
-        enrollBtn.disabled = false;
+      try {
+        await updateEnrollment(true);
+        showToast("Te has inscrito exitosamente", "success");
+        updateButton(true);
+      } catch {
+        showToast("Error al actualizar usuario o taller", "error");
+        updateButton(false);
       }
     });
   });
 
-  // Utility function for element creation (copied from profile.js)
-  function $(tag, props = {}, ...children) {
-    const el = document.createElement(tag);
-    Object.entries(props).forEach(([k, v]) => {
-      if (k.startsWith("on") && typeof v === "function") {
-        el.addEventListener(k.slice(2).toLowerCase(), v);
-      } else if (k === "class") {
-        el.className = v;
-      } else if (k === "style" && typeof v === "object") {
-        Object.assign(el.style, v);
-      } else if (k === "for") {
-        el.htmlFor = v;
-      } else {
-        el.setAttribute(k, v);
-      }
+  editBtn.addEventListener("click", (event) => {
+    createEditWorkshopModal({
+      data: workshopDetail,
+      onSubmit: async (formData) => {
+        try {
+          const updatedWorkshop = await updateWorkshop(formData);
+          updateWorkshopCache(updatedWorkshop);
+          showToast("Taller actualizado exitosamente", "success");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } catch (error) {
+          showToast("Error al actualizar el taller", "error");
+          console.error("Error updating workshop:", error);
+        }
+      },
     });
-    children.flat().forEach((child) => {
-      if (typeof child === "string" || typeof child === "number") {
-        el.appendChild(document.createTextNode(child));
-      } else if (child instanceof Node) {
-        el.appendChild(child);
-      }
+  });
+
+  deleteBtn.addEventListener("click", () => {
+    showConfirmModal({
+      message:
+        "¿Estás seguro de que quieres eliminar el workshop?<br><br>Esta acción no se puede deshacer.",
+      buttonText: "eliminar",
+      buttonColor: "red",
+      onConfirm: async () => {
+        try {
+          const workshopDeleted = await deleteWorkshop(id);
+
+          clearWorkshopsCache(),
+            getCachedWorkshops(),
+            showToast("Taller eliminado correctamente", "success");
+
+          setTimeout(() => {
+            navigate("/workshops");
+          }, 2000); // Wait 2 seconds for toast to be visible
+        } catch (error) {
+          showToast("Error al eliminar el taller", "error");
+          console.error("Error deleting workshop:", error);
+        }
+      },
     });
-    return el;
-  }
+  });
 }

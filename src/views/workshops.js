@@ -8,13 +8,8 @@ import {
   updateWorkshopCache,
 } from "../utils/cache.js";
 import { renderWorkshops } from "../utils/renderCards.js";
-import { createWorkshop, updateWorkshop } from "../api/apiWorkshops.js";
-import {
-  showModal,
-  handleWorkshopFormSubmit,
-  renderWorkshopFormHtml,
-  closeModal,
-} from "../utils/formModal.js";
+import { createWorkshop } from "../api/apiWorkshops.js";
+import { createEditWorkshopModal } from "../components/modals/formModal.js";
 
 export default function workshops(container) {
   container.innerHTML = "";
@@ -53,7 +48,6 @@ export default function workshops(container) {
   );
   const tabContent = workshopsWrapper.querySelector("#workshops-tab-content");
 
-  //filter workshops depending of which tab you are
   function filterWorkshopsByTab(workshops, currentUser, tab) {
     if (tab === "enrolled") {
       return workshops.filter((workshop) =>
@@ -70,13 +64,12 @@ export default function workshops(container) {
         currentUser.savedWorkshops?.includes(String(workshop.id))
       );
     }
+    return [];
   }
 
-  //render the content of the tabs
   async function showTab(tab) {
     const currentUser = getCurrentUser();
 
-    //It does all the request together so it takes less time
     const [workshops, categories, subcategories] = await Promise.all([
       getCachedWorkshops(),
       getCachedCategories(),
@@ -93,32 +86,26 @@ export default function workshops(container) {
       tabCreateButton.appendChild(createBtn);
 
       createBtn.addEventListener("click", () => {
-        showModal(renderWorkshopFormHtml());
-        handleWorkshopFormSubmit(async (formData) => {
-          // 1. Create the workshop and obtain id
-          const newWorkshop = await createWorkshop(formData);
+        createEditWorkshopModal({
+          data: {},
+          onSubmit: async (formData) => {
+            const newWorkshop = await createWorkshop(formData);
+            currentUser.createdWorkshops.push(String(newWorkshop.id));
 
-          // add the new workshop to the currentUser
-          currentUser.createdWorkshops.push(String(newWorkshop.id));
+            const updatedUser = await updateUser({
+              createdWorkshops: currentUser.createdWorkshops,
+            });
+            if (updatedUser) {
+              localStorage.setItem(
+                "currentUser",
+                JSON.stringify({ ...currentUser, ...updatedUser })
+              );
+            }
 
-          // 3. updateUser with the new workshop and update localStorage
-          const updatedUser = await updateUser({
-            createdWorkshops: currentUser.createdWorkshops,
-          });
-          if (updatedUser) {
-            localStorage.setItem(
-              "currentUser",
-              JSON.stringify({ ...currentUser, ...updatedUser })
-            );
-          }
-
-          // Update local cache workshop
-          updateWorkshopCache(newWorkshop);
-
-          // close modal, show toastify and refresh the tab
-          closeModal();
-          showToast("Taller creado exitosamente", "success");
-          showTab("created");
+            updateWorkshopCache(newWorkshop);
+            showToast("Taller creado exitosamente", "success");
+            showTab("created");
+          },
         });
       });
     } else {
@@ -148,6 +135,7 @@ export default function workshops(container) {
     });
   }
 
+  // Tab event listeners
   workshopsWrapper
     .querySelector("#tab-enrolled")
     .addEventListener("click", (e) => {

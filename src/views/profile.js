@@ -48,6 +48,79 @@ export default async function profile(container) {
     alt: "Avatar",
   });
 
+  // Icon edit image
+  const editAvatarBtn = $(
+    "button",
+    {
+      class: "edit-avatar-btn",
+      onclick: () => {
+        uploadSection.style.display = "flex";
+      },
+    },
+    "🖊️"
+  );
+
+  // Input y upload button
+  const fileInput = $("input", {
+    type: "file",
+    accept: "image/*",
+    style: { marginTop: "10px" },
+  });
+
+  const uploadBtn = $(
+    "button",
+    {
+      class: "upload-btn",
+      onclick: async () => {
+        const file = fileInput.files[0];
+        if (!file) return showToast("Selecciona una imagen", "info");
+
+        const formData = new FormData();
+        formData.append("file", file);
+        formData.append("upload_preset", "profile_image");
+
+        try {
+          const res = await fetch(
+            "https://api.cloudinary.com/v1_1/dpm2ylejh/image/upload",
+            {
+              method: "POST",
+              body: formData,
+            }
+          );
+
+          const data = await res.json();
+
+          if (data.secure_url) {
+            avatar.src = data.secure_url;
+
+            // Save new avatar image
+            const updatedUser = { ...user, avatarUrl: data.secure_url };
+            await updateUserById(user.id, updatedUser);
+            localStorage.setItem("currentUser", JSON.stringify(updatedUser));
+            showToast("¡Foto actualizada!", "success");
+            uploadSection.style.display = "none";
+          } else {
+            showToast("Error al subir la imagen", "error");
+          }
+        } catch (err) {
+          console.error(err);
+          showToast("Fallo de red", "error");
+        }
+      },
+    },
+    "Subir nueva foto"
+  );
+
+  const uploadSection = $(
+    "div",
+    {
+      class: "upload-avatar-section",
+      style: { display: "none", flexDirection: "column", gap: "10px" },
+    },
+    fileInput,
+    uploadBtn
+  );
+
   const sidebar = $(
     "aside",
     { class: "profile-sidebar" },
@@ -55,11 +128,50 @@ export default async function profile(container) {
       "div",
       { class: "profile-avatar-box" },
       avatar,
+      editAvatarBtn,
+      uploadSection,
       $(
         "div",
         { class: "profile-user-data" },
         $("span", { class: "profile-user-label" }, user.name),
-        $("span", { class: "profile-user-value" }, user.email)
+        $("span", { class: "profile-user-value" }, user.email),
+        // Título de Talleres
+        $("h3", { class: "profile-workshop-title" }, "Talleres"),
+        // Contadores de workshops
+        $(
+          "div",
+          { class: "profile-workshop-counts" },
+          $(
+            "div",
+            { class: "profile-count" },
+            $(
+              "span",
+              { class: "profile-count-number" },
+              user.enrolledWorkshops ? user.enrolledWorkshops.length : 0
+            ),
+            $("span", { class: "profile-count-label" }, " Inscritos")
+          ),
+          $(
+            "div",
+            { class: "profile-count" },
+            $(
+              "span",
+              { class: "profile-count-number" },
+              user.createdWorkshops ? user.createdWorkshops.length : 0
+            ),
+            $("span", { class: "profile-count-label" }, " Creados")
+          ),
+          $(
+            "div",
+            { class: "profile-count" },
+            $(
+              "span",
+              { class: "profile-count-number" },
+              user.savedWorkshops ? user.savedWorkshops.length : 0
+            ),
+            $("span", { class: "profile-count-label" }, " Guardados")
+          )
+        )
       )
     ),
     $(

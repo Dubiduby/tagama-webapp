@@ -2,13 +2,11 @@ import { getCurrentUser, updateUser } from "../api/apiUsers";
 import dayjs from "dayjs";
 import { showToast } from "../utils/toastify";
 import { updateWorkshopCache } from "../utils/cache.js";
-import { updateWorkshop } from "../api/apiWorkshops.js";
+import { updateWorkshop, deleteWorkshop } from "../api/apiWorkshops.js";
 import {
-  showModal,
-  handleWorkshopFormSubmit,
-  renderWorkshopFormHtml,
+  createEditWorkshopModal,
   closeModal,
-} from "../utils/formModal.js";
+} from "../components/modals/formModal.js";
 
 export function workshopCards(workshop, subcategory, category) {
   // Card container
@@ -22,6 +20,7 @@ export function workshopCards(workshop, subcategory, category) {
     : new URL("../assets/images/no-image-default.jpg", import.meta.url).href;
 
   const divCardImage = document.createElement("div");
+
   divCardImage.className =
     "w-full h-[180px] md:h-[200px] bg-[#f3f3f3] flex items-center justify-center relative";
 
@@ -43,6 +42,7 @@ workshopTagSub.textContent =
 tagsContainer.appendChild(workshopTagCat);
 tagsContainer.appendChild(workshopTagSub);
 
+
   const img = document.createElement("img");
   img.src = imageUrl;
   img.alt = "Imagen del Taller";
@@ -60,28 +60,179 @@ tagsContainer.appendChild(workshopTagSub);
 
   const currentUser = getCurrentUser();
 
-  // Check if workshop is created by current user
+  let optionsWrapper = null;
   if (
     currentUser &&
     currentUser.createdWorkshops &&
     currentUser.createdWorkshops.includes(String(workshop.id))
   ) {
-    buttonAdd.innerHTML = `<img src="${
-      new URL("../assets/images/select.svg", import.meta.url).href
-    }" alt="Editar taller" class="w-7 h-7 block object-contain">`;
-    buttonAdd.setAttribute("aria-label", "Editar taller");
-  } else if (
-    currentUser &&
-    currentUser.savedWorkshops &&
-    currentUser.savedWorkshops.includes(workshop.id)
-  ) {
-    buttonAdd.innerHTML = `<img src="${
-      new URL("../assets/images/bookmark-check.svg", import.meta.url).href
-    }" alt="Añadido a la lista" class="w-7 h-7 block object-contain">`;
-  } else {
-    buttonAdd.innerHTML = `<img src="${
-      new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
-    }" alt="Añadir a la lista" class="w-7 h-7 block object-contain">`;
+
+    optionsWrapper = document.createElement("div");
+    optionsWrapper.style.position = "absolute";
+    optionsWrapper.style.top = "8px";
+    optionsWrapper.style.right = "8px";
+
+    const optionsBtn = document.createElement("button");
+    optionsBtn.innerHTML = "⋮";
+    optionsBtn.style.background = "rgba(0,0,0,0.6)";
+    optionsBtn.style.color = "#fff";
+    optionsBtn.style.border = "none";
+    optionsBtn.style.borderRadius = "50%";
+    optionsBtn.style.width = "28px";
+    optionsBtn.style.height = "28px";
+    optionsBtn.style.cursor = "pointer";
+    optionsBtn.style.fontSize = "18px";
+    optionsBtn.style.lineHeight = "18px";
+
+    const dropdown = document.createElement("div");
+    dropdown.style.display = "none";
+    dropdown.style.position = "absolute";
+    dropdown.style.top = "35px";
+    dropdown.style.right = "0";
+    dropdown.style.background = "#fff";
+    dropdown.style.border = "1px solid #ddd";
+    dropdown.style.borderRadius = "6px";
+    dropdown.style.boxShadow = "0 2px 6px rgba(0,0,0,0.2)";
+    dropdown.style.minWidth = "110px";
+    dropdown.style.zIndex = "100";
+
+    const editOption = document.createElement("button");
+    editOption.textContent = "✏️ Editar";
+    editOption.style.display = "block";
+    editOption.style.width = "100%";
+    editOption.style.padding = "6px 10px";
+    editOption.style.background = "none";
+    editOption.style.border = "none";
+    editOption.style.textAlign = "left";
+    editOption.style.cursor = "pointer";
+
+    const deleteOption = document.createElement("button");
+    deleteOption.textContent = "🗑️ Eliminar";
+    deleteOption.style.display = "block";
+    deleteOption.style.width = "100%";
+    deleteOption.style.padding = "6px 10px";
+    deleteOption.style.background = "none";
+    deleteOption.style.border = "none";
+    deleteOption.style.textAlign = "left";
+    deleteOption.style.cursor = "pointer";
+    deleteOption.style.color = "red";
+
+    dropdown.appendChild(editOption);
+    dropdown.appendChild(deleteOption);
+    optionsWrapper.appendChild(optionsBtn);
+    optionsWrapper.appendChild(dropdown);
+
+    optionsBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      dropdown.style.display =
+        dropdown.style.display === "block" ? "none" : "block";
+    });
+
+    document.addEventListener("click", (e) => {
+      if (!optionsWrapper.contains(e.target)) {
+        dropdown.style.display = "none";
+      }
+    });
+
+    editOption.addEventListener("click", (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+      dropdown.style.display = "none";
+      createEditWorkshopModal({
+        data: workshop,
+        onSubmit: async (formData) => {
+          try {
+            const updatedWorkshop = await updateWorkshop(formData);
+            updateWorkshopCache(updatedWorkshop);
+            closeModal();
+            showToast("Taller actualizado exitosamente", "success");
+            setTimeout(() => window.location.reload(), 1000);
+          } catch (error) {
+            showToast("Error al actualizar el taller", "error");
+          }
+        },
+      });
+    });
+
+    deleteOption.addEventListener("click", async (e) => {
+      e.stopPropagation();
+      e.preventDefault();
+
+      const confirmDelete = confirm(
+        `¿Seguro que deseas eliminar el taller "${workshop.title}"?`
+      );
+      if (!confirmDelete) return;
+
+      const workshopId = workshop.id;
+
+      if (!workshopId || isNaN(Number(workshopId))) {
+        showToast("Este taller no tiene un ID válido.", "error");
+        return;
+      }
+
+      console.log("Deleting workshop ID:", workshopId);
+
+      try {
+        const success = await deleteWorkshop(workshopId);
+        if (success) {
+          const currentUser = getCurrentUser();
+          currentUser.createdWorkshops = currentUser.createdWorkshops.filter(
+            (wid) => String(wid) !== String(workshopId)
+          );
+          localStorage.setItem("currentUser", JSON.stringify(currentUser));
+          await updateUser(currentUser);
+          showToast("Taller eliminado exitosamente", "success");
+          setTimeout(() => window.location.reload(), 1000);
+        } else {
+          showToast(`No se encontró taller con ID: ${workshopId}`, "error");
+        }
+      } catch (error) {
+        console.error("Error deleting workshop:", error);
+        showToast("Error al eliminar el taller", "error");
+      }
+    });
+  }
+
+  let bookmarkBtn = null;
+  if (!optionsWrapper) {
+    bookmarkBtn = document.createElement("button");
+    bookmarkBtn.className = "add-btn";
+
+    if (
+      currentUser &&
+      currentUser.savedWorkshops &&
+      currentUser.savedWorkshops.includes(workshop.id)
+    ) {
+      bookmarkBtn.innerHTML = `<img src="${
+        new URL("../assets/images/bookmark-check.svg", import.meta.url).href
+      }" alt="Añadido a la lista">`;
+    } else {
+      bookmarkBtn.innerHTML = `<img src="${
+        new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
+      }" alt="Añadir a la lista">`;
+    }
+
+    bookmarkBtn.addEventListener("click", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (!currentUser.savedWorkshops) currentUser.savedWorkshops = [];
+      const idx = currentUser.savedWorkshops.indexOf(workshop.id);
+      if (idx === -1) {
+        currentUser.savedWorkshops.push(workshop.id);
+        bookmarkBtn.innerHTML = `<img src="${
+          new URL("../assets/images/bookmark-check.svg", import.meta.url).href
+        }" alt="Añadido a la lista">`;
+      } else {
+        currentUser.savedWorkshops.splice(idx, 1);
+        bookmarkBtn.innerHTML = `<img src="${
+          new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
+        }" alt="Añadir a la lista">`;
+      }
+      localStorage.setItem("currentUser", JSON.stringify(currentUser));
+      updateUser(currentUser);
+    });
+
   }
 
   // Card info
@@ -91,6 +242,7 @@ tagsContainer.appendChild(workshopTagSub);
   const titleCard = document.createElement("h3");
   titleCard.textContent = workshop.title;
   titleCard.className = "mb-2 text-[1.15rem] text-[var(--color-title)] font-semibold line-clamp-2";
+
 
   // Card details
   const divCardDetails = document.createElement("div");
@@ -111,14 +263,23 @@ tagsContainer.appendChild(workshopTagSub);
     " text-[var(--color-text)] flex  items-center gap-[0.2rem] font-semibold";
   locationSpan.innerHTML = `<img src="${
     new URL("../assets/images/location-pin.svg", import.meta.url).href
+
   }" alt="Ubicación" class="w-[18px] h-[18px] inline-block object-contain mr-1 align-middle">  ${workshop.mode}`;
 
   const durationSpan = document.createElement("span");
   durationSpan.className =
     "text-[var(--color-text)] flex items-center gap-[0.4em] font-semibold";
+
+  const hours = Math.floor(workshop.duration / 60);
+  const minutes = workshop.duration % 60;
+  const formattedDuration =
+    hours > 0
+      ? `${hours}h${minutes > 0 ? ` ${minutes}min` : ""}`
+      : `${minutes} min`;
   durationSpan.innerHTML = `<img src="${
     new URL("../assets/images/time.svg", import.meta.url).href
-  }" alt="Duración" class="w-[18px] h-[18px] inline-block object-contain mr-1 align-middle">  ${workshop.duration} min`;
+  }" alt="Duración"> class="w-[18px] h-[18px] inline-block object-contain mr-1 align-middle"> ${formattedDuration}`;
+
 
   const spots = document.createElement("span");
   spots.className =
@@ -131,16 +292,13 @@ tagsContainer.appendChild(workshopTagSub);
   const workshopPrice = document.createElement("span");
   workshopPrice.textContent =
     workshop.price === 0 ? "Gratis" : `${workshop.price}€`;
+
   workshopPrice.className = "text-[#797b6c]  font-bold text-[#1a1a1a] text-xl dark:text-[#f4f2f0]";
  
   const price_spots = document.createElement("div");
   price_spots.className = "flex  gap-60 items-center ";
   price_spots.appendChild(spots);
    price_spots.appendChild(workshopPrice);
-  
- 
- 
-
 
  
   // Final structure
@@ -149,6 +307,23 @@ tagsContainer.appendChild(workshopTagSub);
   divCardImage.appendChild(tagsContainer);
   divCardImage.appendChild(buttonAdd);
 
+
+  const workshopTagCat = document.createElement("span");
+  workshopTagCat.className = "tags";
+  if (category && category.name) workshopTagCat.textContent = category.name;
+
+  const workshopTagSub = document.createElement("span");
+  workshopTagSub.className = "tags";
+  if (subcategory && subcategory.name)
+    workshopTagSub.textContent = subcategory.name;
+
+  card.appendChild(divCardImage);
+  divCardImage.appendChild(img);
+
+  if (optionsWrapper) divCardImage.appendChild(optionsWrapper);
+  if (bookmarkBtn) divCardImage.appendChild(bookmarkBtn);
+
+
   card.appendChild(divCardInfo);
   divCardInfo.appendChild(titleCard);
   divCardInfo.appendChild(divCardDetails);
@@ -156,6 +331,7 @@ tagsContainer.appendChild(workshopTagSub);
   divCardDetails.appendChild(dateSpan);
   divCardDetails.appendChild(locationSpan);
   divCardDetails.appendChild(durationSpan);
+
   divCardDetails.appendChild(price_spots);
 
   // Event listener para el botón
