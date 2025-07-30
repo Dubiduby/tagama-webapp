@@ -19,8 +19,16 @@ export default function footer(footerContainer) {
   contactLink.className = "footer-contact-link";
   contactLink.textContent = "Contact us";
 
+  // Enlace a Sobre nosotros
+  const aboutLink = document.createElement("a");
+  aboutLink.href = "/about";
+  aboutLink.setAttribute("data-link", "");
+  aboutLink.className = "footer-about-link";
+  aboutLink.textContent = "Sobre nosotros";
+
   // Añadir elementos al footer
   footerEl.appendChild(copyright);
   footerEl.appendChild(contactLink);
+  footerEl.appendChild(aboutLink);
   footerContainer.appendChild(footerEl);
 } 

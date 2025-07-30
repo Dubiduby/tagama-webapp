@@ -79,3 +79,17 @@ footer {
   vertical-align: middle;
   margin-right: 6px;
 }
+
+.footer-contact-link,
+.footer-about-link {
+  color: #000000;
+  text-decoration: none;
+  transition: color 0.2s;
+  margin-left: 20px;
+}
+
+.footer-contact-link:hover,
+.footer-about-link:hover {
+  color: #1d4ed8;
+  text-decoration: underline;
+}
