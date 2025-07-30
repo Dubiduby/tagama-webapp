@@ -30,6 +30,7 @@ export default async function detail(container, id) {
   ]);
 
   const workshopDetail = workshopsCache.find((item) => Number(item.id) === Number(id));
+
   const category = categories.find(
     (item) => Number(item.id) === Number(workshopDetail.categoryId)
   );
