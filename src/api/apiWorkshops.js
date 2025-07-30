@@ -46,11 +46,15 @@ export async function updateWorkshop(dataToUpdate) {
       body: JSON.stringify(dataToUpdate),
     });
     if (!response.ok) {
-      throw new Error("Could not update workshop", response.status);
+      if (response.status === 404) {
+        throw new Error(`Workshop with ID ${dataToUpdate.id} not found`);
+      }
+      throw new Error(`Could not update workshop: ${response.status} ${response.statusText}`);
     }
     return await response.json();
   } catch (error) {
     console.error("Error updating workshop", error);
+    throw error; // Re-throw para que el error se maneje en el componente
   }
 }
 

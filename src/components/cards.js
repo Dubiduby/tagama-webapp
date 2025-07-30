@@ -2,7 +2,7 @@ import { getCurrentUser, updateUser } from "../api/apiUsers";
 import dayjs from "dayjs";
 import { showToast } from "../utils/toastify";
 import { updateWorkshopCache } from "../utils/cache.js";
-import { updateWorkshop, deleteWorkshop } from "../api/apiWorkshops.js";
+import { updateWorkshop, deleteWorkshop, createWorkshop } from "../api/apiWorkshops.js";
 import {
   createEditWorkshopModal,
   closeModal,
@@ -132,13 +132,35 @@ export function workshopCards(workshop, subcategory, category) {
         data: workshop,
         onSubmit: async (formData) => {
           try {
-            const updatedWorkshop = await updateWorkshop(formData);
-            updateWorkshopCache(updatedWorkshop);
+            let result;
+            // Si el workshop tiene ID, intentar actualizar
+            if (formData.id) {
+              try {
+                result = await updateWorkshop(formData);
+                showToast("Taller actualizado exitosamente", "success");
+              } catch (error) {
+                // Si el workshop no existe (404), crear uno nuevo
+                if (error.message.includes("not found")) {
+                  console.log("Workshop not found, creating new one...");
+                  delete formData.id; // Remover ID para crear nuevo
+                  result = await createWorkshop(formData);
+                  showToast("Taller creado exitosamente", "success");
+                } else {
+                  throw error; // Re-throw otros errores
+                }
+              }
+            } else {
+              // Si no tiene ID, crear nuevo workshop
+              result = await createWorkshop(formData);
+              showToast("Taller creado exitosamente", "success");
+            }
+            
+            updateWorkshopCache(result);
             closeModal();
-            showToast("Taller actualizado exitosamente", "success");
             setTimeout(() => window.location.reload(), 1000);
           } catch (error) {
-            showToast("Error al actualizar el taller", "error");
+            console.error("Error in workshop submission:", error);
+            showToast("Error al procesar el taller", "error");
           }
         },
       });
