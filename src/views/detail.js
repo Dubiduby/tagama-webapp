@@ -344,7 +344,7 @@ export default async function detail(container, id) {
     }
 
     // Inscripción gratuita
-    if (workshop.price === 0) {
+    if (workshopDetail.price === 0) {
       enrollBtn.disabled = true;
       enrollBtn.textContent = "Procesando...";
       try {
