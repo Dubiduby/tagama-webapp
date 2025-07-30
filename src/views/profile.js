@@ -295,7 +295,7 @@ export default async function profile(container) {
   const deleteBtn = $(
     "button",
     {
-      class: "delete-btn",
+      class: "delete-user-btn",
       onclick: () => {
         if (deleteToastId) return;
         deleteToastId = Toastify({

@@ -113,7 +113,7 @@ body {
   margin-top: 18px;
   transition: background 0.2s;
 }
-.delete-btn {
+.workshop-sidebar .delete-workshop-button {
   width: 100%;
   padding: 16px 0;
   background: #eb2525;

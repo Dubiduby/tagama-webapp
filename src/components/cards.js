@@ -48,7 +48,6 @@ export function workshopCards(workshop, subcategory, category) {
   img.alt = "Imagen del Taller";
   img.className = "w-full h-full object-cover rounded-t-2xl";
 
-
   const currentUser = getCurrentUser();
 
   let optionsWrapper = null;
@@ -186,8 +185,12 @@ export function workshopCards(workshop, subcategory, category) {
 
   // Botón de bookmark (add/save) siempre presente, pero solo funcional si el usuario no es el creador
   const buttonAdd = document.createElement("button");
-  buttonAdd.className = "absolute top-3 right-3 bg-[#f7f7f7] border-none rounded-full p-2 cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors duration-200 hover:bg-[#e0e0e0]";
-  const isCreator = currentUser && currentUser.createdWorkshops && currentUser.createdWorkshops.includes(String(workshop.id));
+  buttonAdd.className =
+    "absolute top-3 right-3 bg-[#f7f7f7] border-none rounded-full p-2 cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors duration-200 hover:bg-[#e0e0e0]";
+  const isCreator =
+    currentUser &&
+    currentUser.createdWorkshops &&
+    currentUser.createdWorkshops.includes(String(workshop.id));
   if (
     currentUser &&
     currentUser.savedWorkshops &&
@@ -310,7 +313,6 @@ export function workshopCards(workshop, subcategory, category) {
   divCardDetails.appendChild(durationSpan);
 
   divCardDetails.appendChild(price_spots);
-
 
   // Link para la card
   const cardLink = document.createElement("a");
