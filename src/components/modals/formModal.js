@@ -1,59 +1,145 @@
+import dayjs from "../../utils/day.js";
+import { getCategories, getSubcategories } from "../../api/apiCategories.js";
 import { getCurrentUser } from "../../api/apiUsers.js";
 
 export function renderWorkshopFormHtml(data = {}) {
-  const isEdit = Boolean(data.id);
   return `
-      <div class="workshop-modal__header">
-        <h3>${isEdit ? "Editar" : "Crear"} Taller</h3>
-        <button class="workshop-modal__close" aria-label="Cerrar" type="button">&times;</button>
+    <form id="workshop-form" class="workshop-form">
+      
+      <div class="form-group">
+        <label for="title">Título</label>
+        <input id="title" name="title" value="${data.title || ""}" required />
       </div>
-      <form id="workshop-form" class="workshop-form">
-        <input name="title" value="${
-          data.title || ""
-        }" placeholder="Título" required />
-        <input name="imageUrl" value="${
-          data.imageUrl || ""
-        }" placeholder="URL de la imagen" />
-        <input name="price" value="${
-          data.price || ""
-        }" placeholder="Precio (€)" />
-        <input name="duration" value="${
-          data.duration || ""
-        }" placeholder="Duración (ej. 90 o 2h)" />
-        <input name="capacity" value="${
-          data.capacity || ""
-        }" placeholder="Capacidad (máx. personas)" />
-        <input name="date" value="${
-          data.date || ""
-        }" placeholder="Fecha de inicio (ej. 2025-08-10)" />
-        <input name="location" value="${
-          data.location || ""
-        }" placeholder="Ubicación (Online o Presencial)" />
-        <textarea name="overview" placeholder="Descripción">${
-          data.overview || ""
-        }</textarea>
-        <button type="submit">${isEdit ? "Actualizar" : "Crear"}</button>
-      </form>
-    `;
+
+      <div class="form-group">
+        <label for="overview">Descripción</label>
+        <textarea id="overview" name="overview">${data.overview || ""}</textarea>
+      </div>
+
+      <div class="form-group">
+        <label for="requirements">Requisitos</label>
+        <textarea id="requirements" name="requirements">${data.requirements || ""}</textarea>
+      </div>
+
+      <div class="form-group inline-group">
+        <div>
+          <label for="place">Lugar</label>
+          <select id="place" name="place" required>
+            <option value="Online" ${data.place === "Online" ? "selected" : ""}>Online</option>
+            <option value="On-Site" ${data.place === "On-Site" ? "selected" : ""}>Presencial</option>
+          </select>
+        </div>
+        <div id="address-group" style="${data.place === "Online" ? "display:none" : ""}">
+          <label for="address">Dirección</label>
+          <input id="address" name="address" value="${data.address || ""}" />
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label for="date">Fecha</label>
+        <input id="date" type="datetime-local" name="date" 
+          value="${data.date ? dayjs.unix(data.date).format("YYYY-MM-DDTHH:mm") : ""}" required />
+      </div>
+
+      <div class="form-group inline-group">
+        <div>
+          <label for="category">Categoría</label>
+          <select id="category-select" name="categoryId"></select>
+        </div>
+        <div>
+          <label for="subcategory">Subcategoría</label>
+          <select id="subcategory-select" name="subcategoryId"></select>
+        </div>
+      </div>
+
+      <div class="form-group inline-group">
+        <div>
+          <label for="capacity">Capacidad</label>
+          <input id="capacity" type="number" name="capacity" value="${data.capacity || ""}" required />
+        </div>
+        <div>
+          <label for="price">Precio (€)</label>
+          <input id="price" type="number" step="0.01" name="price" value="${data.price || 0}" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn-submit">Guardar</button>
+    </form>
+  `;
 }
 
-export function handleWorkshopFormSubmit(onSubmit, data = {}) {
-  const modal = document.getElementById("workshop-modal");
-  const form = modal.querySelector("#workshop-form");
-  const closeBtn = modal.querySelector(".workshop-modal__close");
-  closeBtn.onclick = closeModal;
+export async function handleWorkshopFormSubmit(onSubmit, data = {}) {
+  const form = document.getElementById("workshop-form");
+
+  // Load categories and subcategories
+  const categories = await getCategories();
+  const subcategories = await getSubcategories();
+
+  const categorySelect = form.querySelector("#category-select");
+  const subcategorySelect = form.querySelector("#subcategory-select");
+  const placeSelect = form.querySelector("#place");
+  const addressGroup = form.querySelector("#address-group");
+
+  categorySelect.innerHTML = categories
+    .map(
+      (c) =>
+        `<option value="${c.id}" ${data.categoryId == c.id ? "selected" : ""}>
+          ${c.name}
+        </option>`
+    )
+    .join("");
+
+  function renderSubcategories(categoryId) {
+    const filtered = subcategories.filter(
+      (s) => String(s.categoryId) === String(categoryId)
+    );
+    subcategorySelect.innerHTML = filtered
+      .map(
+        (s) =>
+          `<option value="${s.id}" ${
+            data.subcategoryId == s.id ? "selected" : ""
+          }>${s.name}</option>`
+      )
+      .join("");
+
+    if (filtered.length === 0) {
+      subcategorySelect.innerHTML =
+        '<option value="" disabled selected>-- No hay subcategorías --</option>';
+    }
+  }
+
+  renderSubcategories(categorySelect.value);
+
+  categorySelect.addEventListener("change", () => {
+    renderSubcategories(categorySelect.value);
+  });
+
+  if (placeSelect.value === "Online") {
+    addressGroup.style.display = "none";
+  } else {
+    addressGroup.style.display = "block";
+  }
+
+  placeSelect.addEventListener("change", () => {
+    if (placeSelect.value === "Online") {
+      addressGroup.style.display = "none";
+      addressGroup.querySelector("input").value = "";
+    } else {
+      addressGroup.style.display = "block";
+    }
+  });
 
   form.onsubmit = async (e) => {
     e.preventDefault();
     const currentUser = getCurrentUser();
     const formData = Object.fromEntries(new FormData(form));
+
     const workshop = {
       ...data,
       ...formData,
+      date: dayjs(formData.date).unix(),
       instructorName: currentUser.name,
       enrolled: data.enrolled || [],
-      categoryId: 1,
-      subcategoryId: 1,
       capacity: Number(formData.capacity || 0),
       userId: currentUser.id,
     };

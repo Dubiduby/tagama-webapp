@@ -28,9 +28,10 @@ export async function createWorkshop(workshopData) {
 }
 
 export async function deleteWorkshop(id) {
-  const response = await fetch(`${baseUrl}/${id}`, {
-    method: "DELETE",
-  });
+  const url = `${baseUrl}/${id}`;
+  console.log("DELETE URL:", url); // Debug
+  const response = await fetch(url, { method: "DELETE" });
+  console.log("DELETE status:", response.status);
   return response.ok;
 }
 
@@ -52,4 +53,5 @@ export async function updateWorkshop(dataToUpdate) {
     console.error("Error updating workshop", error);
   }
 }
+
 
