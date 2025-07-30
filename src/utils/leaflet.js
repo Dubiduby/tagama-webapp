@@ -13,13 +13,54 @@ L.Icon.Default.mergeOptions({
 });
 
 export function initMap(coordinates, location) {
-  const map = L.map("map").setView(coordinates, 15);
+  // Verificar si las coordenadas existen
+  if (!coordinates) {
+    console.warn("No coordinates provided for map");
+    return;
+  }
+
+  // Convertir coordenadas a formato [lat, lng] para Leaflet
+  let coordsArray;
+  
+  if (typeof coordinates === 'object' && coordinates.lat && coordinates.lng) {
+    // Formato objeto {lat, lng}
+    coordsArray = [coordinates.lat, coordinates.lng];
+  } else if (Array.isArray(coordinates) && coordinates.length === 2) {
+    // Formato array [lat, lng]
+    coordsArray = coordinates;
+  } else if (typeof coordinates === 'string') {
+    // Formato string "lat,lng"
+    try {
+      const coords = JSON.parse(coordinates);
+      if (coords.lat && coords.lng) {
+        coordsArray = [coords.lat, coords.lng];
+      } else {
+        const [lat, lng] = coordinates.split(',');
+        coordsArray = [parseFloat(lat), parseFloat(lng)];
+      }
+    } catch {
+      const [lat, lng] = coordinates.split(',');
+      coordsArray = [parseFloat(lat), parseFloat(lng)];
+    }
+  } else {
+    console.warn("Invalid coordinates format:", coordinates);
+    return;
+  }
+
+  // Verificar que las coordenadas son válidas
+  if (!coordsArray || coordsArray.length !== 2 || 
+      isNaN(coordsArray[0]) || isNaN(coordsArray[1])) {
+    console.warn("Invalid coordinates:", coordsArray);
+    return;
+  }
+
+  const map = L.map("map").setView(coordsArray, 15);
 
   L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
     attribution:
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
-  L.marker(coordinates).addTo(map).bindPopup(location);
+  L.marker(coordsArray).addTo(map).bindPopup(location || "Ubicación del workshop");
   map.scrollWheelZoom.disable();
 }
