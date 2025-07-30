@@ -1,4 +1,4 @@
-import "../assets/styles/main.css";
+import "../assets/styles/general.css";
 
 export function showSpinner(container) {
   container.innerHTML = `

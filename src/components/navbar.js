@@ -11,6 +11,7 @@ export default function navbar(header) {
   if (isLoggedIn) {
     authLinks = `
       <li><a href="/workshops" data-link>Mis talleres</a></li>
+
       <!-- Avatar y dropdown para desktop -->
       <li class="navbar__avatar-container">
         <button class="navbar__avatar-button" aria-label="Menú de usuario">
@@ -24,9 +25,11 @@ export default function navbar(header) {
       <!-- Profile y Logout como li normales para mobile/burger abierto -->
       <li class="navbar__profile-link"><a href="/profile" data-link>Perfil</a></li>
       <li class="navbar__logout-link"><a href="#" id="logout-link-mobile">Cerrar sesión</a></li>
+      
     `;
   } else {
     authLinks = `
+
       <li><a href="/login" data-link>Iniciar sesión</a></li>
       <li><a href="/signup" data-link>Registrarse</a></li>
     `;
@@ -43,6 +46,7 @@ export default function navbar(header) {
       import.meta.url
     ).href
   }" alt="Añadido a la lista"></img></a>
+  
         <button class="navbar__toggle" aria-label="Abrir menú">
           <span></span>
           <span></span>
@@ -50,9 +54,17 @@ export default function navbar(header) {
         </button>
     </div>
     <ul class="navbar__links">
+    
         <li><a href="${isLoggedIn ? "/home" : "/"}" data-link>Inicio</a></li>
         ${authLinks}
+        <button id="toggle-dark" class="ml-4 p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 transition-colors" aria-label="Cambiar modo claro/oscuro">
+  <span id="dark-icon">🌙</span>
+  <span id="light-icon" class="hidden">☀️</span>
+</button>
+        
     </ul>
+    
+    
   </nav>
   `;
 
@@ -105,4 +117,27 @@ export default function navbar(header) {
       navigate("/");
     });
   }
+
+  const darkToggle = header.querySelector("#toggle-dark");
+if (darkToggle) {
+  darkToggle.addEventListener("click", () => {
+    document.documentElement.classList.toggle("dark");
+    // Opcional: guarda la preferencia en localStorage
+    if (document.documentElement.classList.contains("dark")) {
+      localStorage.setItem("theme", "dark");
+      darkToggle.querySelector("#light-icon").classList.add("hidden");
+      darkToggle.querySelector("#dark-icon").classList.remove("hidden");
+    } else {
+      localStorage.setItem("theme", "light");
+      darkToggle.querySelector("#light-icon").classList.remove("hidden");
+      darkToggle.querySelector("#dark-icon").classList.add("hidden");
+    }
+  });
+  // Al cargar, aplica la preferencia guardada
+  if (localStorage.getItem("theme") === "dark") {
+    document.documentElement.classList.add("dark");
+    darkToggle.querySelector("#light-icon").classList.add("hidden");
+    darkToggle.querySelector("#dark-icon").classList.remove("hidden");
+  }
+}
 }
