@@ -9,12 +9,7 @@ import {
 } from "../utils/cache.js";
 import { renderWorkshops } from "../utils/renderCards.js";
 import { createWorkshop } from "../api/apiWorkshops.js";
-import {
-  showModal,
-  handleWorkshopFormSubmit,
-  renderWorkshopFormHtml,
-  closeModal,
-} from "../components/modals/formModal.js";
+import { createEditWorkshopModal } from "../components/modals/formModal.js";
 
 export default function workshops(container) {
   container.innerHTML = "";
@@ -91,26 +86,26 @@ export default function workshops(container) {
       tabCreateButton.appendChild(createBtn);
 
       createBtn.addEventListener("click", () => {
-        showModal(renderWorkshopFormHtml());
-        handleWorkshopFormSubmit(async (formData) => {
-          const newWorkshop = await createWorkshop(formData);
-          currentUser.createdWorkshops.push(String(newWorkshop.id));
+        createEditWorkshopModal({
+          data: {},
+          onSubmit: async (formData) => {
+            const newWorkshop = await createWorkshop(formData);
+            currentUser.createdWorkshops.push(String(newWorkshop.id));
 
-          const updatedUser = await updateUser({
-            createdWorkshops: currentUser.createdWorkshops,
-          });
-          if (updatedUser) {
-            localStorage.setItem(
-              "currentUser",
-              JSON.stringify({ ...currentUser, ...updatedUser })
-            );
-          }
+            const updatedUser = await updateUser({
+              createdWorkshops: currentUser.createdWorkshops,
+            });
+            if (updatedUser) {
+              localStorage.setItem(
+                "currentUser",
+                JSON.stringify({ ...currentUser, ...updatedUser })
+              );
+            }
 
-          updateWorkshopCache(newWorkshop);
-
-          closeModal();
-          showToast("Taller creado exitosamente", "success");
-          showTab("created");
+            updateWorkshopCache(newWorkshop);
+            showToast("Taller creado exitosamente", "success");
+            showTab("created");
+          },
         });
       });
     } else {
