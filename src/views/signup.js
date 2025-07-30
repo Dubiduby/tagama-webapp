@@ -1,4 +1,3 @@
-import "../assets/styles/signup.css";
 import { createNewUser } from "../api/apiUsers.js";
 import { showToast } from "../utils/toastify.js";
 import { navigate } from "../router.js";
@@ -8,100 +7,84 @@ import { validation } from "../utils/validations.js";
 export default function signUp(container) {
   container.innerHTML = "";
 
+  // Contenedor principal
   const newUserDiv = document.createElement("div");
-  newUserDiv.className = "divNewUser";
+  newUserDiv.className = "max-w-sm mx-auto mt-16 p-10 bg-white rounded-xl shadow-lg flex flex-col items-center";
   container.appendChild(newUserDiv);
 
-  const formWrapper = document.createElement("div");
-  formWrapper.className = "div-form-sign-up";
-  newUserDiv.appendChild(formWrapper);
-
+  // Formulario
   const form = document.createElement("form");
-  formWrapper.appendChild(form);
+  form.className = "w-full flex flex-col gap-4";
+  newUserDiv.appendChild(form);
 
   // Título
   const h1 = document.createElement("h1");
-  h1.className = "sign-up-title";
+  h1.className = "text-center text-3xl font-bold mb-5 text-indigo-600";
   h1.textContent = "Registro";
   form.appendChild(h1);
 
-  // Label y input para el nombre
-  const labelName = document.createElement("label");
-  labelName.htmlFor = "signup-name";
-  labelName.innerHTML = "Nombre <span style='color:#ef4444'>*</span>";
-  const inputName = document.createElement("input");
-  inputName.type = "text";
-  inputName.id = "signup-name";
-  inputName.name = "name";
-  inputName.required = true;
-  inputName.className = "signup-input";
+  // Función para crear inputs con estilos consistentes
+  function createInput(type, id, name, labelText, required = true) {
+    const label = document.createElement("label");
+    label.htmlFor = id;
+    label.className = "text-base text-gray-700 mb-1";
+    label.innerHTML = `${labelText} <span class="text-red-500">*</span>`;
+
+    const input = document.createElement("input");
+    input.type = type;
+    input.id = id;
+    input.name = name;
+    input.required = required;
+    input.className = "px-4 py-3 border border-gray-300 rounded-md text-base bg-gray-50 focus:border-indigo-500 focus:outline-none focus:bg-white transition-colors";
+
+    return { label, input };
+  }
+
+  // Crear inputs
+  const { label: labelName, input: inputName } = createInput("text", "signup-name", "name", "Nombre");
+  const { label: labelEmail, input: inputEmail } = createInput("email", "signup-email", "email", "Email");
+  const { label: labelPassword, input: inputPassword } = createInput("password", "signup-password", "password", "Contraseña");
+  const { label: labelRepeat, input: inputRepeat } = createInput("password", "signup-repeat", "repeat", "Repetir contraseña");
+
+  // Agregar inputs al formulario
   form.appendChild(labelName);
   form.appendChild(inputName);
-
-  // Label y input para el email
-  const labelEmail = document.createElement("label");
-  labelEmail.htmlFor = "signup-email";
-  labelEmail.innerHTML = "Email <span style='color:#ef4444'>*</span>";
-  const inputEmail = document.createElement("input");
-  inputEmail.type = "email";
-  inputEmail.id = "signup-email";
-  inputEmail.name = "email";
-  inputEmail.required = true;
-  inputEmail.className = "signup-input";
   form.appendChild(labelEmail);
   form.appendChild(inputEmail);
-
-  // Label y input para la contraseña
-  const labelPassword = document.createElement("label");
-  labelPassword.htmlFor = "signup-password";
-  labelPassword.innerHTML = "Contraseña <span style='color:#ef4444'>*</span>";
-  const inputPassword = document.createElement("input");
-  inputPassword.type = "password";
-  inputPassword.id = "signup-password";
-  inputPassword.name = "password";
-  inputPassword.required = true;
-  inputPassword.className = "signup-input";
   form.appendChild(labelPassword);
   form.appendChild(inputPassword);
-
-  // Label y input para repetir contraseña
-  const labelRepeat = document.createElement("label");
-  labelRepeat.htmlFor = "signup-repeat";
-  labelRepeat.innerHTML =
-    "Repetir contraseña <span style='color:#ef4444'>*</span>";
-  const inputRepeat = document.createElement("input");
-  inputRepeat.type = "password";
-  inputRepeat.id = "signup-repeat";
-  inputRepeat.name = "repeat";
-  inputRepeat.required = true;
-  inputRepeat.className = "signup-input";
   form.appendChild(labelRepeat);
   form.appendChild(inputRepeat);
 
   // Texto pequeño
   const small = document.createElement("small");
-  small.className = "small-sign-up";
+  small.className = "text-sm text-gray-600 text-center";
   small.textContent = "(*) Todos los campos son obligatorios.";
   form.appendChild(small);
 
   // Botón de registro
   const button = document.createElement("button");
   button.type = "submit";
-  button.className = "button-login-signup";
+  button.className = "px-4 py-3 bg-indigo-600 text-white rounded-md text-lg font-semibold cursor-pointer hover:bg-indigo-700 transition-colors";
   button.textContent = "Registrarse";
   form.appendChild(button);
 
-  const loginMsgDiv = document.createElement("div");
-  loginMsgDiv.className = "login-msg-signup";
-  loginMsgDiv.style.margin = "16px 0 0 0";
-  loginMsgDiv.style.textAlign = "center";
-
+  // Texto de login
   const loginText = document.createElement("p");
-  loginText.classList.add("login-text");
-  loginText.innerHTML = `¿Ya tienes una cuenta? <a href="/login" data-link id="login-link">¡Inicia sesión!</a>`;
+  loginText.className = "text-center text-sm mt-2 text-gray-600";
+  
+  const loginLink = document.createElement("a");
+  loginLink.href = "/login";
+  loginLink.setAttribute("data-link", "");
+  loginLink.id = "login-link";
+  loginLink.textContent = "¡Inicia sesión!";
+  loginLink.className = "text-indigo-600 font-medium hover:text-indigo-700 hover:underline transition-colors";
 
+  loginText.innerHTML = "¿Ya tienes una cuenta? ";
+  loginText.appendChild(loginLink);
   form.appendChild(loginText);
 
+  // Event listener para el formulario
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     try {
@@ -114,6 +97,7 @@ export default function signUp(container) {
         showToast("Las contraseñas no coinciden", "error");
         return;
       }
+      
       const isValid = validation({
         name: signupName,
         email: signupEmail,
