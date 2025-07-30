@@ -9,10 +9,10 @@ import {
 export function renderWorkshops(container, workshops, categories, subcategories) {
 container.innerHTML = "";
   const workshopsContainer = document.createElement("div");
-  workshopsContainer.className = "workshops-container";
+  workshopsContainer.className = "bg-[var(--color-bg)] w-full flex flex-wrap gap-8 justify-center items-center py-8";
 
   const workshopsList = document.createElement("ul");
-  workshopsList.className = "workshops-list";
+  workshopsList.className = "w-full flex flex-wrap gap-8 justify-center items-center list-none p-0 m-0";
 
   const workshopsFragment = document.createDocumentFragment();
 

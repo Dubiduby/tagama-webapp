@@ -1,0 +1,172 @@
+#spinner-container {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+
+  .spinner {
+    border: 4px solid rgba(0, 0, 0, 0.1);
+    border-left-color: #3498db;
+    border-radius: 50%;
+    width: 50px;
+    height: 50px;
+    animation: spin 1s linear infinite;
+  }
+
+  .spinner-text {
+    color: grey;
+  }
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+/* Cards */
+
+/*.workshops-container {
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  justify-content: center;
+  align-items: center;
+  padding: 2rem 0;
+}
+
+.workshops-list {
+  width: 100%;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.workshop-card {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.08);
+  overflow: hidden;
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+  transition: transform 0.15s, box-shadow 0.15s;
+  position: relative;
+}
+
+.workshop-card:hover {
+  transform: translateY(-6px) scale(1.03);
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.15);
+}
+
+.card-image {
+  width: 100%;
+  height: 180px;
+  background: #f3f3f3;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+}
+
+.card-image img {
+  max-width: 100%;
+  max-height: 100%;
+  object-fit: cover;
+  border-top-left-radius: 16px;
+  border-top-right-radius: 16px;
+}
+
+.add-btn {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: #f7f7f7;
+  border: none;
+  border-radius: 50%;
+  padding: 8px;
+  cursor: pointer;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  transition: background 0.2s;
+}
+.add-btn:hover {
+  background: #e0e0e0;
+}
+
+.add-btn img {
+  width: 28px;
+  height: 28px;
+  display: block;
+  object-fit: contain;
+}
+
+.card-info {
+  padding: 1rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.card-info h3 {
+  margin: 0 0 0.5rem 0;
+  font-size: 1.2rem;
+  color: #333;
+}
+
+.card-details {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  font-size: 0.95rem;
+  color: #666;
+}
+
+.card-details .date,
+.card-details .location,
+.card-details .duration,
+.card-details .spots {
+  background: #f0f0f0;
+  border-radius: 8px;
+  padding: 0.2rem 0.6rem;
+}
+
+.card-details span {
+  display: flex;
+  align-items: center;
+  gap: 0.4em; 
+}
+
+.card-details span img {
+  width: 18px; 
+  height: 18px;
+  display: inline-block;
+  object-fit: contain;
+  margin-right: 0.2em;
+  vertical-align: middle;
+}
+
+.card-info p {
+  margin: 0.5rem 0 0 0;
+  font-weight: bold;
+  color: #464455;
+}
+
+.tags {
+  display: inline-block;
+  margin-top: 0.3rem;
+  background: #e0f2fe;
+  color: #0284c7;
+  border-radius: 12px;
+  padding: 2px 12px;
+  font-size: 0.8rem;
+  margin-right: 0;
+  font-weight: 500;
+}*/

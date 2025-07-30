@@ -1,4 +1,3 @@
-import "../assets/styles/home.css";
 import { renderWorkshops } from "../utils/renderCards.js";
 import {
   getCachedWorkshops,
@@ -12,48 +11,42 @@ export default async function home(container) {
   const workshops = await getCachedWorkshops();
   const categories = await getCachedCategories();
   const subcategories = await getCachedSubcategories();
-
+  const app = document.getElementById("app");
+  app.className = "bg-[var(--color-bg)] ";
   // Search
   const searchInput = document.createElement("input");
   searchInput.type = "text";
   searchInput.placeholder = "Buscar taller...";
-  searchInput.className = "search-input";
-  container.appendChild(searchInput);
+  searchInput.className = "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-white focus:border-[#a78bfa] focus:outline-none";
 
   // Botón para mostrar/ocultar filtros
   const filtersToggleBtn = document.createElement("button");
   filtersToggleBtn.textContent = "Filtros";
-  filtersToggleBtn.className = "filters-toggle-btn";
-  container.appendChild(filtersToggleBtn);
+  filtersToggleBtn.className = "block px-3 py-1 bg-[#6c2ccc] text-[#fafafa] border-none rounded-lg text-lg font-semibold cursor-pointer transition-colors duration-200 ml-2 whitespace-nowrap hover:bg-[#4c1b96]";
 
-  //Search an filters container
+  // Search and filters container
   const searchContainer = document.createElement("div");
-  searchContainer.className = "search-container";
+  searchContainer.className = "bg-[var(--color-bg)] w-full flex flex-row items-center gap-3 mb-3 max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] justify-center";
   searchContainer.appendChild(searchInput);
   searchContainer.appendChild(filtersToggleBtn);
-  container.appendChild(searchContainer);
 
-  // All filteers container
+  // All filters container
   const allFiltersContainer = document.createElement("div");
-  allFiltersContainer.className = "all-filters-container";
-
+  allFiltersContainer.className = "bg-[var(--color-bg)] w-full pt-6 max-w-[1100px] mx-auto mb-8 flex flex-col items-center md:max-w-[900px] lg:max-w-[1100px]";
   allFiltersContainer.appendChild(searchContainer);
-  // --- Paginación: contenedor global ---
-  const paginationContainer = document.createElement("div");
-  paginationContainer.className = "pagination-container";
+
+  // Filtros
+  const filterContainer = document.createElement("div");
+  filterContainer.className = "w-full flex flex-row flex-wrap gap-3 items-center bg-white p-4 rounded-xl mb-6 border border-[#ececec] max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] md:gap-4 md:p-6 lg:gap-6 lg:p-8 lg:rounded-2xl hidden";
 
   // Mostrar/ocultar filtros al hacer click
   filtersToggleBtn.addEventListener("click", () => {
     filterContainer.classList.toggle("hidden");
   });
 
-  // Filtros
-  const filterContainer = document.createElement("div");
-  filterContainer.className = "filter-container";
-
   // Categoría
   const categoriesFilter = document.createElement("select");
-  categoriesFilter.className = "category-filter";
+  categoriesFilter.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[#fafbfc] transition-colors duration-200 w-full text-[#222] focus:border-[#a78bfa] focus:outline-none";
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
   defaultOption.textContent = "Todas las categorías";
@@ -68,7 +61,7 @@ export default async function home(container) {
 
   // Subcategoría
   const subcategoriesFilter = document.createElement("select");
-  subcategoriesFilter.className = "subcategory-filter";
+  subcategoriesFilter.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[#fafbfc] transition-colors duration-200 w-full text-[#222] focus:border-[#a78bfa] focus:outline-none";
   const defaultSubcategoryOption = document.createElement("option");
   defaultSubcategoryOption.value = "";
   defaultSubcategoryOption.textContent = "Todas las subcategorías";
@@ -83,11 +76,11 @@ export default async function home(container) {
   // Fecha por meses
   const monthInput = document.createElement("input");
   monthInput.type = "month";
-  monthInput.className = "month-filter";
+  monthInput.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[#fafbfc] transition-colors duration-200 w-full text-[#222] focus:border-[#a78bfa] focus:outline-none";
 
   // Ordenar por
   const orderSelect = document.createElement("select");
-  orderSelect.className = "order-filter";
+  orderSelect.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[#fafbfc] transition-colors duration-200 w-full text-[#222] focus:border-[#a78bfa] focus:outline-none";
   [
     { value: "recent", text: "Próximos" },
     { value: "oldest", text: "Más lejanos" },
@@ -103,21 +96,18 @@ export default async function home(container) {
   // Plazas disponibles
   const spotsCheckbox = document.createElement("input");
   spotsCheckbox.type = "checkbox";
-  spotsCheckbox.className = "spots-filter";
+  spotsCheckbox.className = "accent-[#6c2ccc]";
   const spotsLabel = document.createElement("label");
+  spotsLabel.className = "flex items-center gap-2 text-base cursor-pointer select-none text-[#444]";
   spotsLabel.textContent = "Solo con plazas disponibles";
   spotsLabel.appendChild(spotsCheckbox);
-
-  const workshopsContainer = document.createElement("div");
-  workshopsContainer.className = "workshops-list";
 
   // Botón para resetear filtros
   const resetButton = document.createElement("button");
   resetButton.textContent = "Limpiar";
-  resetButton.className = "reset-filters-btn";
+  resetButton.className = "min-w-[120px] flex-1 px-4 py-2 bg-[#6c2ccc] text-[#fafafa] border border-gray-200 rounded text-base cursor-pointer transition-colors duration-200 w-full font-medium mt-1 hover:bg-[#4c1b96] hover:text-[#f4f3f7] hover:border-[#c4b5fd]";
 
   // Añadir filtros al contenedor
-  //filterContainer.appendChild(searchInput);
   filterContainer.appendChild(categoriesFilter);
   filterContainer.appendChild(subcategoriesFilter);
   filterContainer.appendChild(monthInput);
@@ -125,21 +115,28 @@ export default async function home(container) {
   filterContainer.appendChild(spotsLabel);
   filterContainer.appendChild(resetButton);
   allFiltersContainer.appendChild(filterContainer);
+
+  // Workshops list
+  const workshopsContainer = document.createElement("div");
+  workshopsContainer.className = "w-full flex flex-wrap gap-8 justify-center items-center py-8";
+
+  // --- Paginación: contenedor global ---
+  const paginationContainer = document.createElement("div");
+  paginationContainer.className = "flex justify-center items-center gap-3 mt-8";
+
+  // Montar todo
   container.appendChild(allFiltersContainer);
   container.appendChild(workshopsContainer);
   container.appendChild(paginationContainer);
 
   // Función para actualizar las subcategorías según la categoría seleccionada
   function updateSubcategoriesOptions() {
-    // Limpia todas las opciones
     subcategoriesFilter.innerHTML = "";
-    // Opción por defecto
     const defaultSubcategoryOption = document.createElement("option");
     defaultSubcategoryOption.value = "";
     defaultSubcategoryOption.textContent = "Todas las subcategorías";
     subcategoriesFilter.appendChild(defaultSubcategoryOption);
 
-    // Si hay una categoría seleccionada, filtra las subcategorías
     const selectedCategoryId = categoriesFilter.value;
     const filteredSubcategories = selectedCategoryId
       ? subcategories.filter(
@@ -153,7 +150,6 @@ export default async function home(container) {
       option.textContent = subcategory.name;
       subcategoriesFilter.appendChild(option);
     });
-    // Resetea el valor seleccionado
     subcategoriesFilter.value = "";
   }
 
@@ -163,16 +159,15 @@ export default async function home(container) {
   // --- Paginación ---
   function getWorkshopsPerPage() {
     if (window.innerWidth < 600) {
-      return 8; // Por ejemplo, 4 en móvil
+      return 8;
     } else if (window.innerWidth < 1000) {
-      return 10; // Por ejemplo, 8 en tablet
+      return 10;
     } else {
-      return 15; // 15 en escritorio
+      return 15;
     }
   }
   let currentPage = 1;
   let totalPages = 1;
-  // --- Fin paginación ---
 
   function filterAndRender() {
     let filtered = [...workshops];
@@ -198,7 +193,7 @@ export default async function home(container) {
       );
     }
     // Date Filter
-    const monthValue = monthInput.value; // "YYYY-MM" format
+    const monthValue = monthInput.value;
     if (monthValue) {
       filtered = filtered.filter(
         (workshops) =>
@@ -235,7 +230,7 @@ export default async function home(container) {
     const start = (currentPage - 1) * workshopsPerPage;
     const end = start + workshopsPerPage;
     const paginatedWorkshops = filtered.slice(start, end);
-    // --- Fin paginación ---
+
     // Render the workshopContainer
     workshopsContainer.innerHTML = "";
     if (paginatedWorkshops.length === 0) {
@@ -257,15 +252,16 @@ export default async function home(container) {
     resetButton.addEventListener("click", () => {
       searchInput.value = "";
       categoriesFilter.selectedIndex = 0;
-      updateSubcategoriesOptions(); // <-- Esto es importante
+      updateSubcategoriesOptions();
       subcategoriesFilter.selectedIndex = 0;
       monthInput.value = "";
       orderSelect.selectedIndex = 0;
       spotsCheckbox.checked = false;
-      currentPage = 1; // Reinicia la página
+      currentPage = 1;
       filterAndRender();
     });
   }
+
   // --- Paginación: controles ---
   function renderPaginationControls() {
     paginationContainer.innerHTML = "";
@@ -274,6 +270,7 @@ export default async function home(container) {
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "Anterior";
     prevBtn.disabled = currentPage === 1;
+    prevBtn.className = "bg-white border-2 border-[#2563eb] text-[#2563eb] px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2563eb] hover:text-white hover:border-[#2563eb] focus-visible:bg-[#2563eb] focus-visible:text-white focus-visible:border-[#2563eb]";
     prevBtn.onclick = () => {
       currentPage--;
       filterAndRender();
@@ -283,13 +280,14 @@ export default async function home(container) {
     // Texto de página actual
     const pageInfo = document.createElement("span");
     pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
-    pageInfo.style.margin = "0 12px";
+    pageInfo.className = "text-base text-[#222] font-medium mx-3";
     paginationContainer.appendChild(pageInfo);
 
     // Botón siguiente
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Siguiente";
     nextBtn.disabled = currentPage === totalPages;
+    nextBtn.className = "bg-white border-2 border-[#2563eb] text-[#2563eb] px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2563eb] hover:text-white hover:border-[#2563eb] focus-visible:bg-[#2563eb] focus-visible:text-white focus-visible:border-[#2563eb]";
     nextBtn.onclick = () => {
       currentPage++;
       filterAndRender();
@@ -299,7 +297,6 @@ export default async function home(container) {
   // --- Fin paginación ---
 
   // Events in each filter
-  // Cambia los listeners de filtros para reiniciar la página
   searchInput.addEventListener("input", () => {
     currentPage = 1;
     filterAndRender();
@@ -326,7 +323,6 @@ export default async function home(container) {
     filterAndRender();
   });
 
-  // Actualiza la paginación al cambiar el tamaño de la ventana
   window.addEventListener("resize", () => {
     currentPage = 1;
     filterAndRender();
