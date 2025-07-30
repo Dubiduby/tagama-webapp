@@ -13,12 +13,7 @@ import Toastify from "toastify-js";
 import { updateWorkshop, deleteWorkshop } from "../api/apiWorkshops.js";
 import { initMap } from "../utils/leaflet.js";
 import { showPaymentModal } from "../components/modals/paymentModal.js";
-import {
-  renderWorkshopFormHtml,
-  handleWorkshopFormSubmit,
-  showModal,
-  closeModal,
-} from "../components/modals/formModal.js";
+import { createEditWorkshopModal } from "../components/modals/formModal.js";
 import { showConfirmModal } from "../components/modals/confirmModal.js";
 import { navigate } from "../router.js";
 
@@ -210,7 +205,7 @@ export default async function detail(container, id) {
   locationIcon.style.marginRight = "8px";
   modeDiv.appendChild(locationIcon);
   const modeText = document.createElement("span");
-  modeText.textContent = workshop.mode;
+  modeText.textContent = workshopDetail.mode;
   modeDiv.appendChild(modeText);
   sidebar.appendChild(modeDiv);
 
@@ -379,22 +374,22 @@ export default async function detail(container, id) {
   });
 
   editBtn.addEventListener("click", (event) => {
-    showModal(renderWorkshopFormHtml(workshopDetail));
-    handleWorkshopFormSubmit(async (formData) => {
-      try {
-        const updatedWorkshop = await updateWorkshop(formData);
-        updateWorkshopCache(updatedWorkshop);
-        closeModal();
-        showToast("Taller actualizado exitosamente", "success");
-        //       // Re-render the current page to show updated data after toast is shown
-        setTimeout(() => {
-          window.location.reload();
-        }, 2000); // Wait 2 seconds for toast to be visible
-      } catch (error) {
-        showToast("Error al actualizar el taller", "error");
-        console.error("Error updating workshop:", error);
-      }
-    }, workshopDetail);
+    createEditWorkshopModal({
+      data: workshopDetail,
+      onSubmit: async (formData) => {
+        try {
+          const updatedWorkshop = await updateWorkshop(formData);
+          updateWorkshopCache(updatedWorkshop);
+          showToast("Taller actualizado exitosamente", "success");
+          setTimeout(() => {
+            window.location.reload();
+          }, 2000);
+        } catch (error) {
+          showToast("Error al actualizar el taller", "error");
+          console.error("Error updating workshop:", error);
+        }
+      },
+    });
   });
 
   deleteBtn.addEventListener("click", () => {

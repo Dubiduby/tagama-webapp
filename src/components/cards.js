@@ -5,9 +5,7 @@ import { showToast } from "../utils/toastify";
 import { updateWorkshopCache } from "../utils/cache.js";
 import { updateWorkshop, deleteWorkshop } from "../api/apiWorkshops.js";
 import {
-  showModal,
-  handleWorkshopFormSubmit,
-  renderWorkshopFormHtml,
+  createEditWorkshopModal,
   closeModal,
 } from "../components/modals/formModal.js";
 
@@ -107,18 +105,20 @@ export function workshopCards(workshop, subcategory, category) {
       e.stopPropagation();
       e.preventDefault();
       dropdown.style.display = "none";
-      showModal(renderWorkshopFormHtml(workshop));
-      handleWorkshopFormSubmit(async (formData) => {
-        try {
-          const updatedWorkshop = await updateWorkshop(formData);
-          updateWorkshopCache(updatedWorkshop);
-          closeModal();
-          showToast("Taller actualizado exitosamente", "success");
-          setTimeout(() => window.location.reload(), 1000);
-        } catch (error) {
-          showToast("Error al actualizar el taller", "error");
-        }
-      }, workshop);
+      createEditWorkshopModal({
+        data: workshop,
+        onSubmit: async (formData) => {
+          try {
+            const updatedWorkshop = await updateWorkshop(formData);
+            updateWorkshopCache(updatedWorkshop);
+            closeModal();
+            showToast("Taller actualizado exitosamente", "success");
+            setTimeout(() => window.location.reload(), 1000);
+          } catch (error) {
+            showToast("Error al actualizar el taller", "error");
+          }
+        },
+      });
     });
 
     deleteOption.addEventListener("click", async (e) => {
