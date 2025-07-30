@@ -8,7 +8,7 @@ import {
   updateWorkshopCache,
 } from "../utils/cache.js";
 import { renderWorkshops } from "../utils/renderCards.js";
-import { createWorkshop, updateWorkshop } from "../api/apiWorkshops.js";
+import { createWorkshop } from "../api/apiWorkshops.js";
 import {
   showModal,
   handleWorkshopFormSubmit,
@@ -53,7 +53,6 @@ export default function workshops(container) {
   );
   const tabContent = workshopsWrapper.querySelector("#workshops-tab-content");
 
-  //filter workshops depending of which tab you are
   function filterWorkshopsByTab(workshops, currentUser, tab) {
     if (tab === "enrolled") {
       return workshops.filter((workshop) =>
@@ -70,13 +69,12 @@ export default function workshops(container) {
         currentUser.savedWorkshops?.includes(String(workshop.id))
       );
     }
+    return [];
   }
 
-  //render the content of the tabs
   async function showTab(tab) {
     const currentUser = getCurrentUser();
 
-    //It does all the request together so it takes less time
     const [workshops, categories, subcategories] = await Promise.all([
       getCachedWorkshops(),
       getCachedCategories(),
@@ -95,13 +93,9 @@ export default function workshops(container) {
       createBtn.addEventListener("click", () => {
         showModal(renderWorkshopFormHtml());
         handleWorkshopFormSubmit(async (formData) => {
-          // 1. Create the workshop and obtain id
           const newWorkshop = await createWorkshop(formData);
-
-          // add the new workshop to the currentUser
           currentUser.createdWorkshops.push(String(newWorkshop.id));
 
-          // 3. updateUser with the new workshop and update localStorage
           const updatedUser = await updateUser({
             createdWorkshops: currentUser.createdWorkshops,
           });
@@ -112,10 +106,8 @@ export default function workshops(container) {
             );
           }
 
-          // Update local cache workshop
           updateWorkshopCache(newWorkshop);
 
-          // close modal, show toastify and refresh the tab
           closeModal();
           showToast("Taller creado exitosamente", "success");
           showTab("created");
@@ -148,6 +140,7 @@ export default function workshops(container) {
     });
   }
 
+  // Tab event listeners
   workshopsWrapper
     .querySelector("#tab-enrolled")
     .addEventListener("click", (e) => {
