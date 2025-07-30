@@ -28,8 +28,10 @@ export default async function detail(container, id) {
     getCachedCategories(),
     getCachedSubcategories(),
   ]);
-
-  const workshopDetail = workshopsCache.find((item) => item.id === id);
+  console.log(id);
+  const workshopDetail = workshopsCache.find(
+    (item) => Number(item.id) === Number(id)
+  );
   const category = categories.find(
     (item) => Number(item.id) === Number(workshopDetail.categoryId)
   );
