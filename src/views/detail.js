@@ -1,4 +1,3 @@
-import "../assets/styles/detail.css";
 import {
   getCachedWorkshops,
   getCachedCategories,
@@ -46,69 +45,70 @@ export default async function detail(container, id) {
   // Back link
   const backLink = document.createElement("a");
   backLink.href = "/workshops";
-  backLink.className = "back-link";
-  backLink.textContent = "< Volver a Talleres";
+  backLink.className = "inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium mb-6 transition-colors";
+  backLink.innerHTML = `<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Volver a Talleres`;
   container.appendChild(backLink);
 
   // Contenedor principal
   const detailContent = document.createElement("div");
-  detailContent.className = "workshop-detail-content";
+  detailContent.className = "max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8";
   container.appendChild(detailContent);
 
   // Columna principal (imagen, tags, título, etc.)
   const mainColumn = document.createElement("div");
-  mainColumn.className = "workshop-main-column";
+  mainColumn.className = "lg:col-span-2 space-y-6";
   detailContent.appendChild(mainColumn);
 
   // Imagen arriba
   const imageDiv = document.createElement("div");
-  imageDiv.className = "workshop-image";
+  imageDiv.className = "w-full h-96 rounded-xl overflow-hidden";
   const img = document.createElement("img");
   img.src = workshopDetail.imageUrl;
   img.alt = "Imagen del taller";
+  img.className = "w-full h-full object-cover";
   imageDiv.appendChild(img);
   mainColumn.appendChild(imageDiv);
 
   // Tags
   const tagsDiv = document.createElement("div");
-  tagsDiv.className = "workshop-tags";
+  tagsDiv.className = "flex gap-2 flex-wrap";
 
   const subcategoryTag = document.createElement("span");
-  subcategoryTag.className = "tag";
+  subcategoryTag.className = "px-3 py-1 bg-indigo-100 text-indigo-800 text-sm font-medium rounded-full";
   subcategoryTag.textContent = subcategory.name;
   tagsDiv.appendChild(subcategoryTag);
 
   const categoryTag = document.createElement("span");
-  categoryTag.className = "tag";
+  categoryTag.className = "px-3 py-1 bg-gray-100 text-gray-800 text-sm font-medium rounded-full";
   categoryTag.textContent = category.name;
   tagsDiv.appendChild(categoryTag);
   mainColumn.appendChild(tagsDiv);
 
   // Title
   const title = document.createElement("h1");
-  title.className = "workshop-title";
+  title.className = "text-3xl font-bold text-gray-900";
   title.textContent = workshopDetail.title;
   mainColumn.appendChild(title);
 
   // Instructor
   const instructor = document.createElement("div");
-  instructor.className = "workshop-instructor";
+  instructor.className = "text-lg text-gray-600";
   instructor.textContent = workshopDetail.instructorName;
   mainColumn.appendChild(instructor);
 
   // Tabs y contenido en un solo box
   const tabsBox = document.createElement("div");
-  tabsBox.className = "workshop-tabs-box";
+  tabsBox.className = "bg-white rounded-xl shadow-sm border border-gray-200";
 
   // Tabs
   const tabsDiv = document.createElement("div");
-  tabsDiv.className = "workshop-tabs";
+  tabsDiv.className = "flex border-b border-gray-200";
   const overviewTab = document.createElement("button");
-  overviewTab.className = "tab active";
+  overviewTab.className = "flex-1 px-6 py-4 text-sm font-medium text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50";
   overviewTab.dataset.tab = "overview";
   overviewTab.textContent = "Descripción";
   const requirementsTab = document.createElement("button");
-  requirementsTab.className = "tab";
+  requirementsTab.className = "flex-1 px-6 py-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors";
   requirementsTab.dataset.tab = "requirements";
   requirementsTab.textContent = "Requisitos";
   tabsDiv.appendChild(overviewTab);
@@ -117,19 +117,21 @@ export default async function detail(container, id) {
 
   // Overview content
   const overviewDiv = document.createElement("div");
-  overviewDiv.className = "workshop-tab-content";
+  overviewDiv.className = "p-6";
   overviewDiv.id = "overview";
   const overviewP = document.createElement("p");
+  overviewP.className = "text-gray-700 leading-relaxed";
   overviewP.textContent = workshopDetail.overview;
   overviewDiv.appendChild(overviewP);
   tabsBox.appendChild(overviewDiv);
 
   // Requirements content
   const requirementsDiv = document.createElement("div");
-  requirementsDiv.className = "workshop-tab-content";
+  requirementsDiv.className = "p-6";
   requirementsDiv.id = "requirements";
   requirementsDiv.style.display = "none";
   const reqP = document.createElement("p");
+  reqP.className = "text-gray-700 leading-relaxed";
   reqP.textContent = workshopDetail.requirements;
   requirementsDiv.appendChild(reqP);
   tabsBox.appendChild(requirementsDiv);
@@ -140,10 +142,12 @@ export default async function detail(container, id) {
   if (workshopDetail.mode === "Presencial") {
     // Location
     const locationDiv = document.createElement("div");
-    locationDiv.className = "workshop-location";
+    locationDiv.className = "bg-gray-50 rounded-lg p-6";
     const locationSpan = document.createElement("span");
+    locationSpan.className = "block text-sm font-medium text-gray-700 mb-2";
     locationSpan.textContent = "Ubicación";
     const locationP = document.createElement("p");
+    locationP.className = "text-gray-900";
     locationP.textContent = workshopDetail.address;
     locationDiv.appendChild(locationSpan);
     locationDiv.appendChild(locationP);
@@ -152,7 +156,7 @@ export default async function detail(container, id) {
     // Map
     const mapDiv = document.createElement("div");
     mapDiv.id = "map";
-    mapDiv.className = "workshop-map";
+    mapDiv.className = "w-full rounded-lg overflow-hidden";
     mapDiv.style.height = "50vh";
     mainColumn.appendChild(mapDiv);
     
@@ -164,9 +168,7 @@ export default async function detail(container, id) {
       console.warn("No coordinates available for workshop:", workshopDetail.id);
       // Mostrar mensaje de que no hay mapa disponible
       const noMapDiv = document.createElement("div");
-      noMapDiv.style.padding = "20px";
-      noMapDiv.style.textAlign = "center";
-      noMapDiv.style.color = "#666";
+      noMapDiv.className = "flex items-center justify-center h-full bg-gray-100 text-gray-500";
       noMapDiv.textContent = "No hay mapa disponible para este workshop";
       mapDiv.appendChild(noMapDiv);
     }
@@ -174,106 +176,83 @@ export default async function detail(container, id) {
 
   // Sidebar a la derecha
   const sidebar = document.createElement("aside");
-  sidebar.className = "workshop-sidebar";
+  sidebar.className = "space-y-6";
 
   const priceDiv = document.createElement("div");
-  priceDiv.className = "workshop-price";
+  priceDiv.className = "text-3xl font-bold text-gray-900";
   priceDiv.textContent =
     workshopDetail.price === 0 ? "Gratis" : `${workshopDetail.price}€`;
   sidebar.appendChild(priceDiv);
 
+  // Función para crear elementos de información con iconos
+  function createInfoItem(iconSvg, text, className = "") {
+    const div = document.createElement("div");
+    div.className = `flex items-center gap-3 text-gray-700 ${className}`;
+    const icon = document.createElement("span");
+    icon.innerHTML = iconSvg;
+    icon.className = "flex-shrink-0";
+    const span = document.createElement("span");
+    span.textContent = text;
+    div.appendChild(icon);
+    div.appendChild(span);
+    return div;
+  }
+
   // Fecha con icono
-  const dateDiv = document.createElement("div");
-  dateDiv.className = "workshop-date";
-  dateDiv.style.display = "flex";
-  dateDiv.style.alignItems = "center";
-  const calendarIcon = document.createElement("span");
-  calendarIcon.innerHTML = `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`;
-  calendarIcon.style.marginRight = "8px";
-  dateDiv.appendChild(calendarIcon);
-  const dateText = document.createElement("span");
-  dateText.textContent = dateTime.format("dddd, D MMMM YYYY, HH:mm");
-  dateDiv.appendChild(dateText);
+  const dateDiv = createInfoItem(
+    `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><path d="M16 2v4M8 2v4M3 10h18"/></svg>`,
+    dateTime.format("dddd, D MMMM YYYY, HH:mm")
+  );
   sidebar.appendChild(dateDiv);
 
   // Hora con icono
-  const timeDiv = document.createElement("div");
-  timeDiv.className = "workshop-time";
-  timeDiv.style.display = "flex";
-  timeDiv.style.alignItems = "center";
-  const clockIcon = document.createElement("span");
-  clockIcon.innerHTML = `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`;
-  clockIcon.style.marginRight = "8px";
-  timeDiv.appendChild(clockIcon);
-  const timeText = document.createElement("span");
-  timeText.textContent = formattedDuration;
-  timeDiv.appendChild(timeText);
+  const timeDiv = createInfoItem(
+    `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
+    formattedDuration
+  );
   sidebar.appendChild(timeDiv);
 
   // Modo (ubicación) con icono
-  const modeDiv = document.createElement("div");
-  modeDiv.className = "workshop-mode";
-  modeDiv.style.display = "flex";
-  modeDiv.style.alignItems = "center";
-  const locationIcon = document.createElement("span");
-  locationIcon.innerHTML = `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 21c-4.418 0-8-4.03-8-9a8 8 0 1 1 16 0c0 4.97-3.582 9-8 9z"/><circle cx="12" cy="12" r="3"/></svg>`;
-  locationIcon.style.marginRight = "8px";
-  modeDiv.appendChild(locationIcon);
-  const modeText = document.createElement("span");
-  modeText.textContent = workshopDetail.mode;
-  modeDiv.appendChild(modeText);
+  const modeDiv = createInfoItem(
+    `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 21c-4.418 0-8-4.03-8-9a8 8 0 1 1 16 0c0 4.97-3.582 9-8 9z"/><circle cx="12" cy="12" r="3"/></svg>`,
+    workshopDetail.mode
+  );
   sidebar.appendChild(modeDiv);
 
   // Plazas con icono
-  const spotsDiv = document.createElement("div");
-  spotsDiv.className = "workshop-spots";
-  spotsDiv.style.display = "flex";
-  spotsDiv.style.alignItems = "center";
-  const peopleIcon = document.createElement("span");
-  peopleIcon.innerHTML = `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><circle cx="17" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg>`;
-  peopleIcon.style.marginRight = "8px";
-  spotsDiv.appendChild(peopleIcon);
-  const spotsText = document.createElement("span");
-  spotsText.textContent = `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`;
-  spotsDiv.appendChild(spotsText);
+  const spotsDiv = createInfoItem(
+    `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="9" cy="7" r="4"/><circle cx="17" cy="7" r="4"/><path d="M2 21v-2a4 4 0 0 1 4-4h6a4 4 0 0 1 4 4v2"/></svg>`,
+    `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`
+  );
   sidebar.appendChild(spotsDiv);
 
   // Nivel con icono
-  const levelDiv = document.createElement("div");
-  levelDiv.className = "workshop-level";
-  levelDiv.style.display = "flex";
-  levelDiv.style.alignItems = "center";
-  const levelIcon = document.createElement("span");
-  levelIcon.innerHTML = `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`;
-  levelIcon.style.marginRight = "8px";
-  levelDiv.appendChild(levelIcon);
-  const levelText = document.createElement("span");
-  levelText.textContent = workshopDetail.level || "No especificado";
-  levelDiv.appendChild(levelText);
+  const levelDiv = createInfoItem(
+    `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`,
+    workshopDetail.level || "No especificado"
+  );
   sidebar.appendChild(levelDiv);
 
   // Botón enroll/cancel
   const enrollBtn = document.createElement("button");
-  enrollBtn.className = "enroll-btn";
+  enrollBtn.className = "w-full px-6 py-3 rounded-lg font-medium transition-colors";
   if (isEnrolled) {
     enrollBtn.textContent = "Cancelar";
-    enrollBtn.style.background = "#e10505ff";
-    enrollBtn.style.color = "#fff";
+    enrollBtn.className += " bg-red-600 text-white hover:bg-red-700";
   } else {
     enrollBtn.textContent = "Inscribirse";
-    enrollBtn.style.background = "";
-    enrollBtn.style.color = "";
+    enrollBtn.className += " bg-indigo-600 text-white hover:bg-indigo-700";
   }
 
   sidebar.appendChild(enrollBtn);
 
   // Edit and delete buttons
   const editBtn = document.createElement("button");
-  editBtn.className = "edit-btn";
+  editBtn.className = "w-full px-6 py-3 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors";
   editBtn.textContent = "Editar";
   editBtn.style.display = "none";
   const deleteBtn = document.createElement("button");
-  deleteBtn.className = "delete-workshop-button";
+  deleteBtn.className = "w-full px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors";
   deleteBtn.textContent = "Eliminar";
   deleteBtn.style.display = "none";
 
@@ -285,15 +264,21 @@ export default async function detail(container, id) {
   }
 
   sidebar.appendChild(editBtn);
-  sidebar.appendChild(deleteBtn); // Ahora el botón de eliminar está justo debajo del de editar
+  sidebar.appendChild(deleteBtn);
   detailContent.appendChild(sidebar);
 
   // Tabs logic
   [overviewTab, requirementsTab].forEach((tab) => {
     tab.addEventListener("click", () => {
-      overviewTab.classList.remove("active");
-      requirementsTab.classList.remove("active");
-      tab.classList.add("active");
+      // Update tab styles
+      [overviewTab, requirementsTab].forEach(t => {
+        t.classList.remove("text-indigo-600", "border-indigo-600", "bg-indigo-50");
+        t.classList.add("text-gray-500", "border-transparent");
+      });
+      tab.classList.remove("text-gray-500", "border-transparent");
+      tab.classList.add("text-indigo-600", "border-indigo-600", "bg-indigo-50");
+      
+      // Update content visibility
       overviewDiv.style.display =
         tab.dataset.tab === "overview" ? "block" : "none";
       requirementsDiv.style.display =
@@ -327,8 +312,12 @@ export default async function detail(container, id) {
     // Función interna para actualizar el botón
     function updateButton(enrolled) {
       enrollBtn.textContent = enrolled ? "Cancelar" : "Inscribirse";
-      enrollBtn.style.background = enrolled ? "#e10505ff" : "";
-      enrollBtn.style.color = enrolled ? "#fff" : "";
+      enrollBtn.className = "w-full px-6 py-3 rounded-lg font-medium transition-colors";
+      if (enrolled) {
+        enrollBtn.className += " bg-red-600 text-white hover:bg-red-700";
+      } else {
+        enrollBtn.className += " bg-indigo-600 text-white hover:bg-indigo-700";
+      }
       enrollBtn.disabled = false;
     }
 
