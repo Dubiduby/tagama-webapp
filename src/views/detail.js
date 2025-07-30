@@ -29,7 +29,7 @@ export default async function detail(container, id) {
     getCachedSubcategories(),
   ]);
 
-  const workshopDetail = workshopsCache.find((item) => item.id === id);
+  const workshopDetail = workshopsCache.find((item) => Number(item.id) === Number(id));
   const category = categories.find(
     (item) => Number(item.id) === Number(workshopDetail.categoryId)
   );
@@ -154,7 +154,21 @@ export default async function detail(container, id) {
     mapDiv.className = "workshop-map";
     mapDiv.style.height = "50vh";
     mainColumn.appendChild(mapDiv);
-    initMap(workshopDetail.coordinates, workshopDetail.location);
+    
+    // Verificar que las coordenadas existen antes de inicializar el mapa
+    if (workshopDetail.coordinates) {
+      console.log("Coordinates for map:", workshopDetail.coordinates);
+      initMap(workshopDetail.coordinates, workshopDetail.address || workshopDetail.place);
+    } else {
+      console.warn("No coordinates available for workshop:", workshopDetail.id);
+      // Mostrar mensaje de que no hay mapa disponible
+      const noMapDiv = document.createElement("div");
+      noMapDiv.style.padding = "20px";
+      noMapDiv.style.textAlign = "center";
+      noMapDiv.style.color = "#666";
+      noMapDiv.textContent = "No hay mapa disponible para este workshop";
+      mapDiv.appendChild(noMapDiv);
+    }
   }
 
   // Sidebar a la derecha
@@ -222,6 +236,20 @@ export default async function detail(container, id) {
   spotsText.textContent = `${workshopDetail.enrolled.length} plazas disponibles de ${workshopDetail.capacity}`;
   spotsDiv.appendChild(spotsText);
   sidebar.appendChild(spotsDiv);
+
+  // Nivel con icono
+  const levelDiv = document.createElement("div");
+  levelDiv.className = "workshop-level";
+  levelDiv.style.display = "flex";
+  levelDiv.style.alignItems = "center";
+  const levelIcon = document.createElement("span");
+  levelIcon.innerHTML = `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>`;
+  levelIcon.style.marginRight = "8px";
+  levelDiv.appendChild(levelIcon);
+  const levelText = document.createElement("span");
+  levelText.textContent = workshopDetail.level || "No especificado";
+  levelDiv.appendChild(levelText);
+  sidebar.appendChild(levelDiv);
 
   // Botón enroll/cancel
   const enrollBtn = document.createElement("button");
