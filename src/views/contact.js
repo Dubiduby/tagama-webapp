@@ -1,151 +1,166 @@
-import "../assets/styles/contact.css";
 import { navigate } from "../router.js";
 import { showToast } from "../utils/toastify.js";
 
 export default function contact(container) {
-  // Helper funcional para crear elementos
-  function $(tag, props = {}, ...children) {
-    const el = document.createElement(tag);
-    Object.entries(props).forEach(([k, v]) => {
-      if (k.startsWith("on") && typeof v === "function") {
-        el.addEventListener(k.slice(2).toLowerCase(), v);
-      } else if (k === "class") {
-        el.className = v;
-      } else if (k === "style" && typeof v === "object") {
-        Object.assign(el.style, v);
-      } else if (k === "for") {
-        el.htmlFor = v;
-      } else {
-        el.setAttribute(k, v);
-      }
-    });
-    children.flat().forEach((child) => {
-      if (typeof child === "string" || typeof child === "number") {
-        el.appendChild(document.createTextNode(child));
-      } else if (child instanceof Node) {
-        el.appendChild(child);
-      }
-    });
-    return el;
-  }
-
   container.innerHTML = "";
+  const wrapper = document.createElement("div");
+  wrapper.className = "max-w-5xl mx-auto px-4 py-12";
 
-  // Crear mensaje de éxito
-  const successMsg = document.createElement("div");
-  successMsg.className = "contact-success";
-  successMsg.style.display = "none";
-  successMsg.textContent = "¡Tu mensaje ha sido enviado! (simulado)";
+  // Layout flex para copy y form
+  const flexDiv = document.createElement("div");
+  flexDiv.className = "flex flex-col md:flex-row gap-8 items-start";
 
-  // Crear inputs
+  // Copy (izquierda)
+  const copyDiv = document.createElement("div");
+  copyDiv.className = "md:w-1/2 w-full mb-8 px-2 md:mb-0";
+  copyDiv.innerHTML = `
+    <h1 class="text-3xl md:text-4xl font-extrabold text-[#1e1d1d] mb-4">Contáctanos</h1>
+    <div class="flex flex-col gap-2">
+      <p class="text-[var(--color-gray)] mb-2">¿Has encontrado un error, tienes alguna sugerencia o simplemente quieres saludarnos?<br><br>En Tagama te escuchamos.</p>
+      <p class="text-[var(--color-text)] mb-2 text-[#ad5733] font-bold text-lg">📩 hola@tagama.es</p>
+      <p class="text-[var(--color-gray)] mb-2">O rellena el formulario y te responderemos lo antes posible.</p>
+      <p class="text-[var(--color-text)]">Gracias por formar parte de esta pequeña gran red creativa en Tenerife 🧡</p>
+    </div>
+  `;
+
+  // Formulario (derecha)
+  const formDiv = document.createElement("div");
+  formDiv.className = "md:w-1/2 w-full";
+  const form = document.createElement("form");
+  form.id = "contact-form";
+  form.className = "bg-white rounded-2xl shadow p-6 flex flex-col gap-4";
+
+  // Nombre
+  const nameDiv = document.createElement("div");
+  const nameLabel = document.createElement("label");
+  nameLabel.htmlFor = "contact-name";
+  nameLabel.className = "block text-sm font-medium mb-1";
+  nameLabel.textContent = "Nombre";
   const nameInput = document.createElement("input");
   nameInput.type = "text";
-  nameInput.className = "contact-input";
   nameInput.id = "contact-name";
   nameInput.name = "from_name";
   nameInput.placeholder = "Tu nombre";
   nameInput.required = true;
+  nameInput.className =
+    "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733]";
+  nameDiv.appendChild(nameLabel);
+  nameDiv.appendChild(nameInput);
 
+  // Email
+  const emailDiv = document.createElement("div");
+  const emailLabel = document.createElement("label");
+  emailLabel.htmlFor = "contact-email";
+  emailLabel.className = "block text-sm font-medium mb-1";
+  emailLabel.textContent = "Email";
   const emailInput = document.createElement("input");
   emailInput.type = "email";
-  emailInput.className = "contact-input";
   emailInput.id = "contact-email";
   emailInput.name = "from_email";
   emailInput.placeholder = "Tu email";
   emailInput.required = true;
+  emailInput.className =
+    "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733]";
+  emailDiv.appendChild(emailLabel);
+  emailDiv.appendChild(emailInput);
 
+  // Mensaje
+  const messageDiv = document.createElement("div");
+  const messageLabel = document.createElement("label");
+  messageLabel.htmlFor = "contact-message";
+  messageLabel.className = "block text-sm font-medium mb-1";
+  messageLabel.textContent = "Mensaje";
   const messageInput = document.createElement("textarea");
-  messageInput.className = "contact-input";
   messageInput.id = "contact-message";
   messageInput.name = "message";
   messageInput.placeholder = "Tu mensaje";
   messageInput.rows = 4;
   messageInput.required = true;
+  messageInput.className =
+    "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733]";
+  messageDiv.appendChild(messageLabel);
+  messageDiv.appendChild(messageInput);
 
-  // Crear botón de envío
+  // Botón
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
-  submitBtn.className = "contact-btn";
+  submitBtn.className =
+    "mt-2 bg-[#ad5733] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] transition";
   submitBtn.textContent = "Enviar";
 
-  // Crear labels
-  const nameLabel = document.createElement("label");
-  nameLabel.htmlFor = "contact-name";
-  nameLabel.textContent = "Nombre";
+  // Mensaje de éxito
+  const successMsg = document.createElement("div");
+  successMsg.id = "contact-success";
+  successMsg.className = "hidden text-green-600 text-center font-semibold mt-2";
+  successMsg.textContent = "¡Tu mensaje ha sido enviado!";
 
-  const emailLabel = document.createElement("label");
-  emailLabel.htmlFor = "contact-email";
-  emailLabel.textContent = "Email";
-
-  const messageLabel = document.createElement("label");
-  messageLabel.htmlFor = "contact-message";
-  messageLabel.textContent = "Mensaje";
-
-  // Crear formulario
-  const form = document.createElement("form");
-  form.className = "contact-form";
-  
-  // Agregar elementos al formulario
-  form.appendChild(nameLabel);
-  form.appendChild(nameInput);
-  form.appendChild(emailLabel);
-  form.appendChild(emailInput);
-  form.appendChild(messageLabel);
-  form.appendChild(messageInput);
+  // Añadir campos al form
+  form.appendChild(nameDiv);
+  form.appendChild(emailDiv);
+  form.appendChild(messageDiv);
   form.appendChild(submitBtn);
   form.appendChild(successMsg);
 
-  // Event listener para el formulario
+  formDiv.appendChild(form);
+
+  // Añadir copy y form al flexDiv
+  flexDiv.appendChild(copyDiv);
+  flexDiv.appendChild(formDiv);
+  wrapper.appendChild(flexDiv);
+  container.appendChild(wrapper);
+
+  // Lógica del formulario
+  // Lógica del formulario
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     const SERVICE_ID = "service_go50l25";
     const TEMPLATE_ID = "template_xmcxylt";
     const WELCOME_TEMPLATE_ID = "template_u6ilac9";
-    
+
     if (window.emailjs) {
-      // Enviar mensaje al administrador
-      window.emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form).then(
-        function () {
+      window.emailjs
+        .sendForm(SERVICE_ID, TEMPLATE_ID, form)
+        .then(function () {
           // Enviar mensaje de bienvenida al usuario
           const userEmail = emailInput.value;
           const userName = nameInput.value;
           const userMessage = messageInput.value;
-          
-          // Parámetros para el mensaje de bienvenida
           const welcomeParams = {
             to_email: userEmail,
             to_name: userName,
-            user_message: userMessage
+            user_message: userMessage,
           };
-          
-          // Enviar mensaje de bienvenida usando template específico
-          window.emailjs.send(SERVICE_ID, WELCOME_TEMPLATE_ID, welcomeParams).then(
-            function() {
-              successMsg.style.display = "block";
-              showToast("¡Mensaje enviado! Revisa tu email para la confirmación.", "success");
+          window.emailjs
+            .send(SERVICE_ID, WELCOME_TEMPLATE_ID, welcomeParams)
+            .then(function () {
+              successMsg.classList.remove("hidden");
+              showToast(
+                "¡Mensaje enviado! Revisa tu email para la confirmación.",
+                "success"
+              );
               setTimeout(() => {
-                successMsg.style.display = "none";
+                successMsg.classList.add("hidden");
                 form.reset();
                 navigate("/home");
               }, 3000);
-            },
-            function(error) {
+            })
+            .catch(function (error) {
               console.error("Error enviando bienvenida:", error);
-              // Si falla el mensaje de bienvenida, aún mostrar éxito del mensaje principal
-              successMsg.style.display = "block";
-              showToast("¡Mensaje enviado! (Error al enviar confirmación)", "success");
+              successMsg.classList.remove("hidden");
+              showToast(
+                "¡Mensaje enviado! (Error al enviar confirmación)",
+                "success"
+              );
               setTimeout(() => {
-                successMsg.style.display = "none";
+                successMsg.classList.add("hidden");
                 form.reset();
                 navigate("/home");
               }, 3000);
-            }
-          );
-        },
-        function (error) {
+            });
+        })
+        .catch(function (error) {
           showToast("Error al enviar mensaje: " + error.text, "error");
-        }
-      );
+        });
     } else {
       showToast(
         "EmailJS no está cargado. Verifica tu script CDN en index.html.",
@@ -153,26 +168,4 @@ export default function contact(container) {
       );
     }
   });
-
-  // Crear título
-  const title = document.createElement("h1");
-  title.className = "contact-title";
-  title.textContent = "Contáctanos";
-
-  // Crear descripción
-  const description = document.createElement("p");
-  description.className = "contact-desc";
-  description.textContent = "¡Nos encantaría saber de ti! Completa el formulario de abajo.";
-
-  // Crear contenedor principal
-  const mainDiv = document.createElement("div");
-  mainDiv.className = "contact-layout";
-  
-  // Agregar elementos al contenedor
-  mainDiv.appendChild(title);
-  mainDiv.appendChild(description);
-  mainDiv.appendChild(form);
-
-  // Agregar al container
-  container.appendChild(mainDiv);
 }
