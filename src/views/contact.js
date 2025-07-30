@@ -31,65 +31,116 @@ export default function contact(container) {
 
   container.innerHTML = "";
 
-  const successMsg = $(
-    "div",
-    { class: "contact-success", style: { display: "none" } },
-    "¡Tu mensaje ha sido enviado! (simulado)"
-  );
+  // Crear mensaje de éxito
+  const successMsg = document.createElement("div");
+  successMsg.className = "contact-success";
+  successMsg.style.display = "none";
+  successMsg.textContent = "¡Tu mensaje ha sido enviado! (simulado)";
 
-  const nameInput = $("input", {
-    type: "text",
-    class: "contact-input",
-    id: "contact-name",
-    name: "from_name", // <-- Debe coincidir con la plantilla
-    placeholder: "Tu nombre",
-    required: true,
-  });
-  const emailInput = $("input", {
-    type: "email",
-    class: "contact-input",
-    id: "contact-email",
-    name: "from_email", // <-- Debe coincidir con la plantilla
-    placeholder: "Tu email",
-    required: true,
-  });
-  const messageInput = $("textarea", {
-    class: "contact-input",
-    id: "contact-message",
-    name: "message", // <-- Debe coincidir con la plantilla
-    placeholder: "Tu mensaje",
-    rows: 4,
-    required: true,
-  });
+  // Crear inputs
+  const nameInput = document.createElement("input");
+  nameInput.type = "text";
+  nameInput.className = "contact-input";
+  nameInput.id = "contact-name";
+  nameInput.name = "from_name";
+  nameInput.placeholder = "Tu nombre";
+  nameInput.required = true;
 
-  const form = $(
-    "form",
-    { class: "contact-form" },
+  const emailInput = document.createElement("input");
+  emailInput.type = "email";
+  emailInput.className = "contact-input";
+  emailInput.id = "contact-email";
+  emailInput.name = "from_email";
+  emailInput.placeholder = "Tu email";
+  emailInput.required = true;
 
-    $("label", { for: "contact-name" }, "Nombre"),
-    nameInput,
-    $("label", { for: "contact-email" }, "Email"),
-    emailInput,
-    $("label", { for: "contact-message" }, "Mensaje"),
-    messageInput,
-    $("button", { type: "submit", class: "contact-btn" }, "Enviar"),
-    successMsg
-  );
+  const messageInput = document.createElement("textarea");
+  messageInput.className = "contact-input";
+  messageInput.id = "contact-message";
+  messageInput.name = "message";
+  messageInput.placeholder = "Tu mensaje";
+  messageInput.rows = 4;
+  messageInput.required = true;
 
+  // Crear botón de envío
+  const submitBtn = document.createElement("button");
+  submitBtn.type = "submit";
+  submitBtn.className = "contact-btn";
+  submitBtn.textContent = "Enviar";
+
+  // Crear labels
+  const nameLabel = document.createElement("label");
+  nameLabel.htmlFor = "contact-name";
+  nameLabel.textContent = "Nombre";
+
+  const emailLabel = document.createElement("label");
+  emailLabel.htmlFor = "contact-email";
+  emailLabel.textContent = "Email";
+
+  const messageLabel = document.createElement("label");
+  messageLabel.htmlFor = "contact-message";
+  messageLabel.textContent = "Mensaje";
+
+  // Crear formulario
+  const form = document.createElement("form");
+  form.className = "contact-form";
+  
+  // Agregar elementos al formulario
+  form.appendChild(nameLabel);
+  form.appendChild(nameInput);
+  form.appendChild(emailLabel);
+  form.appendChild(emailInput);
+  form.appendChild(messageLabel);
+  form.appendChild(messageInput);
+  form.appendChild(submitBtn);
+  form.appendChild(successMsg);
+
+  // Event listener para el formulario
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     const SERVICE_ID = "service_go50l25";
     const TEMPLATE_ID = "template_xmcxylt";
+    const WELCOME_TEMPLATE_ID = "template_u6ilac9";
+    
     if (window.emailjs) {
+      // Enviar mensaje al administrador
       window.emailjs.sendForm(SERVICE_ID, TEMPLATE_ID, form).then(
         function () {
-          successMsg.style.display = "block";
-          setTimeout(() => {
-            successMsg.style.display = "none";
-            form.reset();
-            // Si quieres redirigir:
-            navigate("/home");
-          }, 2000);
+          // Enviar mensaje de bienvenida al usuario
+          const userEmail = emailInput.value;
+          const userName = nameInput.value;
+          const userMessage = messageInput.value;
+          
+          // Parámetros para el mensaje de bienvenida
+          const welcomeParams = {
+            to_email: userEmail,
+            to_name: userName,
+            user_message: userMessage
+          };
+          
+          // Enviar mensaje de bienvenida usando template específico
+          window.emailjs.send(SERVICE_ID, WELCOME_TEMPLATE_ID, welcomeParams).then(
+            function() {
+              successMsg.style.display = "block";
+              showToast("¡Mensaje enviado! Revisa tu email para la confirmación.", "success");
+              setTimeout(() => {
+                successMsg.style.display = "none";
+                form.reset();
+                navigate("/home");
+              }, 3000);
+            },
+            function(error) {
+              console.error("Error enviando bienvenida:", error);
+              // Si falla el mensaje de bienvenida, aún mostrar éxito del mensaje principal
+              successMsg.style.display = "block";
+              showToast("¡Mensaje enviado! (Error al enviar confirmación)", "success");
+              setTimeout(() => {
+                successMsg.style.display = "none";
+                form.reset();
+                navigate("/home");
+              }, 3000);
+            }
+          );
         },
         function (error) {
           showToast("Error al enviar mensaje: " + error.text, "error");
@@ -101,20 +152,27 @@ export default function contact(container) {
         "error"
       );
     }
-  }); // <-- ¡Cierra aquí!
+  });
 
-  // Luego el layout:
-  const mainDiv = $(
-    "div",
-    { class: "contact-layout" },
-    $("h1", { class: "contact-title" }, "Contáctanos"),
-    $(
-      "p",
-      { class: "contact-desc" },
-      "¡Nos encantaría saber de ti! Completa el formulario de abajo."
-    ),
-    form
-  );
+  // Crear título
+  const title = document.createElement("h1");
+  title.className = "contact-title";
+  title.textContent = "Contáctanos";
 
+  // Crear descripción
+  const description = document.createElement("p");
+  description.className = "contact-desc";
+  description.textContent = "¡Nos encantaría saber de ti! Completa el formulario de abajo.";
+
+  // Crear contenedor principal
+  const mainDiv = document.createElement("div");
+  mainDiv.className = "contact-layout";
+  
+  // Agregar elementos al contenedor
+  mainDiv.appendChild(title);
+  mainDiv.appendChild(description);
+  mainDiv.appendChild(form);
+
+  // Agregar al container
   container.appendChild(mainDiv);
 }
