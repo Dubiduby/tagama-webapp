@@ -32,7 +32,7 @@ export default async function home(container) {
 
   // All filters container
   const allFiltersContainer = document.createElement("div");
-  allFiltersContainer.className = "bg-[var(--color-bg)] w-full pt-6 max-w-[1100px] mx-auto mb-8 flex flex-col items-center md:max-w-[900px] lg:max-w-[1100px]";
+  allFiltersContainer.className = "bg-[var(--color-bg)] w-full pt-32 max-w-[1100px] mx-auto mb-8 flex flex-col items-center md:max-w-[900px] lg:max-w-[1100px]";
   allFiltersContainer.appendChild(searchContainer);
 
   // Filtros

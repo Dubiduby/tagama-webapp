@@ -1,4 +1,4 @@
-/* Mobile */
+/*Mobile
 .navbar {
   display: flex;
   flex-direction: column;
@@ -52,7 +52,7 @@
   position: absolute;
   left: 6px;
   transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1); /* Más lento y sin bounce */
-}
+/*}
 
 .navbar__toggle span:nth-child(1) {
   top: 10px;
@@ -67,7 +67,7 @@
 }
 
 /* Animación a X cuando el menú está abierto */
-.navbar__toggle.active span:nth-child(1) {
+/*.navbar__toggle.active span:nth-child(1) {
   top: 18.5px;
   transform: rotate(45deg);
 }
@@ -115,7 +115,7 @@
 }
 
 /* Avatar */
-.navbar__avatar-container {
+/*.navbar__avatar-container {
   position: relative;
   display: flex;
   align-items: center;
@@ -149,7 +149,7 @@
 }
 
 /* Dropdown (hidden by default) */
-.navbar__dropdown {
+/*.navbar__dropdown {
   display: none;
   position: absolute;
   right: 0;
@@ -183,7 +183,7 @@
 }
 
 /* Show dropdown on hover/focus (desktop only) */
-@media (min-width: 700px) {
+/*@media (min-width: 700px) {
   .navbar__avatar-container:hover .navbar__dropdown,
   .navbar__avatar-container:focus-within .navbar__dropdown {
     display: block;
@@ -191,24 +191,24 @@
 }
 
 /* Ocultar los li normales de Profile y Logout por defecto */
-.navbar__profile-link,
+/*.navbar__profile-link,
 .navbar__logout-link {
   display: none;
 }
 
 /* Mostrar los li normales de Profile y Logout cuando el menú está abierto (mobile) */
-.navbar__links--open .navbar__profile-link,
+/*.navbar__links--open .navbar__profile-link,
 .navbar__links--open .navbar__logout-link {
   display: block;
 }
 
 /* Ocultar el avatar y dropdown cuando el menú está abierto (mobile) */
-.navbar__links--open .navbar__avatar-container {
+/*.navbar__links--open .navbar__avatar-container {
   display: none;
 }
 
 /* Desktop styles */
-@media (min-width: 600px) {
+/*@media (min-width: 600px) {
   .navbar {
     flex-direction: row;
     align-items: center;
@@ -228,11 +228,11 @@
     margin: 0 1em;
   }
   /* En desktop, los li normales de Profile y Logout siempre ocultos */
-  .navbar__profile-link,
+  /*d.navbar__profile-link,
   .navbar__logout-link {
     display: none !important;
   }
   .navbar__avatar-container {
     display: flex !important;
   }
-}
+} 
