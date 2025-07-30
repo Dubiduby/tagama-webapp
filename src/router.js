@@ -9,6 +9,7 @@ const routes = {
   "/profile": () => import("./views/profile.js"),
   "/notfound": () => import("./views/notfound.js"),
   "/contact": () => import("./views/contact.js"),
+  "/about": () => import("./views/aboutUs.js"),
   "/": () => import("./views/landing.js"),
 };
 
