@@ -13,33 +13,33 @@ L.Icon.Default.mergeOptions({
 });
 
 export function initMap(coordinates, location) {
-  // Verificar si las coordenadas existen
+  // check if coordinates exists
   if (!coordinates) {
     console.warn("No coordinates provided for map");
     return;
   }
 
-  // Convertir coordenadas a formato [lat, lng] para Leaflet
+  // turn coordinates to format
   let coordsArray;
-  
-  if (typeof coordinates === 'object' && coordinates.lat && coordinates.lng) {
-    // Formato objeto {lat, lng}
+
+  if (typeof coordinates === "object" && coordinates.lat && coordinates.lng) {
+    // object format {lat, lng}
     coordsArray = [coordinates.lat, coordinates.lng];
   } else if (Array.isArray(coordinates) && coordinates.length === 2) {
-    // Formato array [lat, lng]
+    // array format [lat, lng]
     coordsArray = coordinates;
-  } else if (typeof coordinates === 'string') {
-    // Formato string "lat,lng"
+  } else if (typeof coordinates === "string") {
+    // string format "lat,lng"
     try {
       const coords = JSON.parse(coordinates);
       if (coords.lat && coords.lng) {
         coordsArray = [coords.lat, coords.lng];
       } else {
-        const [lat, lng] = coordinates.split(',');
+        const [lat, lng] = coordinates.split(",");
         coordsArray = [parseFloat(lat), parseFloat(lng)];
       }
     } catch {
-      const [lat, lng] = coordinates.split(',');
+      const [lat, lng] = coordinates.split(",");
       coordsArray = [parseFloat(lat), parseFloat(lng)];
     }
   } else {
@@ -47,9 +47,13 @@ export function initMap(coordinates, location) {
     return;
   }
 
-  // Verificar que las coordenadas son válidas
-  if (!coordsArray || coordsArray.length !== 2 || 
-      isNaN(coordsArray[0]) || isNaN(coordsArray[1])) {
+  // check if coordinates are valid
+  if (
+    !coordsArray ||
+    coordsArray.length !== 2 ||
+    isNaN(coordsArray[0]) ||
+    isNaN(coordsArray[1])
+  ) {
     console.warn("Invalid coordinates:", coordsArray);
     return;
   }
@@ -61,6 +65,8 @@ export function initMap(coordinates, location) {
       '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
   }).addTo(map);
 
-  L.marker(coordsArray).addTo(map).bindPopup(location || "Ubicación del workshop");
+  L.marker(coordsArray)
+    .addTo(map)
+    .bindPopup(location || "Ubicación del workshop");
   map.scrollWheelZoom.disable();
 }

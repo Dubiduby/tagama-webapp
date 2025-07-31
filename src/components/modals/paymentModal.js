@@ -9,7 +9,7 @@ export function showPaymentModal(onSuccess, onCancel) {
   app.className =
     "relative bg-[var(--color-bg)] dark:bg-[var(--color-2bg)] text-[var(--color-text)] rounded-lg shadow-lg w-full max-w-md p-6";
 
-  // Botón de cerrar
+  // close button
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "×";
   closeBtn.className =
@@ -20,17 +20,17 @@ export function showPaymentModal(onSuccess, onCancel) {
   });
   app.appendChild(closeBtn);
 
-  // Formulario
+  // Form
   const form = document.createElement("form");
   form.className = "space-y-4";
 
-  // Título
+  // title
   const title = document.createElement("h1");
   title.textContent = "Pago de servicios";
   title.className = "text-xl font-semibold text-[var(--color-title)]";
   form.appendChild(title);
 
-  // Selector de proveedor
+  // select
   const label = document.createElement("label");
   label.textContent = "Elige tu método de pago:";
   label.setAttribute("for", "proveedor");
@@ -55,7 +55,7 @@ export function showPaymentModal(onSuccess, onCancel) {
   });
   form.appendChild(select);
 
-  // Campos para tarjeta
+  // creditcard fields
   const cardFields = document.createElement("div");
   cardFields.className = "space-y-3 hidden";
 
@@ -153,7 +153,7 @@ export function showPaymentModal(onSuccess, onCancel) {
   paypalFields.appendChild(paypalInfo);
   form.appendChild(paypalFields);
 
-  // Mostrar campos
+  // show fields
   function togglePaymentFields() {
     cardFields.classList.add("hidden");
     bizumFields.classList.add("hidden");
@@ -181,7 +181,7 @@ export function showPaymentModal(onSuccess, onCancel) {
     e.target.value = e.target.value.replace(/\D/g, "");
   });
 
-  // Botón de pago
+  // Payment button
   const button = document.createElement("button");
   button.id = "pagar";
   button.type = "submit";
@@ -190,13 +190,13 @@ export function showPaymentModal(onSuccess, onCancel) {
     "bg-dark-orange text-white px-4 py-2 rounded hover:bg-orange-700 transition";
   form.appendChild(button);
 
-  // Estado
+  // status
   const status = document.createElement("div");
   status.id = "status";
   status.className = "text-sm mt-2 text-center";
   form.appendChild(status);
 
-  // Enviar
+  // send
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const proveedor = select.value;

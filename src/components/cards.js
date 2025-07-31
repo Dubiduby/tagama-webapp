@@ -21,7 +21,7 @@ export function workshopCards(workshop, subcategory, category) {
   // Card container
   const card = document.createElement("div");
   card.className =
-  "w-96 max-w-xs md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px] ";
+    "w-96 max-w-xs md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px] ";
 
   // Card image container
   const imageUrl = workshop.imageUrl
@@ -33,7 +33,7 @@ export function workshopCards(workshop, subcategory, category) {
   divCardImage.className =
     "w-full h-[180px] md:h-[200px] bg-[#f3f3f3] flex items-center justify-center relative";
 
-  // --- TAGS SOBRE LA IMAGEN ---
+  // --- TAGS on the image ---
   const tagsContainer = document.createElement("div");
   tagsContainer.className =
     "absolute top-3 left-3 flex gap-2 z-10 max-w-[250px] md:max-w-[300px]";
@@ -125,24 +125,24 @@ export function workshopCards(workshop, subcategory, category) {
         onSubmit: async (formData) => {
           try {
             let result;
-            // Si el workshop tiene ID, intentar actualizar
+            // if workshop has id then try update
             if (formData.id) {
               try {
                 result = await updateWorkshop(formData);
                 showToast("Taller actualizado exitosamente", "success");
               } catch (error) {
-                // Si el workshop no existe (404), crear uno nuevo
+                // if it doesnt exist create a new one
                 if (error.message.includes("not found")) {
                   console.log("Workshop not found, creating new one...");
-                  delete formData.id; // Remover ID para crear nuevo
+                  delete formData.id; // Remove ID to create a new one
                   result = await createWorkshop(formData);
                   showToast("Taller creado exitosamente", "success");
                 } else {
-                  throw error; // Re-throw otros errores
+                  throw error; // Re-throw other errors
                 }
               }
             } else {
-              // Si no tiene ID, crear nuevo workshop
+              // no id then create
               result = await createWorkshop(formData);
               showToast("Taller creado exitosamente", "success");
             }
@@ -175,7 +175,7 @@ export function workshopCards(workshop, subcategory, category) {
               return;
             }
 
-            // Deshabilitar UI, mostrar feedback si quieres
+            // Deshabilitate UI
             deleteOption.disabled = true;
             deleteOption.textContent = "Procesando...";
 
@@ -194,7 +194,7 @@ export function workshopCards(workshop, subcategory, category) {
               setTimeout(() => window.location.reload(), 1000);
             } else {
               showToast(`No se encontró taller con ID: ${workshopId}`, "error");
-              // Aquí podrías reactivar el botón si quieres
+
               deleteOption.disabled = false;
               deleteOption.textContent = "Eliminar";
             }
@@ -209,7 +209,7 @@ export function workshopCards(workshop, subcategory, category) {
     });
   }
 
-  // Botón de bookmark
+  // bookmark button
   const buttonAdd = document.createElement("button");
   buttonAdd.className =
     "absolute top-3 right-3 bg-white border-none rounded-full p-2 cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors duration-200 hover:bg-[#e0e0e0] dark:bg-[#141414]";
@@ -249,7 +249,7 @@ export function workshopCards(workshop, subcategory, category) {
       renderButtonIcon();
     });
   } else {
-    // Si es el creador, deshabilita el botón y ocúltalo visualmente
+    // if creator, unactive the button and hide
     buttonAdd.style.display = "none";
   }
 
@@ -348,7 +348,7 @@ export function workshopCards(workshop, subcategory, category) {
 
   divCardDetails.appendChild(price_spots);
 
-  // Link para la card
+  // Link for detail
   const cardLink = document.createElement("a");
   cardLink.href = `/workshops/${workshop.id}`;
   cardLink.setAttribute("data-link", "");

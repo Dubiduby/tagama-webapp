@@ -24,7 +24,7 @@ export default async function home(container) {
   searchInput.className =
     "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-[var(--color-bg)] dark:border-opacity-20 focus:border-light-orange focus:outline-none";
 
-  // Botón para mostrar/ocultar filtros
+  // button to show or hide items
   const filtersToggleBtn = document.createElement("button");
   filtersToggleBtn.textContent = "Filtros";
   filtersToggleBtn.className =
@@ -43,17 +43,17 @@ export default async function home(container) {
     "bg-[var(--color-bg)] w-full pt-10 max-w-[1100px] mx-auto flex flex-col items-center md:max-w-[900px] lg:max-w-[1100px]";
   allFiltersContainer.appendChild(searchContainer);
 
-  // Filtros
+  // Filters
   const filterContainer = document.createElement("div");
   filterContainer.className =
     "w-full flex flex-row justify-center gap-16 flex-wrap gap-3 items-center bg-white p-4 rounded-xl mb-6  max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] md:gap-4 md:p-6 lg:gap-6 lg:p-8 lg:rounded-2xl hidden dark:bg-dark-bg";
 
-  // Mostrar/ocultar filtros al hacer click
+  // show/hide filters when you click
   filtersToggleBtn.addEventListener("click", () => {
     filterContainer.classList.toggle("hidden");
   });
 
-  // Categoría
+  // Category
   const categoriesFilter = document.createElement("select");
   categoriesFilter.className =
     "min-w-[160px] md:max-w-[220px] mw-full flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)]  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none  dark:text-white dark:border-opacity-20 ";
@@ -69,7 +69,7 @@ export default async function home(container) {
     categoriesFilter.appendChild(option);
   });
 
-  // Subcategoría
+  // Subcategory
   const subcategoriesFilter = document.createElement("select");
   subcategoriesFilter.className =
     "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 bg-[var(--color-bg)] rounded  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
@@ -84,13 +84,13 @@ export default async function home(container) {
     subcategoriesFilter.appendChild(option);
   });
 
-  // Fecha por meses
+  // date by months
   const monthInput = document.createElement("input");
   monthInput.type = "month";
   monthInput.className =
     "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
 
-  // Ordenar por
+  // order
   const orderSelect = document.createElement("select");
   orderSelect.className =
     "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
@@ -106,7 +106,7 @@ export default async function home(container) {
     orderSelect.appendChild(option);
   });
 
-  // Plazas disponibles
+  // available spots
   const spotsCheckbox = document.createElement("input");
   spotsCheckbox.type = "checkbox";
   spotsCheckbox.className = "accent-[#6c2ccc]";
@@ -116,7 +116,7 @@ export default async function home(container) {
   spotsLabel.textContent = "Solo con plazas disponibles";
   spotsLabel.appendChild(spotsCheckbox);
 
-  // Botón para resetear filtros
+  // Button to reset
   const resetButton = document.createElement("button");
   resetButton.textContent = "Limpiar";
   resetButton.className = `
@@ -137,7 +137,7 @@ export default async function home(container) {
   filterClearContainer.appendChild(spotsLabel);
   filterClearContainer.appendChild(resetButton);
 
-  // Añadir filtros al contenedor
+  // Add filters to container
   filterContainer.appendChild(categoriesFilter);
   filterContainer.appendChild(subcategoriesFilter);
   filterContainer.appendChild(monthInput);
@@ -153,16 +153,15 @@ export default async function home(container) {
   workshopsContainer.className =
     "w-full flex flex-wrap gap-8 justify-center items-center py-8";
 
-  // --- Paginación: contenedor global ---
+  // --- Pagination: global container ---
   const paginationContainer = document.createElement("div");
   paginationContainer.className = "flex justify-center items-center gap-3 mt-8";
 
-  // Montar todo
   container.appendChild(allFiltersContainer);
   container.appendChild(workshopsContainer);
   container.appendChild(paginationContainer);
 
-  // Función para actualizar las subcategorías según la categoría seleccionada
+  // Function to update subcat depending on categories
   function updateSubcategoriesOptions() {
     subcategoriesFilter.innerHTML = "";
     const defaultSubcategoryOption = document.createElement("option");
@@ -186,10 +185,9 @@ export default async function home(container) {
     subcategoriesFilter.value = "";
   }
 
-  // Inicializa las subcategorías
   updateSubcategoriesOptions();
 
-  // --- Paginación ---
+  // --- Pagination ---
   function getWorkshopsPerPage() {
     if (window.innerWidth < 600) {
       return 8;
@@ -240,7 +238,7 @@ export default async function home(container) {
       );
     }
 
-    // Ordenar por:
+    // Order by:
     const orderValue = orderSelect.value;
     if (orderValue === "recent") {
       filtered = filtered.sort((a, b) =>
@@ -256,7 +254,7 @@ export default async function home(container) {
       filtered = filtered.sort((a, b) => b.price - a.price);
     }
 
-    // --- Paginación ---
+    // --- Pagination ---
     const workshopsPerPage = getWorkshopsPerPage();
     totalPages = Math.ceil(filtered.length / workshopsPerPage);
     if (currentPage > totalPages) currentPage = totalPages || 1;
@@ -278,9 +276,9 @@ export default async function home(container) {
       );
     }
 
-    // --- Paginación: renderizar controles ---
+    // --- Pagination: render controls ---
     renderPaginationControls();
-    // --- Fin paginación ---
+    // --- end pagination ---
 
     resetButton.addEventListener("click", () => {
       searchInput.value = "";
@@ -295,11 +293,11 @@ export default async function home(container) {
     });
   }
 
-  // --- Paginación: controles ---
+  // --- Pagination: controls ---
   function renderPaginationControls() {
     paginationContainer.innerHTML = "";
     if (totalPages <= 1) return;
-    // Botón anterior
+    // back button
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "Anterior";
     prevBtn.disabled = currentPage === 1;
@@ -311,13 +309,13 @@ export default async function home(container) {
     };
     paginationContainer.appendChild(prevBtn);
 
-    // Texto de página actual
+    //actual page text
     const pageInfo = document.createElement("span");
     pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
     pageInfo.className = "text-base text-[#222] font-medium mx-3";
     paginationContainer.appendChild(pageInfo);
 
-    // Botón siguiente
+    // next button
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Siguiente";
     nextBtn.disabled = currentPage === totalPages;
@@ -329,7 +327,7 @@ export default async function home(container) {
     };
     paginationContainer.appendChild(nextBtn);
   }
-  // --- Fin paginación ---
+  // --- end pagination ---
 
   // Events in each filter
   searchInput.addEventListener("input", () => {

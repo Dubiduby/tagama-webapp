@@ -39,13 +39,13 @@ export default async function profile(container) {
 
   const user = await getUserById(currentUser.id);
 
-  // Wrapper principal como en contact.js
+  // Wrapper principal
   const wrapper = $("div", { class: "max-w-5xl mx-auto px-4 py-12" });
 
-  // Layout flex como en contact.js
+  // Layout flex
   const flexDiv = $("div", { class: "flex flex-col md:flex-row gap-8 items-start" });
 
-  // Sidebar (izquierda) - similar al copy de contact.js
+  // Sidebar (left)
   const sidebarDiv = $("div", { class: "md:w-1/3 w-full mb-8 px-2 md:mb-0" });
 
   const avatar = $("img", {
@@ -127,7 +127,7 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
     uploadBtn
   );
 
-  // Información del usuario como en contact.js
+  // user info
   const userInfo = $(
     "div",
     { class: "text-center mb-6" },
@@ -136,7 +136,7 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
     uploadSection,
     $("h2", { class: "text-xl font-bold text-[#1e1d1d] dark:text-white mb-2" }, user.name),
     $("p", { class: "text-[var(--color-gray)] dark:text-[var(--color-text)] mb-4" }, user.email),
-    // Contadores de workshops
+    // counter workshops
     $(
       "div",
       { class: "grid grid-cols-3 gap-4 mt-6" },
@@ -173,7 +173,7 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
     )
   );
 
-  // Botón cerrar sesión
+  // logout button
   const logoutBtn = $(
     "button",
     {
@@ -189,7 +189,7 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
   sidebarDiv.appendChild(userInfo);
   sidebarDiv.appendChild(logoutBtn);
 
-  // Formulario (derecha) - como en contact.js
+  // form right
   const formDiv = $("div", { class: "md:w-2/3 w-full" });
   const form = $(
     "form",
@@ -198,23 +198,23 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
       onsubmit: async (e) => {
         e.preventDefault();
 
-        // Solo actualizar los campos que han sido modificados
+        // just update modified fields
         const updatedUser = { ...user };
         let hasChanges = false;
 
-        // Verificar si el nombre ha cambiado
+        // check if name changed
         if (nameInput.value && nameInput.value !== user.name) {
           updatedUser.name = nameInput.value;
           hasChanges = true;
         }
 
-        // Verificar si el email ha cambiado
+        // check if email changed
         if (emailInput.value && emailInput.value !== user.email) {
           updatedUser.email = emailInput.value;
           hasChanges = true;
         }
 
-        // Verificar si la contraseña ha cambiado
+        // check if password changed
         if (passInput.value && passInput.value !== user.password) {
           if (passInput.value !== repeatInput.value) {
             showToast("Las contraseñas no coinciden.", "error");
@@ -224,7 +224,7 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
           hasChanges = true;
         }
 
-        // Validar solo los campos que se van a actualizar
+        // validate onle the fields to update
         const fieldsToValidate = {};
         if (updatedUser.name !== user.name) fieldsToValidate.name = updatedUser.name;
         if (updatedUser.email !== user.email) fieldsToValidate.email = updatedUser.email;
@@ -246,7 +246,7 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
           localStorage.setItem("currentUser", JSON.stringify(result));
           showToast("¡Perfil actualizado!", "success");
           
-          // Limpiar solo los campos que se actualizaron
+          // clean only the updated fields
           if (updatedUser.name !== user.name) nameInput.value = "";
           if (updatedUser.email !== user.email) emailInput.value = "";
           if (updatedUser.password !== user.password) {
@@ -262,7 +262,6 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
     }
   );
 
-  // Función para crear inputs con estilos de contact.js
   function createInput(type, id, placeholder) {
     return $("input", {
       type: type,
@@ -272,7 +271,7 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
     });
   }
 
-  // Nombre
+  // Name
   const nameDiv = $("div");
   const nameLabel = $("label", { for: "profile-name", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300" }, "Nombre");
   const nameInput = createInput("text", "profile-name", user.name);
@@ -286,21 +285,21 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
   emailDiv.appendChild(emailLabel);
   emailDiv.appendChild(emailInput);
 
-  // Contraseña
+  // password
   const passDiv = $("div");
   const passLabel = $("label", { for: "profile-password", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300" }, "Contraseña");
   const passInput = createInput("password", "profile-password", "********");
   passDiv.appendChild(passLabel);
   passDiv.appendChild(passInput);
 
-  // Repetir contraseña
+  // Repeat password
   const repeatDiv = $("div");
   const repeatLabel = $("label", { for: "profile-repeat", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300" }, "Repetir contraseña");
   const repeatInput = createInput("password", "profile-repeat", "Repetir contraseña");
   repeatDiv.appendChild(repeatLabel);
   repeatDiv.appendChild(repeatInput);
 
-  // Botón cancelar
+  // cancel button
   const cancelBtn = $(
     "button",
     { 
@@ -317,19 +316,19 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
     showToast("Los cambios han sido cancelados.", "info");
   });
 
-  // Botón guardar cambios
+  // cancel changes
   const submitBtn = $(
     "button",
     { type: "submit", class: "flex-1 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition" },
     "Guardar cambios"
   );
 
-  // Contenedor para los botones
+  // button container
   const buttonContainer = $("div", { class: "flex gap-4 mt-6" });
   buttonContainer.appendChild(submitBtn);
   buttonContainer.appendChild(cancelBtn);
 
-  // Zona de peligro
+  // danger zone
   let deleteToastId = null;
   const deleteBtn = $(
     "button",
@@ -378,7 +377,6 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
     deleteBtn
   );
 
-  // Añadir campos al form como en contact.js
   form.appendChild(nameDiv);
   form.appendChild(emailDiv);
   form.appendChild(passDiv);
@@ -388,7 +386,6 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
 
   formDiv.appendChild(form);
 
-  // Añadir sidebar y form al flexDiv como en contact.js
   flexDiv.appendChild(sidebarDiv);
   flexDiv.appendChild(formDiv);
   wrapper.appendChild(flexDiv);

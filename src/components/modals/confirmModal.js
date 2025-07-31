@@ -1,7 +1,7 @@
 export function showConfirmModal({
   message = "¿Estás seguro?",
   buttonText = "Confirmar",
-  buttonColor = "green", // 'green' o 'red'
+  buttonColor = "green",
   onConfirm,
   onCancel,
 }) {

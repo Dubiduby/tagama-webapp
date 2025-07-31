@@ -7,11 +7,11 @@ import { validation } from "../utils/validations.js";
 export default function signUp(container) {
   container.innerHTML = "";
 
-  // Wrapper principal centrado
+  // Wrapper principal centered
   const wrapper = document.createElement("div");
   wrapper.className = "max-w-md mx-auto px-4 pt-12 pb-18 md:pt-0";
 
-  // Título y subtítulo centrados encima del formulario
+  // title subtitle centered on top
   const headerInfo = document.createElement("div");
   headerInfo.className = "text-center mb-8";
 
@@ -33,7 +33,6 @@ export default function signUp(container) {
   form.className =
     "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700";
 
-  // Función para crear inputs con estilos de contact.js
   function createInput(type, id, placeholder) {
     const input = document.createElement("input");
     input.type = type;
@@ -44,7 +43,7 @@ export default function signUp(container) {
     return input;
   }
 
-  // Nombre
+  // Name
   const nameDiv = document.createElement("div");
   const nameLabel = document.createElement("label");
   nameLabel.setAttribute("for", "signup-name");
@@ -66,7 +65,7 @@ export default function signUp(container) {
   emailDiv.appendChild(emailLabel);
   emailDiv.appendChild(emailInput);
 
-  // Contraseña
+  // password
   const passwordDiv = document.createElement("div");
   const passwordLabel = document.createElement("label");
   passwordLabel.setAttribute("for", "signup-password");
@@ -81,7 +80,7 @@ export default function signUp(container) {
   passwordDiv.appendChild(passwordLabel);
   passwordDiv.appendChild(passwordInput);
 
-  // Repetir contraseña
+  // Repeat password
   const repeatDiv = document.createElement("div");
   const repeatLabel = document.createElement("label");
   repeatLabel.setAttribute("for", "signup-repeat");
@@ -96,14 +95,14 @@ export default function signUp(container) {
   repeatDiv.appendChild(repeatLabel);
   repeatDiv.appendChild(repeatInput);
 
-  // Botón de registro
+  //register button
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
   submitBtn.className =
     "mt-6 bg-[#ad5733] dark:bg-[#f49167] text-white dark:text-black font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
   submitBtn.textContent = "Crear cuenta";
 
-  // Texto de login
+  // login text
   const loginText = document.createElement("p");
   loginText.className =
     "text-center text-sm mt-4 text-gray-600 dark:text-gray-400";
@@ -119,7 +118,7 @@ export default function signUp(container) {
   loginText.appendChild(document.createTextNode("¿Ya tienes una cuenta? "));
   loginText.appendChild(loginLink);
 
-  // Añadir campos al form
+  // add fields to the form
   form.appendChild(nameDiv);
   form.appendChild(emailDiv);
   form.appendChild(passwordDiv);
@@ -131,7 +130,6 @@ export default function signUp(container) {
   wrapper.appendChild(form);
   container.appendChild(wrapper);
 
-  // Event listener para el formulario
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     try {
