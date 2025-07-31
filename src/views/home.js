@@ -17,12 +17,12 @@ export default async function home(container) {
   const searchInput = document.createElement("input");
   searchInput.type = "text";
   searchInput.placeholder = "Buscar taller...";
-  searchInput.className = "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-white focus:border-[#a78bfa] focus:outline-none";
+  searchInput.className = "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-white focus:border-light-orange focus:outline-none";
 
   // Botón para mostrar/ocultar filtros
   const filtersToggleBtn = document.createElement("button");
   filtersToggleBtn.textContent = "Filtros";
-  filtersToggleBtn.className = "block px-3 py-1 bg-[#6c2ccc] text-[#fafafa] border-none rounded-lg text-lg font-semibold cursor-pointer transition-colors duration-200 ml-2 whitespace-nowrap hover:bg-[#4c1b96]";
+  filtersToggleBtn.className = "block px-3 py-1 bg-[var(--color-text)] text-[#fafafa] border-none rounded-lg text-lg font-semibold cursor-pointer transition-colors duration-200 ml-2 whitespace-nowrap hover:bg-[#5f6155] dark:text-dark-bg dark:hover:bg-[#d8c3a9]";
 
   // Search and filters container
   const searchContainer = document.createElement("div");
@@ -37,7 +37,7 @@ export default async function home(container) {
 
   // Filtros
   const filterContainer = document.createElement("div");
-  filterContainer.className = "w-full flex flex-row flex-wrap gap-3 items-center bg-white p-4 rounded-xl mb-6 border border-[#ececec] max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] md:gap-4 md:p-6 lg:gap-6 lg:p-8 lg:rounded-2xl hidden";
+  filterContainer.className = "w-full flex flex-row justify-center gap-16 flex-wrap gap-3 items-center bg-white p-4 rounded-xl mb-6  max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] md:gap-4 md:p-6 lg:gap-6 lg:p-8 lg:rounded-2xl hidden dark:bg-dark-bg";
 
   // Mostrar/ocultar filtros al hacer click
   filtersToggleBtn.addEventListener("click", () => {
@@ -46,7 +46,7 @@ export default async function home(container) {
 
   // Categoría
   const categoriesFilter = document.createElement("select");
-  categoriesFilter.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[#fafbfc] transition-colors duration-200 w-full text-[#222] focus:border-[#a78bfa] focus:outline-none";
+  categoriesFilter.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)]  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none  dark:text-white dark:border-opacity-20 ";
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
   defaultOption.textContent = "Todas las categorías";
@@ -61,7 +61,7 @@ export default async function home(container) {
 
   // Subcategoría
   const subcategoriesFilter = document.createElement("select");
-  subcategoriesFilter.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[#fafbfc] transition-colors duration-200 w-full text-[#222] focus:border-[#a78bfa] focus:outline-none";
+  subcategoriesFilter.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 bg-[var(--color-bg)] rounded  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
   const defaultSubcategoryOption = document.createElement("option");
   defaultSubcategoryOption.value = "";
   defaultSubcategoryOption.textContent = "Todas las subcategorías";
@@ -76,11 +76,11 @@ export default async function home(container) {
   // Fecha por meses
   const monthInput = document.createElement("input");
   monthInput.type = "month";
-  monthInput.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[#fafbfc] transition-colors duration-200 w-full text-[#222] focus:border-[#a78bfa] focus:outline-none";
+  monthInput.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
 
   // Ordenar por
   const orderSelect = document.createElement("select");
-  orderSelect.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[#fafbfc] transition-colors duration-200 w-full text-[#222] focus:border-[#a78bfa] focus:outline-none";
+  orderSelect.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
   [
     { value: "recent", text: "Próximos" },
     { value: "oldest", text: "Más lejanos" },
@@ -98,23 +98,41 @@ export default async function home(container) {
   spotsCheckbox.type = "checkbox";
   spotsCheckbox.className = "accent-[#6c2ccc]";
   const spotsLabel = document.createElement("label");
-  spotsLabel.className = "flex items-center gap-2 text-base cursor-pointer select-none text-[#444]";
+  spotsLabel.className = "flex items-center gap-2 text-base cursor-pointer select-none text-dark-bg dark:text-light-bg";
   spotsLabel.textContent = "Solo con plazas disponibles";
   spotsLabel.appendChild(spotsCheckbox);
 
   // Botón para resetear filtros
   const resetButton = document.createElement("button");
   resetButton.textContent = "Limpiar";
-  resetButton.className = "min-w-[120px] flex-1 px-4 py-2 bg-[#6c2ccc] text-[#fafafa] border border-gray-200 rounded text-base cursor-pointer transition-colors duration-200 w-full font-medium mt-1 hover:bg-[#4c1b96] hover:text-[#f4f3f7] hover:border-[#c4b5fd]";
+  resetButton.className =  `
+  min-w-[120px] max-w-[120px] w-full flex-1
+  px-4 py-2 mt-1
+  bg-dark-orange text-[#fafafa] rounded text-base font-medium
+  cursor-pointer transition-colors transition-transform duration-200
+  shadow-sm hover:shadow-md
+  transform  hover:scale-[1.02] active:scale-[0.98]
+  hover:bg-[#934728] hover:text-[#f4f3f7] hover:border-[#c4b5fd]
+  dark:bg-dark-green dark:hover:bg-[#5f6155] dark:border-none
+`;
+
+  //clear and spots container
+  const filterClearContainer = document.createElement("div");
+  filterClearContainer.className = "w-full flex items-center justify-center gap-12  ";
+  filterClearContainer.appendChild(spotsLabel);
+  filterClearContainer.appendChild(resetButton);
 
   // Añadir filtros al contenedor
   filterContainer.appendChild(categoriesFilter);
   filterContainer.appendChild(subcategoriesFilter);
   filterContainer.appendChild(monthInput);
   filterContainer.appendChild(orderSelect);
-  filterContainer.appendChild(spotsLabel);
-  filterContainer.appendChild(resetButton);
+
+  // filterContainer.appendChild(spotsLabel);
+  // filterContainer.appendChild(resetButton);
+   filterContainer.appendChild(filterClearContainer);
   allFiltersContainer.appendChild(filterContainer);
+ 
 
   // Workshops list
   const workshopsContainer = document.createElement("div");
