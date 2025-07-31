@@ -328,8 +328,10 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   durationInput.type = "number";
   durationInput.name = "duration";
   durationInput.value = data.duration || "";
-  durationInput.placeholder = "Ej: 2";
+  durationInput.placeholder = "Ej: 1.5";
+  durationInput.step = "0.1";
   durationInput.required = true;
+  
   durationInput.className =
     "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
