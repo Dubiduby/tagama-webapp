@@ -36,7 +36,7 @@ export default function navbar(header) {
   }
 
   header.innerHTML = `
-    <nav class=" flex flex-col opacity-[0.95]  md:flex-row items-center fixed  bg-[var(--color-2bg)] dark:bg-[var(--color-2bg)/30] border-b border-gray-200 dark:border-gray-800 px-4 py-2 z-50 w-full  dark:backdrop-brightness-50 backdrop-blur-md" 
+    <nav class=" flex justify-between opacity-[0.95]  md:flex-row items-center fixed  bg-[var(--color-2bg)] dark:bg-[var(--color-2bg)/30] border-b border-gray-200 dark:border-gray-800 px-4 py-2 z-50 w-full  dark:backdrop-brightness-50 backdrop-blur-md" 
       <div class="flex w-full md:w-auto items-center justify-between">
         <a href="${isLoggedIn ? "/home" : "/"}" data-link class="font-bold text-xl text-gray-900 dark:text-gray-100 flex items-center">
           <img src="${new URL(`../assets/images/logo/Tagama-light-background-horiz.svg`, import.meta.url).href}" alt="Logo" class="max-w-[160px] h-auto object-contain block py-1" />
