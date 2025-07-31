@@ -13,28 +13,61 @@ export default function contact(container) {
   // Copy (izquierda)
   const copyDiv = document.createElement("div");
   copyDiv.className = "md:w-1/2 w-full mb-8 px-2 md:mb-0";
-  copyDiv.innerHTML = `
-    <h1 class="text-3xl md:text-4xl font-extrabold text-[#1e1d1d] mb-4">Contáctanos</h1>
-    <div class="flex flex-col gap-2">
-      <p class="text-[var(--color-gray)] mb-2">¿Has encontrado un error, tienes alguna sugerencia o simplemente quieres saludarnos?<br><br>En Tagama te escuchamos.</p>
-      <p class="text-[var(--color-text)] mb-2 text-[#ad5733] font-bold text-lg">📩 hola@tagama.es</p>
-      <p class="text-[var(--color-gray)] mb-2">O rellena el formulario y te responderemos lo antes posible.</p>
-      <p class="text-[var(--color-text)]">Gracias por formar parte de esta pequeña gran red creativa en Tenerife 🧡</p>
-    </div>
-  `;
+  
+  // Título
+  const title = document.createElement("h1");
+  title.className = "text-3xl md:text-4xl font-extrabold text-[#1e1d1d] dark:text-white mb-4";
+  title.textContent = "Contáctanos";
+  copyDiv.appendChild(title);
+
+  // Contenido
+  const contentDiv = document.createElement("div");
+  contentDiv.className = "flex flex-col gap-2";
+
+  // Primer párrafo
+  const p1 = document.createElement("p");
+  p1.className = "text-[var(--color-gray)] dark:text-[var(--color-text)] mb-2";
+  p1.textContent = "¿Has encontrado un error, tienes alguna sugerencia o simplemente quieres saludarnos?";
+  const br1 = document.createElement("br");
+  const br2 = document.createElement("br");
+  const textNode = document.createTextNode("En Tagama te escuchamos.");
+  p1.appendChild(br1);
+  p1.appendChild(br2);
+  p1.appendChild(textNode);
+  contentDiv.appendChild(p1);
+
+  // Email
+  const emailP = document.createElement("p");
+  emailP.className = "text-[var(--color-text)] dark:text-[var(--color-text)] mb-2 text-[#ad5733] dark:text-[#f49167] font-bold text-lg";
+  emailP.textContent = "📩 hola@tagama.es";
+  contentDiv.appendChild(emailP);
+
+  // Segundo párrafo
+  const p2 = document.createElement("p");
+  p2.className = "text-[var(--color-gray)] dark:text-[var(--color-text)] mb-2";
+  p2.textContent = "O rellena el formulario y te responderemos lo antes posible.";
+  contentDiv.appendChild(p2);
+
+  // Tercer párrafo
+  const p3 = document.createElement("p");
+  p3.className = "text-[var(--color-text)] dark:text-[var(--color-text)]";
+  p3.textContent = "Gracias por formar parte de esta pequeña gran red creativa en Tenerife 🧡";
+  contentDiv.appendChild(p3);
+
+  copyDiv.appendChild(contentDiv);
 
   // Formulario (derecha)
   const formDiv = document.createElement("div");
   formDiv.className = "md:w-1/2 w-full";
   const form = document.createElement("form");
   form.id = "contact-form";
-  form.className = "bg-white rounded-2xl shadow p-6 flex flex-col gap-4";
+  form.className = "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700";
 
   // Nombre
   const nameDiv = document.createElement("div");
   const nameLabel = document.createElement("label");
   nameLabel.htmlFor = "contact-name";
-  nameLabel.className = "block text-sm font-medium mb-1";
+  nameLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   nameLabel.textContent = "Nombre";
   const nameInput = document.createElement("input");
   nameInput.type = "text";
@@ -43,7 +76,7 @@ export default function contact(container) {
   nameInput.placeholder = "Tu nombre";
   nameInput.required = true;
   nameInput.className =
-    "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733]";
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
   nameDiv.appendChild(nameLabel);
   nameDiv.appendChild(nameInput);
 
@@ -51,7 +84,7 @@ export default function contact(container) {
   const emailDiv = document.createElement("div");
   const emailLabel = document.createElement("label");
   emailLabel.htmlFor = "contact-email";
-  emailLabel.className = "block text-sm font-medium mb-1";
+  emailLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   emailLabel.textContent = "Email";
   const emailInput = document.createElement("input");
   emailInput.type = "email";
@@ -60,7 +93,7 @@ export default function contact(container) {
   emailInput.placeholder = "Tu email";
   emailInput.required = true;
   emailInput.className =
-    "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733]";
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
   emailDiv.appendChild(emailLabel);
   emailDiv.appendChild(emailInput);
 
@@ -68,7 +101,7 @@ export default function contact(container) {
   const messageDiv = document.createElement("div");
   const messageLabel = document.createElement("label");
   messageLabel.htmlFor = "contact-message";
-  messageLabel.className = "block text-sm font-medium mb-1";
+  messageLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   messageLabel.textContent = "Mensaje";
   const messageInput = document.createElement("textarea");
   messageInput.id = "contact-message";
@@ -77,7 +110,7 @@ export default function contact(container) {
   messageInput.rows = 4;
   messageInput.required = true;
   messageInput.className =
-    "w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733]";
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
   messageDiv.appendChild(messageLabel);
   messageDiv.appendChild(messageInput);
 
@@ -85,13 +118,13 @@ export default function contact(container) {
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
   submitBtn.className =
-    "mt-2 bg-[#ad5733] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] transition";
+    "mt-2 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
   submitBtn.textContent = "Enviar";
 
   // Mensaje de éxito
   const successMsg = document.createElement("div");
   successMsg.id = "contact-success";
-  successMsg.className = "hidden text-green-600 text-center font-semibold mt-2";
+  successMsg.className = "hidden text-green-600 dark:text-green-400 text-center font-semibold mt-2";
   successMsg.textContent = "¡Tu mensaje ha sido enviado!";
 
   // Añadir campos al form
@@ -109,7 +142,6 @@ export default function contact(container) {
   wrapper.appendChild(flexDiv);
   container.appendChild(wrapper);
 
-  // Lógica del formulario
   // Lógica del formulario
   form.addEventListener("submit", function (e) {
     e.preventDefault();
