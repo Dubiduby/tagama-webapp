@@ -1,55 +1,46 @@
-// Módulo para el modal de pago
-
 export function showPaymentModal(onSuccess, onCancel) {
   // Overlay
   const overlay = document.createElement("div");
-  overlay.className = "payment-modal-overlay";
-  overlay.style.position = "fixed";
-  overlay.style.top = 0;
-  overlay.style.left = 0;
-  overlay.style.width = "100vw";
-  overlay.style.height = "100vh";
-  overlay.style.background = "rgba(0,0,0,0.5)";
-  overlay.style.display = "flex";
-  overlay.style.alignItems = "center";
-  overlay.style.justifyContent = "center";
-  overlay.style.zIndex = 10000;
+  overlay.className =
+    "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10000]";
 
   // Modal
   const app = document.createElement("div");
-  app.className = "payment-card";
-  app.style.position = "relative";
+  app.className =
+    "relative bg-[var(--color-bg)] dark:bg-[var(--color-2bg)] text-[var(--color-text)] rounded-lg shadow-lg w-full max-w-md p-6";
 
-  // Close button
+  // Botón de cerrar
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "×";
-  closeBtn.style.position = "absolute";
-  closeBtn.style.top = "10px";
-  closeBtn.style.right = "10px";
-  closeBtn.style.background = "transparent";
-  closeBtn.style.border = "none";
-  closeBtn.style.fontSize = "1.5rem";
-  closeBtn.style.cursor = "pointer";
+  closeBtn.className =
+    "absolute top-2 right-2 text-2xl text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-white";
   closeBtn.addEventListener("click", () => {
     document.body.removeChild(overlay);
     if (onCancel) onCancel();
   });
   app.appendChild(closeBtn);
 
-  // Formulario de pago
+  // Formulario
   const form = document.createElement("form");
-  form.className = "payment-form";
+  form.className = "space-y-4";
+
   // Título
   const title = document.createElement("h1");
   title.textContent = "Pago de servicios";
+  title.className = "text-xl font-semibold text-[var(--color-title)]";
   form.appendChild(title);
+
   // Selector de proveedor
   const label = document.createElement("label");
-  label.textContent = "Elige tu método de pago: ";
+  label.textContent = "Elige tu método de pago:";
   label.setAttribute("for", "proveedor");
+  label.className = "block text-sm font-medium";
   form.appendChild(label);
+
   const select = document.createElement("select");
   select.id = "proveedor";
+  select.className =
+    "w-full border border-gray-300 rounded px-3 py-2 mt-1 bg-white dark:bg-[var(--color-bg)]";
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
   defaultOption.textContent = "Selecciona un método de pago";
@@ -63,154 +54,158 @@ export function showPaymentModal(onSuccess, onCancel) {
     select.appendChild(option);
   });
   form.appendChild(select);
-  // Campos para datos de tarjeta
+
+  // Campos para tarjeta
   const cardFields = document.createElement("div");
-  cardFields.className = "card-fields";
-  const cardNumberLabel = document.createElement("label");
-  cardNumberLabel.textContent = "Número de tarjeta:";
-  cardNumberLabel.setAttribute("for", "cardNumber");
-  cardFields.appendChild(cardNumberLabel);
-  const cardNumber = document.createElement("input");
-  cardNumber.type = "text";
-  cardNumber.id = "cardNumber";
-  cardNumber.name = "cardNumber";
-  cardNumber.placeholder = "1234 5678 9012 3456";
-  cardNumber.maxLength = "19";
-  cardFields.appendChild(cardNumber);
-  const holderLabel = document.createElement("label");
-  holderLabel.textContent = "Nombre del titular:";
-  holderLabel.setAttribute("for", "cardHolder");
-  cardFields.appendChild(holderLabel);
-  const cardHolder = document.createElement("input");
-  cardHolder.type = "text";
-  cardHolder.id = "cardHolder";
-  cardHolder.name = "cardHolder";
-  cardHolder.placeholder = "Juan Pérez";
-  cardFields.appendChild(cardHolder);
+  cardFields.className = "space-y-3 hidden";
+
+  const makeInputGroup = (labelText, id, type, placeholder, maxLength) => {
+    const wrapper = document.createElement("div");
+    const label = document.createElement("label");
+    label.textContent = labelText;
+    label.setAttribute("for", id);
+    label.className = "block text-sm font-medium";
+    const input = document.createElement("input");
+    input.type = type;
+    input.id = id;
+    input.name = id;
+    input.placeholder = placeholder;
+    if (maxLength) input.maxLength = maxLength;
+    input.className =
+      "w-full border border-gray-300 rounded px-3 py-2 mt-1 bg-white dark:bg-[var(--color-bg)]";
+    wrapper.appendChild(label);
+    wrapper.appendChild(input);
+    return { wrapper, input };
+  };
+
+  const { wrapper: cardNumberWrap, input: cardNumber } = makeInputGroup(
+    "Número de tarjeta:",
+    "cardNumber",
+    "text",
+    "1234 5678 9012 3456",
+    19
+  );
+  cardFields.appendChild(cardNumberWrap);
+
+  const { wrapper: cardHolderWrap, input: cardHolder } = makeInputGroup(
+    "Nombre del titular:",
+    "cardHolder",
+    "text",
+    "Juan Pérez"
+  );
+  cardFields.appendChild(cardHolderWrap);
+
   const row = document.createElement("div");
-  row.className = "row";
-  const expiryDiv = document.createElement("div");
-  const expiryLabel = document.createElement("label");
-  expiryLabel.textContent = "Fecha de caducidad:";
-  expiryLabel.setAttribute("for", "expiry");
-  expiryDiv.appendChild(expiryLabel);
-  const expiry = document.createElement("input");
-  expiry.type = "text";
-  expiry.id = "expiry";
-  expiry.name = "expiry";
-  expiry.placeholder = "MM/AA";
-  expiry.maxLength = "5";
-  expiryDiv.appendChild(expiry);
-  row.appendChild(expiryDiv);
-  const cvcDiv = document.createElement("div");
-  const cvcLabel = document.createElement("label");
-  cvcLabel.textContent = "CVC:";
-  cvcLabel.setAttribute("for", "cvc");
-  cvcDiv.appendChild(cvcLabel);
-  const cvc = document.createElement("input");
-  cvc.type = "text";
-  cvc.id = "cvc";
-  cvc.name = "cvc";
-  cvc.placeholder = "123";
-  cvc.maxLength = "4";
-  cvcDiv.appendChild(cvc);
-  row.appendChild(cvcDiv);
+  row.className = "flex gap-4";
+
+  const { wrapper: expiryWrap, input: expiry } = makeInputGroup(
+    "Fecha de caducidad:",
+    "expiry",
+    "text",
+    "MM/AA",
+    5
+  );
+  const { wrapper: cvcWrap, input: cvc } = makeInputGroup(
+    "CVC:",
+    "cvc",
+    "text",
+    "123",
+    4
+  );
+
+  row.appendChild(expiryWrap);
+  row.appendChild(cvcWrap);
   cardFields.appendChild(row);
-  cardFields.style.display = "none";
   form.appendChild(cardFields);
-  // Bizum fields
+
+  // Bizum
   const bizumFields = document.createElement("div");
-  bizumFields.className = "payment-fields bizum-fields";
-  bizumFields.style.display = "none";
-  const bizumLabel = document.createElement("label");
-  bizumLabel.textContent = "Número de teléfono:";
-  bizumLabel.setAttribute("for", "bizumPhone");
-  bizumFields.appendChild(bizumLabel);
-  const bizumPhone = document.createElement("input");
-  bizumPhone.type = "tel";
-  bizumPhone.id = "bizumPhone";
-  bizumPhone.name = "bizumPhone";
-  bizumPhone.placeholder = "600 000 000";
-  bizumPhone.maxLength = "12";
-  bizumFields.appendChild(bizumPhone);
+  bizumFields.className = "hidden space-y-2";
+  const { wrapper: bizumWrap, input: bizumPhone } = makeInputGroup(
+    "Número de teléfono:",
+    "bizumPhone",
+    "tel",
+    "600 000 000",
+    12
+  );
+  bizumFields.appendChild(bizumWrap);
   const bizumInfo = document.createElement("p");
-  bizumInfo.className = "payment-info";
   bizumInfo.textContent =
     "Recibirás una notificación en tu app de Bizum para confirmar el pago.";
-  bizumInfo.style.fontSize = "0.9rem";
-  bizumInfo.style.color = "#666";
-  bizumInfo.style.marginTop = "0.5rem";
+  bizumInfo.className = "text-sm text-gray-600 dark:text-gray-400";
   bizumFields.appendChild(bizumInfo);
   form.appendChild(bizumFields);
-  // PayPal fields
+
+  // PayPal
   const paypalFields = document.createElement("div");
-  paypalFields.className = "payment-fields paypal-fields";
-  paypalFields.style.display = "none";
-  const paypalEmailLabel = document.createElement("label");
-  paypalEmailLabel.textContent = "Email de PayPal:";
-  paypalEmailLabel.setAttribute("for", "paypalEmail");
-  paypalFields.appendChild(paypalEmailLabel);
-  const paypalEmail = document.createElement("input");
-  paypalEmail.type = "email";
-  paypalEmail.id = "paypalEmail";
-  paypalEmail.name = "paypalEmail";
-  paypalEmail.placeholder = "tu@email.com";
-  paypalFields.appendChild(paypalEmail);
+  paypalFields.className = "hidden space-y-2";
+  const { wrapper: paypalWrap, input: paypalEmail } = makeInputGroup(
+    "Email de PayPal:",
+    "paypalEmail",
+    "email",
+    "tu@email.com"
+  );
+  paypalFields.appendChild(paypalWrap);
   const paypalInfo = document.createElement("p");
-  paypalInfo.className = "payment-info";
   paypalInfo.textContent =
     "Serás redirigido a PayPal para completar el pago de forma segura.";
-  paypalInfo.style.fontSize = "0.9rem";
-  paypalInfo.style.color = "#666";
-  paypalInfo.style.marginTop = "0.5rem";
+  paypalInfo.className = "text-sm text-gray-600 dark:text-gray-400";
   paypalFields.appendChild(paypalInfo);
   form.appendChild(paypalFields);
-  // Toggle fields
+
+  // Mostrar campos
   function togglePaymentFields() {
-    const selectedMethod = select.value;
-    cardFields.style.display = "none";
-    bizumFields.style.display = "none";
-    paypalFields.style.display = "none";
-    if (selectedMethod === "tarjeta") cardFields.style.display = "block";
-    else if (selectedMethod === "bizum") bizumFields.style.display = "block";
-    else if (selectedMethod === "paypal") paypalFields.style.display = "block";
+    cardFields.classList.add("hidden");
+    bizumFields.classList.add("hidden");
+    paypalFields.classList.add("hidden");
+    const method = select.value;
+    if (method === "tarjeta") cardFields.classList.remove("hidden");
+    else if (method === "bizum") bizumFields.classList.remove("hidden");
+    else if (method === "paypal") paypalFields.classList.remove("hidden");
   }
   togglePaymentFields();
   select.addEventListener("change", togglePaymentFields);
-  // Format card number
+
+  // Format
   cardNumber.addEventListener("input", (e) => {
-    let value = e.target.value.replace(/\s/g, "").replace(/[^0-9]/gi, "");
-    let formattedValue = value.match(/.{1,4}/g)?.join(" ") || value;
-    e.target.value = formattedValue;
+    let value = e.target.value.replace(/\s/g, "").replace(/\D/g, "");
+    let formatted = value.match(/.{1,4}/g)?.join(" ") || value;
+    e.target.value = formatted;
   });
   expiry.addEventListener("input", (e) => {
-    let value = e.target.value.replace(/\D/g, "");
-    if (value.length >= 2) value = value.slice(0, 2) + "/" + value.slice(2);
-    e.target.value = value;
+    let v = e.target.value.replace(/\D/g, "");
+    if (v.length >= 2) v = v.slice(0, 2) + "/" + v.slice(2);
+    e.target.value = v;
   });
   cvc.addEventListener("input", (e) => {
     e.target.value = e.target.value.replace(/\D/g, "");
   });
-  // Pay button
+
+  // Botón de pago
   const button = document.createElement("button");
   button.id = "pagar";
   button.type = "submit";
   button.textContent = "Pagar";
+  button.className =
+    "bg-dark-orange text-white px-4 py-2 rounded hover:bg-orange-700 transition";
   form.appendChild(button);
-  // Status
+
+  // Estado
   const status = document.createElement("div");
   status.id = "status";
+  status.className = "text-sm mt-2 text-center";
   form.appendChild(status);
-  // Lógica de pago
+
+  // Enviar
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const proveedor = select.value;
+    let isValid = true;
+    let paymentData = {};
     if (!proveedor) {
       status.textContent = "Por favor, selecciona un método de pago.";
       return;
     }
-    let isValid = true;
-    let paymentData = {};
     if (proveedor === "tarjeta") {
       paymentData = {
         number: cardNumber.value.replace(/\s/g, ""),
@@ -241,11 +236,13 @@ export function showPaymentModal(onSuccess, onCancel) {
         isValid = false;
       }
     }
+
     if (!isValid) return;
+
     button.disabled = true;
     button.textContent = "Procesando...";
     status.textContent = "Procesando pago...";
-    // Simulación de pago
+
     setTimeout(() => {
       status.textContent = "¡Pago procesado correctamente!";
       setTimeout(() => {
@@ -254,6 +251,7 @@ export function showPaymentModal(onSuccess, onCancel) {
       }, 1200);
     }, 2000);
   });
+
   app.appendChild(form);
   overlay.appendChild(app);
   document.body.appendChild(overlay);
