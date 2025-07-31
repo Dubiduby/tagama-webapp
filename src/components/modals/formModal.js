@@ -15,20 +15,24 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     overlay.onclick = closeModal;
 
     const content = document.createElement("div");
-    content.className = "relative bg-white dark:bg-[#1a1a1a] rounded-2xl shadow-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto";
+    content.className =
+      "relative bg-white dark:bg-[#1a1a1a] rounded-2xl shadow-lg max-w-4xl w-full max-h-[90vh] overflow-y-auto";
 
     modal.appendChild(overlay);
     modal.appendChild(content);
     document.body.appendChild(modal);
   }
 
-  const content = modal.querySelector(".workshop-modal__content") || modal.querySelector("div:last-child");
+  const content =
+    modal.querySelector(".workshop-modal__content") ||
+    modal.querySelector("div:last-child");
   content.innerHTML = "";
 
   // Crear formulario
   const form = document.createElement("form");
   form.id = "workshop-form";
-  form.className = "p-6 flex flex-col gap-4";
+  form.className =
+    "p-6 flex flex-col gap-4 dark:border-solid dark:border-dark-green dark:border";
 
   // Título
   const titleGroup = document.createElement("div");
@@ -36,7 +40,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   const titleLabel = document.createElement("label");
   titleLabel.setAttribute("for", "title");
-  titleLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  titleLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   titleLabel.textContent = "Título";
 
   const titleInput = document.createElement("input");
@@ -44,7 +49,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   titleInput.name = "title";
   titleInput.value = data.title || "";
   titleInput.required = true;
-  titleInput.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
+  titleInput.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
 
   titleGroup.appendChild(titleLabel);
   titleGroup.appendChild(titleInput);
@@ -56,14 +62,16 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   const overviewLabel = document.createElement("label");
   overviewLabel.setAttribute("for", "overview");
-  overviewLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  overviewLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   overviewLabel.textContent = "Descripción";
 
   const overviewTextarea = document.createElement("textarea");
   overviewTextarea.id = "overview";
   overviewTextarea.name = "overview";
   overviewTextarea.textContent = data.overview || "";
-  overviewTextarea.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
+  overviewTextarea.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
 
   overviewGroup.appendChild(overviewLabel);
   overviewGroup.appendChild(overviewTextarea);
@@ -75,14 +83,16 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   const requirementsLabel = document.createElement("label");
   requirementsLabel.setAttribute("for", "requirements");
-  requirementsLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  requirementsLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   requirementsLabel.textContent = "Requisitos";
 
   const requirementsTextarea = document.createElement("textarea");
   requirementsTextarea.id = "requirements";
   requirementsTextarea.name = "requirements";
   requirementsTextarea.textContent = data.requirements || "";
-  requirementsTextarea.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
+  requirementsTextarea.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
 
   requirementsGroup.appendChild(requirementsLabel);
   requirementsGroup.appendChild(requirementsTextarea);
@@ -94,14 +104,16 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   const modeLabel = document.createElement("label");
   modeLabel.setAttribute("for", "mode");
-  modeLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  modeLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   modeLabel.textContent = "Modo";
 
   const modeSelect = document.createElement("select");
   modeSelect.id = "mode";
   modeSelect.name = "mode";
   modeSelect.required = true;
-  modeSelect.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
+  modeSelect.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
   const onlineOption = document.createElement("option");
   onlineOption.value = "Online";
@@ -126,7 +138,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   const placeLabel = document.createElement("label");
   placeLabel.setAttribute("for", "place");
-  placeLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  placeLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   placeLabel.textContent = "Lugar";
 
   const placeInput = document.createElement("input");
@@ -134,12 +147,14 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   placeInput.name = "place";
   placeInput.value = data.location || "";
   placeInput.placeholder = "Ej: Centro, Oficina, Mi Casa";
-  placeInput.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
+  placeInput.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
   placeInput.setAttribute("autocomplete", "off");
 
   const addressLabel = document.createElement("label");
   addressLabel.setAttribute("for", "address");
-  addressLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  addressLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   addressLabel.textContent = "Dirección";
 
   const addressInput = document.createElement("input");
@@ -147,7 +162,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   addressInput.name = "address";
   addressInput.value = "";
   addressInput.placeholder = "Ej: Calle papafrita 22, Santa Cruz de Tenerife";
-  addressInput.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
+  addressInput.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
   addressInput.setAttribute("autocomplete", "off");
 
   // Campo oculto para las coordenadas
@@ -187,7 +203,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   const geocodeBtn = document.createElement("button");
   geocodeBtn.type = "button";
   geocodeBtn.textContent = "📍 Obtener coordenadas";
-  geocodeBtn.className = "mt-2 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-4 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition text-sm";
+  geocodeBtn.className =
+    "mt-2 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-4 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition text-sm";
   geocodeBtn.onclick = geocodeAddress;
 
   // Indicador de estado
@@ -211,7 +228,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   const dateLabel = document.createElement("label");
   dateLabel.setAttribute("for", "date");
-  dateLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  dateLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   dateLabel.textContent = "Fecha";
 
   const dateInput = document.createElement("input");
@@ -222,7 +240,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   if (data.date) {
     dateInput.value = dayjs.unix(data.date).format("YYYY-MM-DDTHH:mm");
   }
-  dateInput.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
+  dateInput.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
   dateGroup.appendChild(dateLabel);
   dateGroup.appendChild(dateInput);
@@ -236,13 +255,15 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   categoryDiv.className = "flex-1";
   const categoryLabel = document.createElement("label");
   categoryLabel.setAttribute("for", "category");
-  categoryLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  categoryLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   categoryLabel.textContent = "Categoría";
 
   const categorySelect = document.createElement("select");
   categorySelect.id = "category-select";
   categorySelect.name = "categoryId";
-  categorySelect.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
+  categorySelect.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
   categoryDiv.appendChild(categoryLabel);
   categoryDiv.appendChild(categorySelect);
@@ -252,13 +273,15 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   subcategoryDiv.className = "flex-1";
   const subcategoryLabel = document.createElement("label");
   subcategoryLabel.setAttribute("for", "subcategory");
-  subcategoryLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  subcategoryLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   subcategoryLabel.textContent = "Subcategoría";
 
   const subcategorySelect = document.createElement("select");
   subcategorySelect.id = "subcategory-select";
   subcategorySelect.name = "subcategoryId";
-  subcategorySelect.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
+  subcategorySelect.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
   subcategoryDiv.appendChild(subcategoryLabel);
   subcategoryDiv.appendChild(subcategorySelect);
@@ -274,7 +297,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   capacityDiv.className = "flex-1";
   const capacityLabel = document.createElement("label");
   capacityLabel.setAttribute("for", "capacity");
-  capacityLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  capacityLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   capacityLabel.textContent = "Capacidad";
 
   const capacityInput = document.createElement("input");
@@ -283,7 +307,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   capacityInput.name = "capacity";
   capacityInput.value = data.capacity || "";
   capacityInput.required = true;
-  capacityInput.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
+  capacityInput.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
   capacityDiv.appendChild(capacityLabel);
   capacityDiv.appendChild(capacityInput);
@@ -294,7 +319,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   durationDiv.className = "flex-1";
   const durationLabel = document.createElement("label");
   durationLabel.setAttribute("for", "duration");
-  durationLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  durationLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   durationLabel.textContent = "Duración Hrs";
 
   const durationInput = document.createElement("input");
@@ -304,7 +330,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   durationInput.value = data.duration || "";
   durationInput.placeholder = "Ej: 2";
   durationInput.required = true;
-  durationInput.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
+  durationInput.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
   durationDiv.appendChild(durationLabel);
   durationDiv.appendChild(durationInput);
@@ -315,14 +342,16 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   levelDiv.className = "flex-1";
   const levelLabel = document.createElement("label");
   levelLabel.setAttribute("for", "level");
-  levelLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  levelLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   levelLabel.textContent = "Nivel";
 
   const levelSelect = document.createElement("select");
   levelSelect.id = "level";
   levelSelect.name = "level";
   levelSelect.required = true;
-  levelSelect.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
+  levelSelect.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
   const principianteOption = document.createElement("option");
   principianteOption.value = "Principiante";
@@ -354,7 +383,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   const priceLabel = document.createElement("label");
   priceLabel.setAttribute("for", "price");
-  priceLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  priceLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   priceLabel.textContent = "Precio (€)";
 
   const priceInput = document.createElement("input");
@@ -363,7 +393,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   priceInput.step = "0.01";
   priceInput.name = "price";
   priceInput.value = data.price || 0;
-  priceInput.className = "w-48 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
+  priceInput.className =
+    "w-48 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
   priceGroup.appendChild(priceLabel);
   priceGroup.appendChild(priceInput);
@@ -375,7 +406,8 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   const imageLabel = document.createElement("label");
   imageLabel.setAttribute("for", "imageUrl");
-  imageLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  imageLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   imageLabel.textContent = "Imagen";
 
   const imageUrlInput = document.createElement("input");
@@ -388,12 +420,14 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   imageUploadInput.id = "image-upload";
   imageUploadInput.type = "file";
   imageUploadInput.accept = "image/*";
-  imageUploadInput.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 dark:file:bg-gray-600 file:text-gray-700 dark:file:text-gray-200 hover:file:bg-gray-300 dark:hover:file:bg-gray-500 file:cursor-pointer";
+  imageUploadInput.className =
+    "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-gray-200 dark:file:bg-gray-600 file:text-gray-700 dark:file:text-gray-200 hover:file:bg-gray-300 dark:hover:file:bg-gray-500 file:cursor-pointer";
 
   const uploadBtn = document.createElement("button");
   uploadBtn.type = "button";
   uploadBtn.id = "upload-btn";
-  uploadBtn.className = "mt-2 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-4 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition text-sm";
+  uploadBtn.className =
+    "mt-2 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-4 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition text-sm";
   uploadBtn.textContent = "Subir imagen";
 
   const imagePreview = document.createElement("div");
@@ -422,13 +456,15 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   const cancelBtn = document.createElement("button");
   cancelBtn.type = "button";
   cancelBtn.textContent = "Cancelar";
-  cancelBtn.className = "flex-1 bg-gray-500 text-white font-bold py-2 px-6 rounded-full hover:bg-gray-600 transition";
+  cancelBtn.className =
+    "flex-1 bg-gray-500 text-white font-bold py-2 px-6 rounded-full hover:bg-gray-600 transition";
   cancelBtn.onclick = closeModal;
 
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
   submitBtn.textContent = data.id ? "Actualizar Taller" : "Crear Taller";
-  submitBtn.className = "flex-1 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
+  submitBtn.className =
+    "flex-1 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
 
   buttonGroup.appendChild(cancelBtn);
   buttonGroup.appendChild(submitBtn);
@@ -545,9 +581,9 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     const filtered = subcategories.filter(
       (s) => Number(s.categoryId) === Number(categoryId)
     );
-    
+
     subcategorySelect.innerHTML = "";
-    
+
     if (filtered.length === 0) {
       const noOption = document.createElement("option");
       noOption.value = "";
