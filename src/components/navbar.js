@@ -5,13 +5,15 @@ import { clearCache } from "../utils/cache.js";
 export default function navbar(header) {
   const user = JSON.parse(localStorage.getItem("currentUser") || "null");
   const isLoggedIn = !!user;
-  const theme = localStorage.getItem("theme", "light");
-  console.log("Current theme:", theme);
+
+  const theme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const isDarkMode = theme === "dark" || (!theme && prefersDark);
 
   let authLinks = "";
   if (isLoggedIn) {
     authLinks = `
-      <li><a href="/workshops" data-link class="hover:bg-dark-green/10 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Mis talleres</a></li>
+      <li><a href="/workshops" data-link class="hover:bg-dark-green/20 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Mis talleres</a></li>
       <!-- Avatar y dropdown para desktop -->
       <li class="relative hidden md:flex items-center group">
         <button class="flex items-center focus:outline-none" aria-label="Menú de usuario">
@@ -22,19 +24,19 @@ export default function navbar(header) {
           </span>
         </button>
         <ul class="absolute right-0 top-12 border bg-[var(--color-bg)] border-gray-200 dark:border-gray-700 rounded-lg shadow-lg min-w-[140px] z-20 py-2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition">
-          <li><a href="/profile" data-link class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-dark-green/10 dark:hover:bg-dark-green/50 rounded dark:text-[var(--color-text)]">Perfil</a></li>
+          <li><a href="/profile" data-link class="block px-4 py-2 text-gray-800 dark:text-gray-200 hover:bg-dark-green/20 dark:hover:bg-dark-green/50 rounded dark:text-[var(--color-text)]">Perfil</a></li>
           <li><a href="#" id="logout-link" class="block px-4 py-2 text-red-600 dark:text-red-400 hover:bg-gray-100 dark:hover:bg-gray-800 rounded">Cerrar sesión</a></li>
         </ul>
       </li>
       <!-- Profile y Logout como li normales para mobile/burger abierto -->
-      <li class="block md:hidden"><a href="/profile" data-link class="hover:bg-dark-green/10 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Perfil</a></li>
+      <li class="block md:hidden"><a href="/profile" data-link class="hover:bg-dark-green/20 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Perfil</a></li>
       <li class="block md:hidden"><a href="#" id="logout-link-mobile" class="text-red-600 hover:bg-gray-100 dark:hover:bg-gray-800 px-4 py-2 rounded transition">Cerrar sesión</a></li>
     `;
   } else {
     authLinks = `
-      <li><a href="/about" data-link class="hover:bg-dark-green/10 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Sobre nosotros</a></li>
-      <li><a href="/login" data-link class="hover:bg-dark-green/10 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Iniciar sesión</a></li>
-      <li><a href="/signup" data-link class="hover:bg-dark-green/10 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Registrarse</a></li>
+      <li><a href="/about" data-link class="hover:bg-dark-green/20 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Sobre nosotros</a></li>
+      <li><a href="/login" data-link class="hover:bg-dark-green/20 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Iniciar sesión</a></li>
+      <li><a href="/signup" data-link class="hover:bg-dark-green/20 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Registrarse</a></li>
     `;
   }
 
@@ -69,7 +71,7 @@ export default function navbar(header) {
       <li>
         <a href="${
           isLoggedIn ? "/home" : "/"
-        }" data-link class="hover:bg-dark-green/10 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Inicio</a>
+        }" data-link class="hover:bg-dark-green/20 dark:hover:bg-dark-green/50 px-4 py-2 rounded transition dark:text-[var(--color-title)]">Inicio</a>
       </li>
       ${authLinks}
       <li>
@@ -127,24 +129,29 @@ export default function navbar(header) {
 
   // Dark mode toggle
   const darkToggle = header.querySelector("#toggle-dark");
+  const darkIcon = darkToggle?.querySelector("#dark-icon");
+  const lightIcon = darkToggle?.querySelector("#light-icon");
+
   if (darkToggle) {
+    if (isDarkMode) {
+      lightIcon.classList.add("hidden");
+      darkIcon.classList.remove("hidden");
+    } else {
+      lightIcon.classList.remove("hidden");
+      darkIcon.classList.add("hidden");
+    }
+
     darkToggle.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      if (document.documentElement.classList.contains("dark")) {
+      const isNowDark = document.documentElement.classList.toggle("dark");
+      if (isNowDark) {
         localStorage.setItem("theme", "dark");
-        darkToggle.querySelector("#light-icon").classList.add("hidden");
-        darkToggle.querySelector("#dark-icon").classList.remove("hidden");
+        lightIcon.classList.add("hidden");
+        darkIcon.classList.remove("hidden");
       } else {
         localStorage.setItem("theme", "light");
-        darkToggle.querySelector("#light-icon").classList.remove("hidden");
-        darkToggle.querySelector("#dark-icon").classList.add("hidden");
+        lightIcon.classList.remove("hidden");
+        darkIcon.classList.add("hidden");
       }
     });
-    // Al cargar, aplica la preferencia guardada
-    if (localStorage.getItem("theme") === "dark") {
-      document.documentElement.classList.add("dark");
-      darkToggle.querySelector("#light-icon").classList.add("hidden");
-      darkToggle.querySelector("#dark-icon").classList.remove("hidden");
-    }
   }
 }

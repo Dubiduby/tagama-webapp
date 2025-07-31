@@ -12,32 +12,41 @@ export default async function home(container) {
   const categories = await getCachedCategories();
   const subcategories = await getCachedSubcategories();
   const app = document.getElementById("app");
-  app.className = "bg-[var(--color-bg)] ";
+  app.className = "bg-[var(--color-bg)] px-4";
+
+  const main = document.getElementById("main");
+  main.className = "flex-1 py-20 md:py-20";
+
   // Search
   const searchInput = document.createElement("input");
   searchInput.type = "text";
   searchInput.placeholder = "Buscar taller...";
-  searchInput.className = "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-white focus:border-light-orange focus:outline-none";
+  searchInput.className =
+    "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-[var(--color-bg)] dark:border-opacity-20 focus:border-light-orange focus:outline-none";
 
   // Botón para mostrar/ocultar filtros
   const filtersToggleBtn = document.createElement("button");
   filtersToggleBtn.textContent = "Filtros";
-  filtersToggleBtn.className = "block px-3 py-1 bg-[var(--color-text)] text-[#fafafa] border-none rounded-lg text-lg font-semibold cursor-pointer transition-colors duration-200 ml-2 whitespace-nowrap hover:bg-[#5f6155] dark:text-dark-bg dark:hover:bg-[#d8c3a9]";
+  filtersToggleBtn.className =
+    "block px-6 py-1 bg-[var(--color-text)] text-[#fafafa] border-none rounded-full text-lg font-semibold cursor-pointer transition-colors duration-200 ml-2 whitespace-nowrap hover:bg-[#5f6155] dark:text-dark-bg dark:hover:bg-[#d8c3a9]";
 
   // Search and filters container
   const searchContainer = document.createElement("div");
-  searchContainer.className = "bg-[var(--color-bg)] w-full flex flex-row items-center gap-3 mb-3 max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] justify-center";
+  searchContainer.className =
+    "bg-[var(--color-bg)] w-full flex flex-row items-center gap-3 mb-3 max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] justify-center";
   searchContainer.appendChild(searchInput);
   searchContainer.appendChild(filtersToggleBtn);
 
   // All filters container
   const allFiltersContainer = document.createElement("div");
-  allFiltersContainer.className = "bg-[var(--color-bg)] w-full pt-32 max-w-[1100px] mx-auto mb-8 flex flex-col items-center md:max-w-[900px] lg:max-w-[1100px]";
+  allFiltersContainer.className =
+    "bg-[var(--color-bg)] w-full pt-10 max-w-[1100px] mx-auto flex flex-col items-center md:max-w-[900px] lg:max-w-[1100px]";
   allFiltersContainer.appendChild(searchContainer);
 
   // Filtros
   const filterContainer = document.createElement("div");
-  filterContainer.className = "w-full flex flex-row justify-center gap-16 flex-wrap gap-3 items-center bg-white p-4 rounded-xl mb-6  max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] md:gap-4 md:p-6 lg:gap-6 lg:p-8 lg:rounded-2xl hidden dark:bg-dark-bg";
+  filterContainer.className =
+    "w-full flex flex-row justify-center gap-16 flex-wrap gap-3 items-center bg-white p-4 rounded-xl mb-6  max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] md:gap-4 md:p-6 lg:gap-6 lg:p-8 lg:rounded-2xl hidden dark:bg-dark-bg";
 
   // Mostrar/ocultar filtros al hacer click
   filtersToggleBtn.addEventListener("click", () => {
@@ -46,7 +55,8 @@ export default async function home(container) {
 
   // Categoría
   const categoriesFilter = document.createElement("select");
-  categoriesFilter.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)]  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none  dark:text-white dark:border-opacity-20 ";
+  categoriesFilter.className =
+    "min-w-[160px] md:max-w-[220px] mw-full flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)]  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none  dark:text-white dark:border-opacity-20 ";
   const defaultOption = document.createElement("option");
   defaultOption.value = "";
   defaultOption.textContent = "Todas las categorías";
@@ -61,7 +71,8 @@ export default async function home(container) {
 
   // Subcategoría
   const subcategoriesFilter = document.createElement("select");
-  subcategoriesFilter.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 bg-[var(--color-bg)] rounded  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
+  subcategoriesFilter.className =
+    "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 bg-[var(--color-bg)] rounded  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
   const defaultSubcategoryOption = document.createElement("option");
   defaultSubcategoryOption.value = "";
   defaultSubcategoryOption.textContent = "Todas las subcategorías";
@@ -76,11 +87,13 @@ export default async function home(container) {
   // Fecha por meses
   const monthInput = document.createElement("input");
   monthInput.type = "month";
-  monthInput.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
+  monthInput.className =
+    "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
 
   // Ordenar por
   const orderSelect = document.createElement("select");
-  orderSelect.className = "min-w-[160px] max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
+  orderSelect.className =
+    "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
   [
     { value: "recent", text: "Próximos" },
     { value: "oldest", text: "Más lejanos" },
@@ -98,17 +111,18 @@ export default async function home(container) {
   spotsCheckbox.type = "checkbox";
   spotsCheckbox.className = "accent-[#6c2ccc]";
   const spotsLabel = document.createElement("label");
-  spotsLabel.className = "flex items-center gap-2 text-base cursor-pointer select-none text-dark-bg dark:text-light-bg";
+  spotsLabel.className =
+    "flex items-center gap-2 text-base cursor-pointer select-none text-dark-bg dark:text-light-bg";
   spotsLabel.textContent = "Solo con plazas disponibles";
   spotsLabel.appendChild(spotsCheckbox);
 
   // Botón para resetear filtros
   const resetButton = document.createElement("button");
   resetButton.textContent = "Limpiar";
-  resetButton.className =  `
-  min-w-[120px] max-w-[120px] w-full flex-1
+  resetButton.className = `
+  min-w-[120px] md:max-w-[120px] w-full flex-1
   px-4 py-2 mt-1
-  bg-dark-orange text-[#fafafa] rounded text-base font-medium
+  bg-dark-orange text-[#fafafa] rounded-full text-base font-medium
   cursor-pointer transition-colors transition-transform duration-200
   shadow-sm hover:shadow-md
   transform  hover:scale-[1.02] active:scale-[0.98]
@@ -118,7 +132,8 @@ export default async function home(container) {
 
   //clear and spots container
   const filterClearContainer = document.createElement("div");
-  filterClearContainer.className = "w-full flex items-center justify-center gap-12  ";
+  filterClearContainer.className =
+    "w-full flex items-center justify-center gap-12  ";
   filterClearContainer.appendChild(spotsLabel);
   filterClearContainer.appendChild(resetButton);
 
@@ -130,13 +145,13 @@ export default async function home(container) {
 
   // filterContainer.appendChild(spotsLabel);
   // filterContainer.appendChild(resetButton);
-   filterContainer.appendChild(filterClearContainer);
+  filterContainer.appendChild(filterClearContainer);
   allFiltersContainer.appendChild(filterContainer);
- 
 
   // Workshops list
   const workshopsContainer = document.createElement("div");
-  workshopsContainer.className = "w-full flex flex-wrap gap-8 justify-center items-center py-8";
+  workshopsContainer.className =
+    "w-full flex flex-wrap gap-8 justify-center items-center py-8";
 
   // --- Paginación: contenedor global ---
   const paginationContainer = document.createElement("div");
@@ -288,7 +303,8 @@ export default async function home(container) {
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "Anterior";
     prevBtn.disabled = currentPage === 1;
-    prevBtn.className = "bg-white border-2 border-[#2563eb] text-[#2563eb] px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2563eb] hover:text-white hover:border-[#2563eb] focus-visible:bg-[#2563eb] focus-visible:text-white focus-visible:border-[#2563eb]";
+    prevBtn.className =
+      "bg-white border-2 border-[#2563eb] text-[#2563eb] px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2563eb] hover:text-white hover:border-[#2563eb] focus-visible:bg-[#2563eb] focus-visible:text-white focus-visible:border-[#2563eb]";
     prevBtn.onclick = () => {
       currentPage--;
       filterAndRender();
@@ -305,7 +321,8 @@ export default async function home(container) {
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Siguiente";
     nextBtn.disabled = currentPage === totalPages;
-    nextBtn.className = "bg-white border-2 border-[#2563eb] text-[#2563eb] px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2563eb] hover:text-white hover:border-[#2563eb] focus-visible:bg-[#2563eb] focus-visible:text-white focus-visible:border-[#2563eb]";
+    nextBtn.className =
+      "bg-white border-2 border-[#2563eb] text-[#2563eb] px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2563eb] hover:text-white hover:border-[#2563eb] focus-visible:bg-[#2563eb] focus-visible:text-white focus-visible:border-[#2563eb]";
     nextBtn.onclick = () => {
       currentPage++;
       filterAndRender();

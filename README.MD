@@ -1,180 +1,247 @@
-🎓 Tagama - Plataforma de Talleres
+# 🎓 Tagama – Creative Workshop Platform
 
-Una aplicación web moderna para la gestión y participación en talleres tecnológicos, desarrollada con JavaScript vanilla, Tailwind CSS y APIs externas.
-Proyecto que forma parte del Bootcamp experta en JavaScript de HerTech.
+A modern web application for discovering and managing creative workshops in **Tenerife, Canary Islands**, developed with **vanilla JavaScript**, **Tailwind CSS**, and external APIs.  
+Created as part of the _JavaScript Expert Bootcamp_ by **HerTech** and **LaRueca**, funded by **Provivienda**.
 
-## 📋 Tabla de Contenidos
+![Tagama logo light](/src/assets/images/logo/Tagama-light-background-horiz.svg)
+![Tagama logo dark](/src/assets/images/logo/Tagama-dark-background-horiz.svg)
 
-- [Características](#-características)
-- [Arquitectura Técnica](#-arquitectura-técnica)
-- [Instalación y Configuración](#-instalación-y-configuración)
-- [Guía de Uso](#-guía-de-uso)
-- [Estructura del Proyecto](#-estructura-del-proyecto)
-- [APIs y Servicios Externos](#-apis-y-servicios-externos)
-- [Tecnologías Utilizadas](#-tecnologías-utilizadas)
-- [Contribución](#-contribución)
+---
 
-## ✨ Características
+## 📋 Table of Contents
 
-### 🎨 Interfaz de Usuario
-- **Diseño Responsivo**: Adaptable a dispositivos móviles y desktop
-- **Tema Claro/Oscuro**: Soporte completo para ambos temas
-- **UI Moderna**: Interfaz intuitiva con Tailwind CSS
-- **Modales Dinámicos**: Formularios y confirmaciones en tiempo real
+- [Features](#-features)
+- [Technical Architecture](#-technical-architecture)
+- [Installation & Setup](#-installation--setup)
+- [External APIs & Services](#-external-apis--services)
+- [Technologies Used](#-technologies-used)
+- [Team & Collaboration](#-team--collaboration)
+- [Authors](#-authors)
+- [License](#-license)
 
-### 🔐 Autenticación y Usuarios
-- **Registro/Login**: Sistema completo de autenticación
-- **Perfiles de Usuario**: Gestión de información personal
-- **Avatares**: Subida de imágenes de perfil con Cloudinary
-- **Sesiones**: Persistencia de datos de usuario
+---
 
-### 📚 Gestión de Talleres
-- **CRUD Completo**: Crear, leer, actualizar y eliminar talleres
-- **Categorías y Subcategorías**: Organización jerárquica
-- **Niveles de Dificultad**: Principiante, Intermedio, Avanzado
-- **Modos de Impartición**: Online y Presencial
-- **Geocodificación**: Conversión automática de direcciones a coordenadas
-- **Mapas Interactivos**: Visualización de ubicaciones con Leaflet
+## ✨ Features
 
-### 🖼️ Gestión de Contenido
-- **Subida de Imágenes**: Integración con Cloudinary
-- **Previsualización**: Vista previa de imágenes antes de subir
-- **Validación de Archivos**: Verificación de tipos y tamaños
+### 🖥️ User Interface
 
-### 📧 Comunicación
-- **Formulario de Contacto**: Integración con EmailJS
-- **Notificaciones Toast**: Feedback en tiempo real
-- **Confirmaciones**: Modales de confirmación personalizados
+- **Responsive Design**: Fully functional across devices
+- **Dark / Light Mode**: Seamless theme switching
+- **Modern Look**: Styled with Tailwind CSS
+- **Interactive Modals**: Dynamic forms and confirmations
 
-## 🏗️ Arquitectura Técnica
+### 🔐 Authentication
 
-### 📁 Estructura de Carpetas
+- **Sign Up / Login**: Full user authentication flow
+- **User Profiles**: Edit personal info and avatar
+- **Persistent Sessions**: Stay logged in between visits
+
+### 🧑‍🏫 Workshop Management
+
+- **Full CRUD**: Create, view, update, and delete workshops
+- **Categories & Subcategories**: Organized workshop listing
+- **Levels & Modes**: Beginner to advanced, online or in-person
+- **Geocoding Integration**: Auto-location from address
+- **Map Display**: Interactive maps using Leaflet
+
+### 🖼️ Media & Content
+
+- **Image Uploads**: Integrated with Cloudinary
+- **Image Previews**: Before uploading
+- **Validations**: File type and size checks
+
+### 📬 Communication & UX
+
+- **Contact Form**: Sends email with EmailJS
+- **Toast Notifications**: Real-time feedback to users
+- **Custom Confirm Modals**: Personalized confirmations
+
+---
+
+## 🏗️ Technical Architecture
+
+### 📁 Folder Structure
 
 ```
 src/
-├── api/                    # Capa de acceso a datos
-│   ├── apiCategories.js    # API para categorías
-│   ├── apiUsers.js        # API para usuarios
-│   └── apiWorkshops.js    # API para talleres
-├── components/            # Componentes reutilizables
-│   ├── cards.js          # Tarjetas de talleres
-│   └── modals/           # Modales del sistema
-│       └── formModal.js  # Modal de formularios
-├── utils/                # Utilidades y helpers
-│   ├── day.js           # Configuración de fechas
-│   ├── leaflet.js       # Configuración de mapas
-│   └── toastify.js      # Sistema de notificaciones
-├── views/               # Vistas principales
-│   ├── contact.js       # Página de contacto
-│   ├── detail.js        # Detalle de taller
-│   ├── login.js         # Página de login
-│   ├── profile.js       # Perfil de usuario
-│   ├── signup.js        # Página de registro
-│   └── workshops.js     # Lista de talleres
-└── assets/              # Recursos estáticos
+├── api/
+│   ├── apiCategories.js
+│   ├── apiUsers.js
+│   └── apiWorkshops.js
+├── components/
+│   ├── cards.js
+│   └── modals/
+│       └── formModal.js
+├── utils/
+│   ├── day.js
+│   ├── leaflet.js
+│   └── toastify.js
+├── views/
+│   ├── contact.js
+│   ├── detail.js
+│   ├── login.js
+│   ├── profile.js
+│   ├── signup.js
+│   └── workshops.js
+└── assets/
     └── styles/
-        └── main.css     # Variables CSS globales
+        └── main.css
 ```
 
-## 🚀 Instalación y Configuración
+---
 
-### Prerrequisitos
-- Navegador web moderno
-- Conexión a internet (para APIs externas)
+## 🚀 Installation & Setup
 
-### Pasos de Instalación
+### Prerequisites
 
-1. **Clonar el repositorio**
+- Modern web browser
+- Internet connection (for external APIs)
+
+### Steps
+
+1. **Clone the repository**
+
    ```bash
-   git clone [url-del-repositorio]
-   cd her-tech-workshops
+   git clone [repository-url]
+   cd tagama-workshops
    ```
 
-2. **Abrir el proyecto**
+2. **Open the project**
+
    ```bash
-   # Usar un servidor local (recomendado)
-   python -m http.server 8000
-   # O usar Live Server en VS Code
+   # Use Live Server in VS Code or open index.html directly
    ```
 
-3. **Acceder a la aplicación**
-   ```
-   http://localhost:8000
-   ```
+---
 
+## 🧭 User Guide
 
-## 🔧 APIs y Servicios Externos
+### Public Access
+
+- **Landing page**
+- **About Us**
+- **Contact page**
+
+### Requires Login
+
+- **Workshop list and filtering**
+- **Workshop detail**
+- **Save and join workshops**
+- **Create, edit, and delete own workshops**
+- **Profile page with edit and delete account**
+
+---
+
+## 🔧 External APIs & Services
 
 ### **MockAPI**
-- **Propósito**: Base de datos para usuarios, talleres y categorías
-- **Configuración**: URLs en archivos `api/*.js`
-- **Estructura**:
-  ```json
-  {
-    "users": [
-      {
-        "id": "1",
-        "name": "Usuario",
-        "email": "usuario@email.com",
-        "avatar": "url_imagen"
-      }
-    ],
-    "workshops": [
-      {
-        "id": "1",
-        "title": "Taller de JavaScript",
-        "instructorName": "Instructor",
-        "coordinates": {"lat": 28.4636, "lng": -16.2518}
-      }
-    ]
-  }
-  ```
+
+- **Purpose**: Simulated backend for users, workshops, categories and subcategories
+- **Setup**: Endpoints configured in `api/*.js`
 
 ### **Cloudinary**
-- **Propósito**: Almacenamiento de imágenes
-- **Configuración**: Upload preset y cloud name
-- **Uso**: Subida automática de imágenes de talleres y avatares
+
+- **Purpose**: Image storage and delivery
+- **Usage**: Avatar and workshop image uploads
 
 ### **EmailJS**
-- **Propósito**: Envío de emails de contacto
-- **Configuración**: Template y credenciales
-- **Uso**: Formulario de contacto en tiempo real
+
+- **Purpose**: Email sending via contact form
+- **Usage**: Real-time form submission
 
 ### **Nominatim (OpenStreetMap)**
-- **Propósito**: Geocodificación de direcciones
-- **Configuración**: No requiere configuración
-- **Uso**: Conversión automática de direcciones a coordenadas
+
+- **Purpose**: Address-to-coordinates conversion
+- **Usage**: Geolocation for workshop addresses
 
 ### **Leaflet**
-- **Propósito**: Visualización de mapas interactivos
-- **Configuración**: CDN incluido en HTML
-- **Uso**: Mostrar ubicaciones de talleres presenciales
 
-## 🛠️ Tecnologías Utilizadas
+- **Purpose**: Interactive map rendering
+- **Usage**: Show locations of in-person workshops
+
+---
+
+## 🛠️ Technologies Used
 
 ### **Frontend**
-- **JavaScript ES6+**: Lógica de aplicación
-- **Tailwind CSS**: Framework de estilos
-- **HTML5**: Estructura semántica
-- **CSS3**: Variables
 
-### **APIs y Servicios**
-- **MockAPI**: Base de datos simulada
-- **Cloudinary**: Gestión de imágenes
-- **EmailJS**: Servicio de emails
-- **Nominatim**: Geocodificación
-- **Leaflet**: Mapas interactivos
+- **JavaScript ES6+**
+- **Tailwind CSS**
+- **HTML5**
+- **CSS3** (with custom properties)
 
-### **Utilidades**
-- **Day.js**: Manejo de fechas
-- **Toastify**: Notificaciones
+### **APIs & Services**
 
+- **MockAPI**
+- **Cloudinary**
+- **EmailJS**
+- **Nominatim**
+- **Leaflet**
 
-## 📄 Licencia
+### **Utilities**
 
-Este proyecto está bajo la Licencia MIT. Ver archivo `LICENSE` para más detalles.
+- **Day.js**: Date formatting
+- **Toastify**: Notifications
 
-## 👥 Autores
+---
 
-- **Desarrolladores Principales**: Carolina, Yesenia Medina, Tracy Medina
+## 🤝 Team & Collaboration
 
+### 🧩 Tools for Teamwork & Documentation
+
+- **Trello**: Task management
+- **Discord**: Communication
+- **FigJam**: Project documentation:
+  - MVP definition
+  - PRD
+  - User flow diagrams
+  - Content and structure maps
+  - Visual documentation (wireframes via Whimsical)
+
+### 📈 From MVP to Final Delivery
+
+The team achieved all core objectives except integration with **Unsplash**. Additional features like **landing page**, **about us**, **contact form**, **dark mode**, and **simulated payments** were implemented.
+
+The project scope was narrowed to Tenerife to give it a more **local, artisanal, and human identity**.
+
+> **Next steps**: Add Unsplash API, reviews, and waiting lists.
+
+📎 Access to FigJam:  
+[https://www.figma.com/board/jSRhWP6x6qrpY8VS6zac08/Proyecto-final-Her-Tech](https://www.figma.com/board/jSRhWP6x6qrpY8VS6zac08/Proyecto-final-Her-Tech?node-id=0-1&t=RltlJ4fb4WPj1WlV-1)
+
+---
+
+## 🎨 Visual Identity
+
+Tagama’s design is inspired by **earthy, natural elements**, reflecting creativity, community, and artisan values.  
+It features:
+
+- **Organic typography**
+- **Spiral symbol** evoking natural cycles and creativity
+- **Colors**:
+  - Muted green-gray
+  - Terracotta
+  - Beige
+- Used on both **light and dark backgrounds**
+- Subtitles such as `TALLERES` appear in **uppercase**
+- Visual elements reinforce a **local, grounded, and handcrafted feel**
+
+---
+
+## 💡 Contribution
+
+This was a learning project developed in a bootcamp setting. While external contributions aren’t expected, feel free to fork or explore for educational purposes.
+
+---
+
+## 👥 Authors
+
+- **Carolina Melian**
+- **Yesenia Medina**
+- **Tracy Medina**
+
+---
+
+## 📄 License
+
+This project is licensed under the MIT License. See the `LICENSE` file for details.

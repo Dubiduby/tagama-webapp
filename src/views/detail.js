@@ -19,6 +19,7 @@ import { navigate } from "../router.js";
 export default async function detail(container, id) {
   // Limpia solo el container, no el body
   container.innerHTML = "";
+
   const currentUser = getCurrentUser();
   let isEnrolled = currentUser.enrolledWorkshops.includes(id);
 
