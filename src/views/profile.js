@@ -177,7 +177,7 @@ export default async function profile(container) {
   const logoutBtn = $(
     "button",
     {
-      class: "w-full mt-6 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition",
+      class: "w-full mt-6 bg-[#797b6c] dark:bg-[#797b6c] text-white font-bold py-2 px-6 rounded-full hover:bg-[#ad5733] dark:hover:bg-[#f49167] transition",
       onclick: () => {
         localStorage.removeItem("currentUser");
         window.location.href = "/login";
@@ -198,38 +198,45 @@ export default async function profile(container) {
       onsubmit: async (e) => {
         e.preventDefault();
 
-        const newName = nameInput.value ? nameInput.value : user.name;
-        const newEmail = emailInput.value ? emailInput.value : user.email;
-        const newPassword = passInput.value ? passInput.value : user.password;
-        const newRepeat = repeatInput.value ? repeatInput.value : user.password;
+        // Solo actualizar los campos que han sido modificados
+        const updatedUser = { ...user };
+        let hasChanges = false;
 
-        if (
-          !validation({
-            name: newName,
-            email: newEmail,
-            password: newPassword,
-          })
-        ) {
-          return;
+        // Verificar si el nombre ha cambiado
+        if (nameInput.value && nameInput.value !== user.name) {
+          updatedUser.name = nameInput.value;
+          hasChanges = true;
         }
 
-        if (passInput.value && passInput.value !== repeatInput.value) {
-          showToast("Las contraseñas no coinciden.", "error");
-          return;
+        // Verificar si el email ha cambiado
+        if (emailInput.value && emailInput.value !== user.email) {
+          updatedUser.email = emailInput.value;
+          hasChanges = true;
         }
 
-        const updatedUser = {
-          ...user,
-          name: newName,
-          email: newEmail,
-          password: newPassword,
-        };
+        // Verificar si la contraseña ha cambiado
+        if (passInput.value && passInput.value !== user.password) {
+          if (passInput.value !== repeatInput.value) {
+            showToast("Las contraseñas no coinciden.", "error");
+            return;
+          }
+          updatedUser.password = passInput.value;
+          hasChanges = true;
+        }
 
-        if (
-          newName === user.name &&
-          newEmail === user.email &&
-          !passInput.value
-        ) {
+        // Validar solo los campos que se van a actualizar
+        const fieldsToValidate = {};
+        if (updatedUser.name !== user.name) fieldsToValidate.name = updatedUser.name;
+        if (updatedUser.email !== user.email) fieldsToValidate.email = updatedUser.email;
+        if (updatedUser.password !== user.password) fieldsToValidate.password = updatedUser.password;
+
+        if (Object.keys(fieldsToValidate).length > 0) {
+          if (!validation(fieldsToValidate)) {
+            return;
+          }
+        }
+
+        if (!hasChanges) {
           showToast("No hay cambios para guardar.", "info");
           return;
         }
@@ -238,6 +245,15 @@ export default async function profile(container) {
           const result = await updateUserById(user.id, updatedUser);
           localStorage.setItem("currentUser", JSON.stringify(result));
           showToast("¡Perfil actualizado!", "success");
+          
+          // Limpiar solo los campos que se actualizaron
+          if (updatedUser.name !== user.name) nameInput.value = "";
+          if (updatedUser.email !== user.email) emailInput.value = "";
+          if (updatedUser.password !== user.password) {
+            passInput.value = "";
+            repeatInput.value = "";
+          }
+          
           setTimeout(() => window.location.reload(), 1200);
         } catch (err) {
           showToast("Error al actualizar el perfil.", "error");
@@ -289,7 +305,7 @@ export default async function profile(container) {
     "button",
     { 
       type: "button", 
-      class: "mt-2 bg-gray-500 text-white font-bold py-2 px-6 rounded-full hover:bg-gray-600 transition" 
+      class: "flex-1 bg-gray-500 text-white font-bold py-2 px-6 rounded-full hover:bg-gray-600 transition" 
     },
     "Cancelar"
   );
@@ -304,9 +320,14 @@ export default async function profile(container) {
   // Botón guardar cambios
   const submitBtn = $(
     "button",
-    { type: "submit", class: "mt-2 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition" },
+    { type: "submit", class: "flex-1 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition" },
     "Guardar cambios"
   );
+
+  // Contenedor para los botones
+  const buttonContainer = $("div", { class: "flex gap-4 mt-6" });
+  buttonContainer.appendChild(submitBtn);
+  buttonContainer.appendChild(cancelBtn);
 
   // Zona de peligro
   let deleteToastId = null;
@@ -362,8 +383,7 @@ export default async function profile(container) {
   form.appendChild(emailDiv);
   form.appendChild(passDiv);
   form.appendChild(repeatDiv);
-  form.appendChild(submitBtn);
-  form.appendChild(cancelBtn);
+  form.appendChild(buttonContainer);
   form.appendChild(dangerArea);
 
   formDiv.appendChild(form);

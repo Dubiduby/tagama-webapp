@@ -7,91 +7,118 @@ import { validation } from "../utils/validations.js";
 export default function signUp(container) {
   container.innerHTML = "";
 
-  // Contenedor principal
-  const newUserDiv = document.createElement("div");
-  newUserDiv.className = "max-w-sm mx-auto mt-16 p-10 bg-white rounded-xl shadow-lg flex flex-col items-center";
-  container.appendChild(newUserDiv);
+  // Wrapper principal centrado
+  const wrapper = document.createElement("div");
+  wrapper.className = "max-w-md mx-auto px-4 py-12";
 
-  // Formulario
+  // Título y subtítulo centrados encima del formulario
+  const headerInfo = document.createElement("div");
+  headerInfo.className = "text-center mb-8";
+
+  const title = document.createElement("h1");
+  title.className = "text-3xl md:text-4xl font-extrabold text-[#1e1d1d] dark:text-white mb-4";
+  title.textContent = "Únete a HerTech";
+
+  const subtitle = document.createElement("p");
+  subtitle.className = "text-lg text-[var(--color-gray)] dark:text-[var(--color-text)] mb-6";
+  subtitle.textContent = "Crea tu cuenta y comienza a explorar talleres creativos increíbles.";
+
+  headerInfo.appendChild(title);
+  headerInfo.appendChild(subtitle);
+
   const form = document.createElement("form");
-  form.className = "w-full flex flex-col gap-4";
-  newUserDiv.appendChild(form);
+  form.className = "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700";
 
-  // Título
-  const h1 = document.createElement("h1");
-  h1.className = "text-center text-3xl font-bold mb-5 text-indigo-600";
-  h1.textContent = "Registro";
-  form.appendChild(h1);
-
-  // Función para crear inputs con estilos consistentes
-  function createInput(type, id, name, labelText, required = true) {
-    const label = document.createElement("label");
-    label.htmlFor = id;
-    label.className = "text-base text-gray-700 mb-1";
-    label.innerHTML = `${labelText} <span class="text-red-500">*</span>`;
-
+  // Función para crear inputs con estilos de contact.js
+  function createInput(type, id, placeholder) {
     const input = document.createElement("input");
     input.type = type;
+    input.placeholder = placeholder;
+    input.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
     input.id = id;
-    input.name = name;
-    input.required = required;
-    input.className = "px-4 py-3 border border-gray-300 rounded-md text-base bg-gray-50 focus:border-indigo-500 focus:outline-none focus:bg-white transition-colors";
-
-    return { label, input };
+    return input;
   }
 
-  // Crear inputs
-  const { label: labelName, input: inputName } = createInput("text", "signup-name", "name", "Nombre");
-  const { label: labelEmail, input: inputEmail } = createInput("email", "signup-email", "email", "Email");
-  const { label: labelPassword, input: inputPassword } = createInput("password", "signup-password", "password", "Contraseña");
-  const { label: labelRepeat, input: inputRepeat } = createInput("password", "signup-repeat", "repeat", "Repetir contraseña");
+  // Nombre
+  const nameDiv = document.createElement("div");
+  const nameLabel = document.createElement("label");
+  nameLabel.setAttribute("for", "signup-name");
+  nameLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  nameLabel.textContent = "Nombre";
+  const nameInput = createInput("text", "signup-name", "Tu nombre completo");
+  nameDiv.appendChild(nameLabel);
+  nameDiv.appendChild(nameInput);
 
-  // Agregar inputs al formulario
-  form.appendChild(labelName);
-  form.appendChild(inputName);
-  form.appendChild(labelEmail);
-  form.appendChild(inputEmail);
-  form.appendChild(labelPassword);
-  form.appendChild(inputPassword);
-  form.appendChild(labelRepeat);
-  form.appendChild(inputRepeat);
+  // Email
+  const emailDiv = document.createElement("div");
+  const emailLabel = document.createElement("label");
+  emailLabel.setAttribute("for", "signup-email");
+  emailLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  emailLabel.textContent = "Email";
+  const emailInput = createInput("email", "signup-email", "tu@email.com");
+  emailDiv.appendChild(emailLabel);
+  emailDiv.appendChild(emailInput);
 
-  // Texto pequeño
-  const small = document.createElement("small");
-  small.className = "text-sm text-gray-600 text-center";
-  small.textContent = "(*) Todos los campos son obligatorios.";
-  form.appendChild(small);
+  // Contraseña
+  const passwordDiv = document.createElement("div");
+  const passwordLabel = document.createElement("label");
+  passwordLabel.setAttribute("for", "signup-password");
+  passwordLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  passwordLabel.textContent = "Contraseña";
+  const passwordInput = createInput("password", "signup-password", "Mínimo 6 caracteres");
+  passwordDiv.appendChild(passwordLabel);
+  passwordDiv.appendChild(passwordInput);
+
+  // Repetir contraseña
+  const repeatDiv = document.createElement("div");
+  const repeatLabel = document.createElement("label");
+  repeatLabel.setAttribute("for", "signup-repeat");
+  repeatLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  repeatLabel.textContent = "Repetir contraseña";
+  const repeatInput = createInput("password", "signup-repeat", "Confirma tu contraseña");
+  repeatDiv.appendChild(repeatLabel);
+  repeatDiv.appendChild(repeatInput);
 
   // Botón de registro
-  const button = document.createElement("button");
-  button.type = "submit";
-  button.className = "px-4 py-3 bg-indigo-600 text-white rounded-md text-lg font-semibold cursor-pointer hover:bg-indigo-700 transition-colors";
-  button.textContent = "Registrarse";
-  form.appendChild(button);
+  const submitBtn = document.createElement("button");
+  submitBtn.type = "submit";
+  submitBtn.className = "mt-6 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
+  submitBtn.textContent = "Crear cuenta";
 
   // Texto de login
   const loginText = document.createElement("p");
-  loginText.className = "text-center text-sm mt-2 text-gray-600";
+  loginText.className = "text-center text-sm mt-4 text-gray-600 dark:text-gray-400";
   
   const loginLink = document.createElement("a");
   loginLink.href = "/login";
   loginLink.setAttribute("data-link", "");
   loginLink.id = "login-link";
   loginLink.textContent = "¡Inicia sesión!";
-  loginLink.className = "text-indigo-600 font-medium hover:text-indigo-700 hover:underline transition-colors";
+  loginLink.className = "text-[#ad5733] dark:text-[#f49167] font-medium hover:underline transition-colors";
 
-  loginText.innerHTML = "¿Ya tienes una cuenta? ";
+  loginText.appendChild(document.createTextNode("¿Ya tienes una cuenta? "));
   loginText.appendChild(loginLink);
+
+  // Añadir campos al form
+  form.appendChild(nameDiv);
+  form.appendChild(emailDiv);
+  form.appendChild(passwordDiv);
+  form.appendChild(repeatDiv);
+  form.appendChild(submitBtn);
   form.appendChild(loginText);
+
+  wrapper.appendChild(headerInfo);
+  wrapper.appendChild(form);
+  container.appendChild(wrapper);
 
   // Event listener para el formulario
   form.addEventListener("submit", async (event) => {
     event.preventDefault();
     try {
-      const signupName = inputName.value.trim();
-      const signupEmail = inputEmail.value.trim();
-      const signupPassword = inputPassword.value.trim();
-      const signupRepPassword = inputRepeat.value.trim();
+      const signupName = nameInput.value.trim();
+      const signupEmail = emailInput.value.trim();
+      const signupPassword = passwordInput.value.trim();
+      const signupRepPassword = repeatInput.value.trim();
 
       if (signupPassword !== signupRepPassword) {
         showToast("Las contraseñas no coinciden", "error");
