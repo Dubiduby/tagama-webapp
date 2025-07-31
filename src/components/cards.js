@@ -21,8 +21,8 @@ export function workshopCards(workshop, subcategory, category) {
   // Card container
   const card = document.createElement("div");
   card.className =
-    "w-96 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px] ";
-  // "bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden w-96 flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px]";
+    "w-96 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px] dark:hover:shadow-[0_6px_24px_rgba(255,255,255,0.08)]";
+  
 
   // Card image container
   const imageUrl = workshop.imageUrl
@@ -308,19 +308,9 @@ function renderButtonIcon() {
   const durationSpan = document.createElement("span");
   durationSpan.className =
     "text-[var(--color-text)] flex items-center gap-[0.4em]";
+  durationSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>  ${workshop.duration} h`;
 
-  // const hours = Math.floor(workshop.duration / 60);
-  // const minutes = workshop.duration % 60;
-  // const formattedDuration =
-  //   hours > 0
-  //     ? `${hours}h${minutes > 0 ? ` ${minutes}min` : ""}`
-  //     : `${minutes} min`;
-  const hours = Math.floor(workshop.duration / 60);
-  const minutes = workshop.duration % 60;
-  const formattedDuration =
-    minutes === 0 ? `${hours}h` : `${hours}h ${minutes}min`;
-  durationSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>  ${formattedDuration}`;
-
+  // Spots
   const spots = document.createElement("span");
   spots.className = "text-[var(--color-text)] flex items-center gap-[0.4em]";
   spots.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange">
@@ -334,7 +324,7 @@ function renderButtonIcon() {
     workshop.price === 0 ? "Gratis" : `${workshop.price}€`;
 
   workshopPrice.className =
-    "text-[#797b6c]  font-bold text-[#1a1a1a] text-lg dark:text-[#f4f2f0]";
+    "text-dark-bg  font-bold text-[#1a1a1a] text-lg dark:text-[#f4f2f0]";
 
   const price_spots = document.createElement("div");
   price_spots.className = "flex  gap-60 items-center ";
