@@ -5,81 +5,94 @@ import { navigate } from "../router.js";
 export default function login(container) {
   container.innerHTML = "";
 
-  const app = document.getElementById("app");
+  // Wrapper principal centrado
+  const wrapper = document.createElement("div");
+  wrapper.className = "max-w-md mx-auto px-4 py-12";
 
-  // Contenedor principal - usando Tailwind para estructura y colores
-  const loginContainer = document.createElement("div");
-  loginContainer.className = "max-w-sm mx-auto mt-16 p-10 bg-white rounded-xl shadow-lg flex flex-col items-center";
-  
-  // Formulario - usando Tailwind para estructura
-  const loginForm = document.createElement("form");
-  loginForm.className = "w-full flex flex-col gap-4";
+  // Título y subtítulo centrados
+  const headerInfo = document.createElement("div");
+  headerInfo.className = "text-center mb-8";
 
-  // Título - usando Tailwind para estructura y colores
-  const h1 = document.createElement("h1");
-  h1.id = "login-h1";
-  h1.className = "text-center text-3xl font-bold mb-5 text-indigo-600";
-  h1.textContent = "Inicio de sesión";
+  const title = document.createElement("h1");
+  title.className = "text-3xl md:text-4xl font-extrabold text-[#1e1d1d] dark:text-white mb-4";
+  title.textContent = "Bienvenido de vuelta";
 
-  // Función para crear inputs con estilos consistentes
-  function createInput(type, id, placeholder, labelText) {
-    const label = document.createElement("label");
-    label.textContent = labelText;
-    label.setAttribute("for", id);
-    label.className = "text-base text-gray-700 mb-1";
+  const subtitle = document.createElement("p");
+  subtitle.className = "text-lg text-[var(--color-gray)] dark:text-[var(--color-text)] mb-6";
+  subtitle.textContent = "Inicia sesión para continuar explorando talleres creativos.";
 
+  headerInfo.appendChild(title);
+  headerInfo.appendChild(subtitle);
+
+  const form = document.createElement("form");
+  form.className = "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700";
+
+  // Función para crear inputs con estilos de contact.js
+  function createInput(type, id, placeholder) {
     const input = document.createElement("input");
     input.type = type;
-    input.id = id;
     input.placeholder = placeholder;
-    input.name = type === "email" ? "email" : "password";
-    input.className = "px-4 py-3 border border-gray-300 rounded-md text-base bg-gray-50 focus:border-indigo-500 focus:outline-none focus:bg-white transition-colors";
-
-    return { label, input };
+    input.className = "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
+    input.id = id;
+    return input;
   }
 
-  // Crear inputs
-  const { label: emailLabel, input: loginEmail } = createInput("email", "login-email", "Ingresa tu mejor email", "Email:");
-  const { label: passwordLabel, input: loginPassword } = createInput("password", "login-password", "Ingresa una contraseña segura", "Contraseña:");
+  // Email
+  const emailDiv = document.createElement("div");
+  const emailLabel = document.createElement("label");
+  emailLabel.setAttribute("for", "login-email");
+  emailLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  emailLabel.textContent = "Email";
+  const emailInput = createInput("email", "login-email", "Ingresa tu mejor email");
+  emailDiv.appendChild(emailLabel);
+  emailDiv.appendChild(emailInput);
 
-  // Botón de envío - usando Tailwind para estructura y colores
-  const submitButton = document.createElement("button");
-  submitButton.type = "submit";
-  submitButton.textContent = "Iniciar Sesión";
-  submitButton.className = "px-4 py-3 bg-indigo-600 text-white rounded-md text-lg font-semibold cursor-pointer hover:bg-indigo-700 transition-colors";
+  // Contraseña
+  const passwordDiv = document.createElement("div");
+  const passwordLabel = document.createElement("label");
+  passwordLabel.setAttribute("for", "login-password");
+  passwordLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  passwordLabel.textContent = "Contraseña";
+  const passwordInput = createInput("password", "login-password", "Ingresa una contraseña segura");
+  passwordDiv.appendChild(passwordLabel);
+  passwordDiv.appendChild(passwordInput);
 
-  // Texto de registro - usando Tailwind para estructura y colores
+  // Botón de envío
+  const submitBtn = document.createElement("button");
+  submitBtn.type = "submit";
+  submitBtn.className = "mt-6 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
+  submitBtn.textContent = "Iniciar Sesión";
+
+  // Texto de registro
   const signupText = document.createElement("p");
-  signupText.className = "text-center text-sm mt-2 text-gray-600";
+  signupText.className = "text-center text-sm mt-4 text-gray-600 dark:text-gray-400";
   
   const signupLink = document.createElement("a");
   signupLink.href = "/signup";
   signupLink.setAttribute("data-link", "");
   signupLink.id = "signup-link";
   signupLink.textContent = "¡Regístrate!";
-  signupLink.className = "text-indigo-600 font-medium hover:text-indigo-700 hover:underline transition-colors";
+  signupLink.className = "text-[#ad5733] dark:text-[#f49167] font-medium hover:underline transition-colors";
 
-  signupText.innerHTML = "¿No tienes una cuenta? ";
+  signupText.appendChild(document.createTextNode("¿No tienes una cuenta? "));
   signupText.appendChild(signupLink);
 
-  // Ensamblar el formulario
-  loginForm.appendChild(h1);
-  loginForm.appendChild(emailLabel);
-  loginForm.appendChild(loginEmail);
-  loginForm.appendChild(passwordLabel);
-  loginForm.appendChild(loginPassword);
-  loginForm.appendChild(submitButton);
-  loginForm.appendChild(signupText);
-  
-  loginContainer.appendChild(loginForm);
-  app.appendChild(loginContainer);
+  // Añadir campos al form
+  form.appendChild(emailDiv);
+  form.appendChild(passwordDiv);
+  form.appendChild(submitBtn);
+  form.appendChild(signupText);
+
+  wrapper.appendChild(headerInfo);
+  wrapper.appendChild(form);
+  container.appendChild(wrapper);
 
   // Event listener para el formulario
-  loginForm.addEventListener("submit", async (event) => {
+  form.addEventListener("submit", async (event) => {
     event.preventDefault();
 
-    const email = loginEmail.value;
-    const password = loginPassword.value;
+    const email = emailInput.value;
+    const password = passwordInput.value;
 
     if (!email || !password) {
       showToast("Por favor, completa todos los campos.", "error");
@@ -99,7 +112,7 @@ export default function login(container) {
         navigate("/home");
       } else {
         showToast("Email o contraseña incorrectos", "error");
-        loginPassword.value = "";
+        passwordInput.value = "";
       }
     } else {
       showToast("Error inesperado en el inicio de sesión", "error");
