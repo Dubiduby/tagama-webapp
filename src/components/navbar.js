@@ -5,8 +5,10 @@ import { clearCache } from "../utils/cache.js";
 export default function navbar(header) {
   const user = JSON.parse(localStorage.getItem("currentUser") || "null");
   const isLoggedIn = !!user;
-  const theme = localStorage.getItem("theme", "light");
-  console.log("Current theme:", theme);
+
+  const theme = localStorage.getItem("theme");
+  const prefersDark = window.matchMedia("(prefers-color-scheme: dark)").matches;
+  const isDarkMode = theme === "dark" || (!theme && prefersDark);
 
   let authLinks = "";
   if (isLoggedIn) {
@@ -127,24 +129,29 @@ export default function navbar(header) {
 
   // Dark mode toggle
   const darkToggle = header.querySelector("#toggle-dark");
+  const darkIcon = darkToggle?.querySelector("#dark-icon");
+  const lightIcon = darkToggle?.querySelector("#light-icon");
+
   if (darkToggle) {
+    if (isDarkMode) {
+      lightIcon.classList.add("hidden");
+      darkIcon.classList.remove("hidden");
+    } else {
+      lightIcon.classList.remove("hidden");
+      darkIcon.classList.add("hidden");
+    }
+
     darkToggle.addEventListener("click", () => {
-      document.documentElement.classList.toggle("dark");
-      if (document.documentElement.classList.contains("dark")) {
+      const isNowDark = document.documentElement.classList.toggle("dark");
+      if (isNowDark) {
         localStorage.setItem("theme", "dark");
-        darkToggle.querySelector("#light-icon").classList.add("hidden");
-        darkToggle.querySelector("#dark-icon").classList.remove("hidden");
+        lightIcon.classList.add("hidden");
+        darkIcon.classList.remove("hidden");
       } else {
         localStorage.setItem("theme", "light");
-        darkToggle.querySelector("#light-icon").classList.remove("hidden");
-        darkToggle.querySelector("#dark-icon").classList.add("hidden");
+        lightIcon.classList.remove("hidden");
+        darkIcon.classList.add("hidden");
       }
     });
-    // Al cargar, aplica la preferencia guardada
-    if (localStorage.getItem("theme") === "dark") {
-      document.documentElement.classList.add("dark");
-      darkToggle.querySelector("#light-icon").classList.add("hidden");
-      darkToggle.querySelector("#dark-icon").classList.remove("hidden");
-    }
   }
 }

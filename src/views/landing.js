@@ -35,22 +35,26 @@ export default async function landing(container) {
     </div>
     <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-8 mt-8">
       <div class="bg-[var(--color-bg)] rounded-xl p-8 shadow text-center">
-        <div class="text-3xl mb-2">[Icono Comunidad]</div>
+        <div class="text-3xl mb-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-users-round-icon lucide-users-round"><path d="M18 21a8 8 0 0 0-16 0"/><circle cx="10" cy="8" r="5"/><path d="M22 20c0-3.37-2-6.5-4-8a5 5 0 0 0-.45-8.3"/></svg></div>
         <h3 class="text-dark-orange font-bold mt-2 mb-1">Comunidad</h3>
         <p class="text-[var(--color-title)] text-base">Encuentros reales con personas afines que comparten tu pasión por crear y aprender.</p>
       </div>
       <div class="bg-[var(--color-bg)] rounded-xl p-8 shadow text-center">
-        <div class="text-3xl mb-2">[Icono Cercanía]</div>
+        <div class="text-3xl mb-2">
+        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-heart-handshake-icon lucide-heart-handshake"><path d="M19.414 14.414C21 12.828 22 11.5 22 9.5a5.5 5.5 0 0 0-9.591-3.676.6.6 0 0 1-.818.001A5.5 5.5 0 0 0 2 9.5c0 2.3 1.5 4 3 5.5l5.535 5.362a2 2 0 0 0 2.879.052 2.12 2.12 0 0 0-.004-3 2.124 2.124 0 1 0 3-3 2.124 2.124 0 0 0 3.004 0 2 2 0 0 0 0-2.828l-1.881-1.882a2.41 2.41 0 0 0-3.409 0l-1.71 1.71a2 2 0 0 1-2.828 0 2 2 0 0 1 0-2.828l2.823-2.762"/></svg>
+        </div>
         <h3 class="text-dark-orange font-bold mt-2 mb-1">Cercanía</h3>
         <p class="text-[var(--color-title)] text-base">Un proyecto local, hecho con mimo, que celebra el talento y la creatividad de Tenerife.</p>
       </div>
       <div class="bg-[var(--color-bg)] rounded-xl p-8 shadow text-center">
-        <div class="text-3xl mb-2">[Icono Creatividad]</div>
+        <div class="text-3xl mb-2"><svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="size-6">
+        <path stroke-linecap="round" stroke-linejoin="round" d="M9.813 15.904 9 18.75l-.813-2.846a4.5 4.5 0 0 0-3.09-3.09L2.25 12l2.846-.813a4.5 4.5 0 0 0 3.09-3.09L9 5.25l.813 2.846a4.5 4.5 0 0 0 3.09 3.09L15.75 12l-2.846.813a4.5 4.5 0 0 0-3.09 3.09ZM18.259 8.715 18 9.75l-.259-1.035a3.375 3.375 0 0 0-2.455-2.456L14.25 6l1.036-.259a3.375 3.375 0 0 0 2.455-2.456L18 2.25l.259 1.035a3.375 3.375 0 0 0 2.456 2.456L21.75 6l-1.035.259a3.375 3.375 0 0 0-2.456 2.456ZM16.894 20.567 16.5 21.75l-.394-1.183a2.25 2.25 0 0 0-1.423-1.423L13.5 18.75l1.183-.394a2.25 2.25 0 0 0 1.423-1.423l.394-1.183.394 1.183a2.25 2.25 0 0 0 1.423 1.423l1.183.394-1.183.394a2.25 2.25 0 0 0-1.423 1.423Z" />
+        </svg></div>
         <h3 class="text-dark-orange font-bold mt-2 mb-1">Creatividad</h3>
         <p class="text-[var(--color-title)] text-base">Talleres variados para explorar nuevas habilidades y despertar tu lado más artístico.</p>
       </div>
       <div class="bg-[var(--color-bg)] rounded-xl p-8 shadow text-center">
-        <div class="text-3xl mb-2">[Icono Accesibilidad]</div>
+        <div class="text-3xl mb-2"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-check-big-icon lucide-circle-check-big"><path d="M21.801 10A10 10 0 1 1 17 3.335"/><path d="m9 11 3 3L22 4"/></svg></div>
         <h3 class="text-dark-orange font-bold mt-2 mb-1">Accesibilidad</h3>
         <p class="text-[var(--color-title)] text-base">Para todo tipo de personas y presupuestos. Porque la creatividad no tiene límites.</p>
       </div>
