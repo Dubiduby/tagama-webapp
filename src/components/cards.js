@@ -21,7 +21,7 @@ export function workshopCards(workshop, subcategory, category) {
   // Card container
   const card = document.createElement("div");
   card.className =
-    "w-96 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px]";
+    "w-96 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px] ";
   // "bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden w-96 flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px]";
 
   // Card image container
@@ -229,45 +229,41 @@ export function workshopCards(workshop, subcategory, category) {
   // Botón de bookmark (add/save) siempre presente, pero solo funcional si el usuario no es el creador
   const buttonAdd = document.createElement("button");
   buttonAdd.className =
-    "absolute top-3 right-3 bg-[#f7f7f7] border-none rounded-full p-2 cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors duration-200 hover:bg-[#e0e0e0]";
+    "absolute top-3 right-3 bg-white border-none rounded-full p-2 cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors duration-200 hover:bg-[#e0e0e0] dark:bg-[#141414]";
   const isCreator =
     currentUser &&
     currentUser.createdWorkshops &&
     currentUser.createdWorkshops.includes(String(workshop.id));
-  if (
-    currentUser &&
-    currentUser.savedWorkshops &&
-    currentUser.savedWorkshops.includes(workshop.id)
-  ) {
-    buttonAdd.innerHTML = `<img src="${
-      new URL("../assets/images/bookmark-check.svg", import.meta.url).href
-    }" alt="Añadido a la lista" class="w-5 h-5 block object-contain">`;
-  } else {
-    buttonAdd.innerHTML = `<img src="${
-      new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
-    }" alt="Añadir a la lista" class="w-5 h-5 block object-contain">`;
-  }
+
+  // Function to render the button icon based on saved status
+function renderButtonIcon() {
+  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+  const isSaved = currentUser?.savedWorkshops?.includes(String(workshop.id));
+
+  buttonAdd.innerHTML = isSaved
+    ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block object-contain text-black dark:text-white"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></svg>`
+    : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block object-contain text-black dark:text-white"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/><line x1="12" x2="12" y1="7" y2="13"/><line x1="15" x2="9" y1="10" y2="10"/></svg> `;
+}
+
   if (!isCreator) {
+    renderButtonIcon();
     buttonAdd.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
       //always get de update user
       let currentUser = JSON.parse(localStorage.getItem("currentUser"));
       if (!currentUser.savedWorkshops) currentUser.savedWorkshops = [];
-      const idx = currentUser.savedWorkshops.indexOf(workshop.id);
+      const idx = currentUser.savedWorkshops.indexOf(String(workshop.id));
       if (idx === -1) {
-        currentUser.savedWorkshops.push(workshop.id);
-        buttonAdd.innerHTML = `<img src="${
-          new URL("../assets/images/bookmark-check.svg", import.meta.url).href
-        }" alt="Añadido a la lista" class="w-5 h-5 block object-contain">`;
+        currentUser.savedWorkshops.push(String(workshop.id));
+        buttonAdd.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block object-contain text-black dark:text-white"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></svg>`;
       } else {
         currentUser.savedWorkshops.splice(idx, 1);
-        buttonAdd.innerHTML = `<img src="${
-          new URL("../assets/images/bookmark_Plus.svg", import.meta.url).href
-        }" alt="Añadir a la lista" class="w-5 h-5 block object-contain">`;
+        buttonAdd.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block object-contain text-black dark:text-white"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/><line x1="12" x2="12" y1="7" y2="13"/><line x1="15" x2="9" y1="10" y2="10"/></svg> `;
       }
       localStorage.setItem("currentUser", JSON.stringify(currentUser));
       updateUser(currentUser);
+      renderButtonIcon();
     });
   } else {
     // Si es el creador, deshabilita el botón y ocúltalo visualmente
@@ -331,12 +327,16 @@ export function workshopCards(workshop, subcategory, category) {
   durationSpan.className =
     "text-[var(--color-text)] flex items-center gap-[0.4em] font-semibold";
 
+  // const hours = Math.floor(workshop.duration / 60);
+  // const minutes = workshop.duration % 60;
+  // const formattedDuration =
+  //   hours > 0
+  //     ? `${hours}h${minutes > 0 ? ` ${minutes}min` : ""}`
+  //     : `${minutes} min`;
   const hours = Math.floor(workshop.duration / 60);
   const minutes = workshop.duration % 60;
   const formattedDuration =
-    hours > 0
-      ? `${hours}h${minutes > 0 ? ` ${minutes}min` : ""}`
-      : `${minutes} min`;
+    minutes === 0 ? `${hours}h` : `${hours}h ${minutes}min`;
   durationSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>  ${formattedDuration}`;
 
   const spots = document.createElement("span");

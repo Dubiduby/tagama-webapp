@@ -55,16 +55,16 @@ export default async function profile(container) {
   });
 
   // Icon edit image
-  const editAvatarBtn = $(
-    "button",
-    {
-      class: "absolute top-0 right-0 bg-[#ad5733] dark:bg-[#f49167] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition-colors shadow-md",
-      onclick: () => {
-        uploadSection.style.display = "flex";
-      },
-    },
-    "✏️"
-  );
+ const editAvatarBtn = document.createElement("button");
+editAvatarBtn.className =
+  "absolute top-0 right-0 bg-[#ad5733] dark:bg-[#f49167] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition-colors shadow-md";
+editAvatarBtn.onclick = () => {
+  uploadSection.style.display = "flex";
+};
+editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white dark:text-dark-bg">
+  <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
+</svg>`;
+
 
   // Input y upload button
   const fileInput = $("input", {

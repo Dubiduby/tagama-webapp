@@ -13,9 +13,10 @@
 
 .dark {
   --color-bg: #141414 /* Dark background color */;
-  --color-2bg: #1a1a1a;
+  --color-2bg: #202020;
   --color-title: white;
   --color-text: #f1e2c2;
   --color-grey: #b4adad;
   --color-footer: #797b6c;
 }
+/* #1a1a1a */
