@@ -14,7 +14,7 @@ export default {
         "light-yellow": "#f1e2c2",
         "light-orange": "#f49167",
         "light-bg": "#f4f2f0",
-        "dark-bg": "#1e1d1d",
+        "dark-bg": "#1a1a1a",
       }
     },
   },

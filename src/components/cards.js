@@ -40,12 +40,12 @@ export function workshopCards(workshop, subcategory, category) {
 
   const workshopTagCat = document.createElement("span");
   workshopTagCat.className =
-    "bg-[#ad5733] text-[#f1e2c2] rounded-[12px] px-3 py-[2px] text-[0.8rem] font-medium ";
+    "bg-dark-green text-white rounded-[12px] px-3 py-[2px] text-[0.8rem] font-medium ";
   workshopTagCat.textContent = category && category.name ? category.name : "";
 
   const workshopTagSub = document.createElement("span");
   workshopTagSub.className =
-    "bg-[#ad5733] text-[#f1e2c2] rounded-[12px] px-2 py-[2px] text-[0.8rem] font-medium ";
+    "bg-[#ad5733] text-white rounded-[12px] px-2 py-[2px] text-[0.8rem] font-medium ";
   workshopTagSub.textContent =
     subcategory && subcategory.name ? subcategory.name : "";
 
@@ -286,25 +286,46 @@ export function workshopCards(workshop, subcategory, category) {
   // Card details
   const divCardDetails = document.createElement("div");
   divCardDetails.className =
-    "flex flex-col  gap-x-4 gap-y-2 text-[0.95rem] text-[#666]";
+    "flex flex-col  gap-x-4 gap-y-2 text-[0.95rem] ";
 
   const dateSpan = document.createElement("span");
   dateSpan.className =
     " text-[var(--color-text)] flex items-center gap-[0.4em] font-semibold";
-  dateSpan.innerHTML = `<img src="${
-    new URL("../assets/images/calendar.svg", import.meta.url).href
-  }" alt="Calendario" class="w-5 h-5 inline-block object-contain mr-1 align-middle">  ${dayjs
-    .unix(workshop.date)
-    .format("DD/MM/YYYY")}`;
+  dateSpan.innerHTML = `  <svg xmlns="http://www.w3.org/2000/svg"
+       width="18"
+       height="18"
+       viewBox="0 0 24 24"
+       fill="none"
+       stroke="currentColor"
+       stroke-width="2"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange"
+       aria-hidden="true">
+    <path d="M8 2v4"/>
+    <path d="M16 2v4"/>
+    <rect width="18" height="18" x="3" y="4" rx="2"/>
+    <path d="M3 10h18"/>
+  </svg>
+  ${dayjs.unix(workshop.date).format("DD/MM/YYYY")}`;
 
   const locationSpan = document.createElement("span");
   locationSpan.className =
     " text-[var(--color-text)] flex  items-center gap-[0.2rem] font-semibold";
-  locationSpan.innerHTML = `<img src="${
-    new URL("../assets/images/location-pin.svg", import.meta.url).href
-  }" alt="Ubicación" class="w-5 h-5 inline-block object-contain mr-1 align-middle">  ${
-    workshop.mode
-  }`;
+  locationSpan.innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg"
+       width="24"
+       height="24"
+       viewBox="0 0 24 24"
+       fill="none"
+       stroke="currentColor"
+       stroke-width="2"
+       stroke-linecap="round"
+       stroke-linejoin="round"
+       class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange">
+    <path d="M20 10c0 4.993-5.539 10.193-7.399 11.799a1 1 0 0 1-1.202 0C9.539 20.193 4 14.993 4 10a8 8 0 0 1 16 0"/>
+    <circle cx="12" cy="10" r="3"/>
+  </svg>
+  ${workshop.mode}`;
 
   const durationSpan = document.createElement("span");
   durationSpan.className =
@@ -316,16 +337,15 @@ export function workshopCards(workshop, subcategory, category) {
     hours > 0
       ? `${hours}h${minutes > 0 ? ` ${minutes}min` : ""}`
       : `${minutes} min`;
-  durationSpan.innerHTML = `<img src="${
-    new URL("../assets/images/time.svg", import.meta.url).href
-  }" alt="Duración" class="w-5 h-5 inline-block object-contain mr-1 align-middle"> ${formattedDuration}`;
+  durationSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>  ${formattedDuration}`;
 
   const spots = document.createElement("span");
   spots.className =
     "text-[var(--color-text)] flex items-center gap-[0.4em] font-semibold";
-  spots.innerHTML = `<img src="${
-    new URL("../assets/images/spots.svg", import.meta.url).href
-  }" alt="Plazas" class="w-5 h-5 inline-block object-contain mr-1 align-middle">  ${
+  spots.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange">
+  <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
+</svg>
+   ${
     workshop.enrolled.length
   }/${workshop.capacity}`;
 

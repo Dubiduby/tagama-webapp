@@ -21,30 +21,39 @@ export default function workshops(container) {
   workshopsWrapper.className = "rounded-xl overflow-hidden";
 
   workshopsWrapper.innerHTML = `
-    <div class="border-b border-gray-200">
-      <ul class="flex space-x-8 px-6" role="tablist">
+    <div class="border-b border-gray-200 dark:border-gray-700">
+      <ul class="flex space-x-8 px-6" >
         <li class="flex-1">
           <button id="tab-enrolled" role="tab" type="button" class="w-full flex items-center justify-center gap-2 py-4 px-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors">
-            <img src="src/assets/images/ticket-alt.svg" alt="" class="w-5 h-5" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-dark-orange dark:text-light-orange">
+  <path fill-rule="evenodd" d="M1.5 6.375c0-1.036.84-1.875 1.875-1.875h17.25c1.035 0 1.875.84 1.875 1.875v3.026a.75.75 0 0 1-.375.65 2.249 2.249 0 0 0 0 3.898.75.75 0 0 1 .375.65v3.026c0 1.035-.84 1.875-1.875 1.875H3.375A1.875 1.875 0 0 1 1.5 17.625v-3.026a.75.75 0 0 1 .374-.65 2.249 2.249 0 0 0 0-3.898.75.75 0 0 1-.374-.65V6.375Zm15-1.125a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0V6a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0v.75a.75.75 0 0 0 1.5 0v-.75Zm-.75 3a.75.75 0 0 1 .75.75v.75a.75.75 0 0 1-1.5 0v-.75a.75.75 0 0 1 .75-.75Zm.75 4.5a.75.75 0 0 0-1.5 0V18a.75.75 0 0 0 1.5 0v-.75ZM6 12a.75.75 0 0 1 .75-.75H12a.75.75 0 0 1 0 1.5H6.75A.75.75 0 0 1 6 12Zm.75 2.25a.75.75 0 0 0 0 1.5h3a.75.75 0 0 0 0-1.5h-3Z" clip-rule="evenodd" />
+</svg>
+
             <span>Inscritos</span>
           </button>
         </li>
         <li class="flex-1">
           <button id="tab-created" role="tab" type="button" class="w-full flex items-center justify-center gap-2 py-4 px-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors">
-            <img src="src/assets/images/select.svg" alt="" class="w-5 h-5" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-dark-orange dark:text-light-orange">
+  <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-8.4 8.4a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32l8.4-8.4Z" />
+  <path d="M5.25 5.25a3 3 0 0 0-3 3v10.5a3 3 0 0 0 3 3h10.5a3 3 0 0 0 3-3V13.5a.75.75 0 0 0-1.5 0v5.25a1.5 1.5 0 0 1-1.5 1.5H5.25a1.5 1.5 0 0 1-1.5-1.5V8.25a1.5 1.5 0 0 1 1.5-1.5h5.25a.75.75 0 0 0 0-1.5H5.25Z" />
+</svg>
             <span>Creados</span>
           </button>
         </li>
         <li class="flex-1">
           <button id="tab-saved" role="tab" type="button" class="w-full flex items-center justify-center gap-2 py-4 px-3 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors">
-            <img src="src/assets/images/bookmark.svg" alt="" class="w-5 h-5" />
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-dark-orange dark:text-light-orange">
+  <path fill-rule="evenodd" d="M6.32 2.577a49.255 49.255 0 0 1 11.36 0c1.497.174 2.57 1.46 2.57 2.93V21a.75.75 0 0 1-1.085.67L12 18.089l-7.165 3.583A.75.75 0 0 1 3.75 21V5.507c0-1.47 1.073-2.756 2.57-2.93Z" clip-rule="evenodd" />
+</svg>
+
             <span>Guardados</span>
           </button>
         </li>
       </ul>
     </div>
     <div class="p-6">
-      <div id="workshops-tab-content-button" class="mb-6"></div>
+      <div id="workshops-tab-content-button" class="mb-6 flex justify-center "></div>
       <div id="workshops-tab-content" class="min-h-64"></div>
     </div>
   `;
@@ -90,7 +99,7 @@ export default function workshops(container) {
       const createBtn = document.createElement("button");
       createBtn.textContent = "+ Nuevo Taller";
       createBtn.className =
-        "px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-sm";
+        " px-6 py-3 bg-dark-green text-white rounded-lg font-medium hover:bg-[#5f6155] transition-colors shadow-sm dark:bg-light-yellow dark:text-dark-bg dark:hover:bg-[#f9f0dd]";
       tabCreateButton.appendChild(createBtn);
 
       createBtn.addEventListener("click", () => {
@@ -136,11 +145,11 @@ export default function workshops(container) {
     ["enrolled", "created", "saved"].forEach((t) => {
       const btn = workshopsWrapper.querySelector(`#tab-${t}`);
       if (t === tab) {
-        btn.classList.remove("text-gray-500", "border-transparent");
-        btn.classList.add("text-indigo-600", "border-indigo-600");
+        btn.classList.remove("text-gray-500", "border-transparent", "dark:text-gray-400", "dark:border-transparent");
+        btn.classList.add("text-grey-500", "border-dark-green", "dark:text-light-yellow", "dark:border-light-yellow");
       } else {
-        btn.classList.remove("text-indigo-600", "border-indigo-600");
-        btn.classList.add("text-gray-500", "border-transparent");
+        btn.classList.remove("text-grey-500", "border-dark-green", "dark:text-light-yellow", "dark:border-light-yellow");
+        btn.classList.add("text-gray-500", "border-transparent", "dark:text-gray-400", "dark:border-transparent");
       }
     });
   }
