@@ -446,9 +446,14 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     categorySelect.appendChild(option);
   });
 
-  // Cargar subcategorías si hay categoría seleccionada
+  // Cargar subcategorías
   if (data.categoryId) {
+    // Si hay datos previos, cargar subcategorías de esa categoría
     await renderSubcategories(data.categoryId);
+  } else if (categories.length > 0) {
+    // Si no hay datos previos, cargar subcategorías de la primera categoría
+    await renderSubcategories(categories[0].id);
+    categorySelect.value = categories[0].id;
   }
 
   // Event listeners
