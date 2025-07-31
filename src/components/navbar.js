@@ -16,7 +16,9 @@ export default function navbar(header) {
       <li class="relative hidden md:flex items-center group">
         <button class="flex items-center focus:outline-none" aria-label="Menú de usuario">
           <span class="w-8 h-8 rounded-full overflow-hidden border-2 border-gray-200 bg-gray-50 flex items-center justify-center">
-            <img src="${user.avatarUrl || userDefaultImg}" alt="Avatar del usuario" class="w-full h-full object-cover block" />
+            <img src="${
+              user.avatarUrl || userDefaultImg
+            }" alt="Avatar del usuario" class="w-full h-full object-cover block" />
           </span>
         </button>
         <ul class="absolute right-0 top-12 bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-lg shadow-lg min-w-[140px] z-20 py-2 opacity-0 group-hover:opacity-100 group-focus-within:opacity-100 pointer-events-none group-hover:pointer-events-auto group-focus-within:pointer-events-auto transition">
@@ -38,8 +40,21 @@ export default function navbar(header) {
   header.innerHTML = `
     <nav class=" flex justify-between opacity-[0.95]  md:flex-row items-center fixed  bg-[var(--color-2bg)] dark:bg-[var(--color-2bg)/30] border-b border-gray-200 dark:border-gray-800 px-4 py-2 z-50 w-full  dark:backdrop-brightness-50 backdrop-blur-md" 
       <div class="flex w-full md:w-auto items-center justify-between">
-        <a href="${isLoggedIn ? "/home" : "/"}" data-link class="font-bold text-xl text-gray-900 dark:text-gray-100 flex items-center">
-          <img src="${new URL(`../assets/images/logo/Tagama-light-background-horiz.svg`, import.meta.url).href}" alt="Logo" class="max-w-[160px] h-auto object-contain block py-1" />
+        <a href="${
+          isLoggedIn ? "/home" : "/"
+        }" data-link class="font-bold text-xl text-gray-900 dark:text-gray-100 flex items-center">
+          <img src="${
+            new URL(
+              `../assets/images/logo/Tagama-light-background-horiz.svg`,
+              import.meta.url
+            ).href
+          }" alt="Logo" class="max-w-[160px] h-auto object-contain block dark:hidden py-1" />
+          <img src="${
+            new URL(
+              `../assets/images/logo/Tagama-dark-background-horiz.svg`,
+              import.meta.url
+            ).href
+          }" alt="Logo" class="max-w-[160px] h-auto object-contain hidden dark:block py-1" />
         </a>
         <button class="md:hidden flex flex-col justify-center items-center w-10 h-10 relative group" aria-label="Abrir menú" id="navbar-toggle">
           <span class="block w-7 h-0.5 bg-gray-800 dark:bg-gray-200 rounded transition-all duration-300 absolute top-2.5 left-1.5 group-[.active]:top-4 group-[.active]:rotate-45"></span>
@@ -48,7 +63,9 @@ export default function navbar(header) {
         </button>
       </div>
       <ul class="flex-col md:flex-row md:flex hidden md:ml-auto items-center w-full md:w-auto mt-2 md:mt-0 gap-2 md:gap-4 text-center bg-white dark:bg-gray-900 md:bg-transparent md:dark:bg-transparent rounded-lg md:rounded-none shadow md:shadow-none py-2 md:py-0" id="navbar-links">
-        <li><a href="${isLoggedIn ? "/home" : "/"}" data-link class="hover:bg-gray-100 dark:hover:bg-gray-800 px-4 py-2 rounded transition dark:text-[var(--color-text)]">Inicio</a></li>
+        <li><a href="${
+          isLoggedIn ? "/home" : "/"
+        }" data-link class="hover:bg-gray-100 dark:hover:bg-gray-800 px-4 py-2 rounded transition dark:text-[var(--color-text)]">Inicio</a></li>
         ${authLinks}
         <li>
           <button id="toggle-dark" class="ml-2 p-2 rounded bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 transition-colors" aria-label="Cambiar modo claro/oscuro">

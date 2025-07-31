@@ -1,12 +1,21 @@
 import { getCurrentUser, updateUser } from "../api/apiUsers";
 import dayjs from "dayjs";
 import { showToast } from "../utils/toastify";
-import { updateWorkshopCache } from "../utils/cache.js";
-import { updateWorkshop, deleteWorkshop, createWorkshop } from "../api/apiWorkshops.js";
+import {
+  clearWorkshopsCache,
+  getCachedWorkshops,
+  updateWorkshopCache,
+} from "../utils/cache.js";
+import {
+  updateWorkshop,
+  deleteWorkshop,
+  createWorkshop,
+} from "../api/apiWorkshops.js";
 import {
   createEditWorkshopModal,
   closeModal,
 } from "../components/modals/formModal.js";
+import { showConfirmModal } from "./modals/confirmModal.js";
 
 export function workshopCards(workshop, subcategory, category) {
   // Card container
@@ -154,7 +163,7 @@ export function workshopCards(workshop, subcategory, category) {
               result = await createWorkshop(formData);
               showToast("Taller creado exitosamente", "success");
             }
-            
+
             updateWorkshopCache(result);
             closeModal();
             setTimeout(() => window.location.reload(), 1000);
@@ -166,42 +175,54 @@ export function workshopCards(workshop, subcategory, category) {
       });
     });
 
-    deleteOption.addEventListener("click", async (e) => {
+    deleteOption.addEventListener("click", (e) => {
       e.stopPropagation();
       e.preventDefault();
 
-      const confirmDelete = confirm(
-        `¿Seguro que deseas eliminar el taller "${workshop.title}"?`
-      );
-      if (!confirmDelete) return;
+      showConfirmModal({
+        message: `¿Seguro que deseas eliminar el taller "${workshop.title}"?`,
+        buttonText: "eliminar",
+        buttonColor: "red",
+        onConfirm: async () => {
+          try {
+            const workshopId = workshop.id;
 
-      const workshopId = workshop.id;
+            if (!workshopId || isNaN(Number(workshopId))) {
+              showToast("Este taller no tiene un ID válido.", "error");
+              return;
+            }
 
-      if (!workshopId || isNaN(Number(workshopId))) {
-        showToast("Este taller no tiene un ID válido.", "error");
-        return;
-      }
+            // Deshabilitar UI, mostrar feedback si quieres
+            deleteOption.disabled = true;
+            deleteOption.textContent = "Procesando...";
 
-      console.log("Deleting workshop ID:", workshopId);
-
-      try {
-        const success = await deleteWorkshop(workshopId);
-        if (success) {
-          const currentUser = getCurrentUser();
-          currentUser.createdWorkshops = currentUser.createdWorkshops.filter(
-            (wid) => String(wid) !== String(workshopId)
-          );
-          localStorage.setItem("currentUser", JSON.stringify(currentUser));
-          await updateUser(currentUser);
-          showToast("Taller eliminado exitosamente", "success");
-          setTimeout(() => window.location.reload(), 1000);
-        } else {
-          showToast(`No se encontró taller con ID: ${workshopId}`, "error");
-        }
-      } catch (error) {
-        console.error("Error deleting workshop:", error);
-        showToast("Error al eliminar el taller", "error");
-      }
+            const success = await deleteWorkshop(workshopId);
+            if (success) {
+              const currentUser = getCurrentUser();
+              currentUser.createdWorkshops =
+                currentUser.createdWorkshops.filter(
+                  (wid) => String(wid) !== String(workshopId)
+                );
+              localStorage.setItem("currentUser", JSON.stringify(currentUser));
+              await updateUser(currentUser);
+              clearWorkshopsCache();
+              getCachedWorkshops();
+              showToast("Taller eliminado exitosamente", "success");
+              setTimeout(() => window.location.reload(), 1000);
+            } else {
+              showToast(`No se encontró taller con ID: ${workshopId}`, "error");
+              // Aquí podrías reactivar el botón si quieres
+              deleteOption.disabled = false;
+              deleteOption.textContent = "Eliminar";
+            }
+          } catch (error) {
+            console.error("Error deleting workshop:", error);
+            showToast("Error al eliminar el taller", "error");
+            deleteOption.disabled = false;
+            deleteOption.textContent = "Eliminar";
+          }
+        },
+      });
     });
   }
 
