@@ -218,7 +218,7 @@ export default async function detail(container, id) {
   // Hora con icono
   const timeDiv = createInfoItem(
     `<svg width="20" height="20" fill="none" stroke="#2563eb" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>`,
-    formattedDuration
+    workshopDetail.duration + " h"
   );
   sidebar.appendChild(timeDiv);
 
