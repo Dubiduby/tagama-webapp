@@ -13,10 +13,11 @@ export default function contact(container) {
   // Copy (izquierda)
   const copyDiv = document.createElement("div");
   copyDiv.className = "md:w-1/2 w-full mb-8 px-2 md:mb-0";
-  
+
   // Título
   const title = document.createElement("h1");
-  title.className = "text-3xl md:text-4xl font-extrabold text-[#1e1d1d] dark:text-white mb-4";
+  title.className =
+    "text-3xl md:text-4xl font-extrabold text-[#1e1d1d] dark:text-white mb-4";
   title.textContent = "Contáctanos";
   copyDiv.appendChild(title);
 
@@ -26,8 +27,9 @@ export default function contact(container) {
 
   // Primer párrafo
   const p1 = document.createElement("p");
-  p1.className = "text-[var(--color-gray)] dark:text-[var(--color-text)] mb-2";
-  p1.textContent = "¿Has encontrado un error, tienes alguna sugerencia o simplemente quieres saludarnos?";
+  p1.className = "text-[var(--color-grey)] mb-2";
+  p1.textContent =
+    "¿Has encontrado un error, tienes alguna sugerencia o simplemente quieres saludarnos?";
   const br1 = document.createElement("br");
   const br2 = document.createElement("br");
   const textNode = document.createTextNode("En Tagama te escuchamos.");
@@ -38,20 +40,23 @@ export default function contact(container) {
 
   // Email
   const emailP = document.createElement("p");
-  emailP.className = "text-[var(--color-text)] dark:text-[var(--color-text)] mb-2 text-[#ad5733] dark:text-[#f49167] font-bold text-lg";
+  emailP.className =
+    "text-[var(--color-text)] dark:text-[var(--color-text)] mb-2 text-[#ad5733] dark:text-[#f49167] font-bold text-lg";
   emailP.textContent = "📩 hola@tagama.es";
   contentDiv.appendChild(emailP);
 
   // Segundo párrafo
   const p2 = document.createElement("p");
-  p2.className = "text-[var(--color-gray)] dark:text-[var(--color-text)] mb-2";
-  p2.textContent = "O rellena el formulario y te responderemos lo antes posible.";
+  p2.className = "text-[var(--color-grey)] mb-2";
+  p2.textContent =
+    "O rellena el formulario y te responderemos lo antes posible.";
   contentDiv.appendChild(p2);
 
   // Tercer párrafo
   const p3 = document.createElement("p");
   p3.className = "text-[var(--color-text)] dark:text-[var(--color-text)]";
-  p3.textContent = "Gracias por formar parte de esta pequeña gran red creativa en Tenerife 🧡";
+  p3.textContent =
+    "Gracias por formar parte de esta pequeña gran red creativa en Tenerife 🧡";
   contentDiv.appendChild(p3);
 
   copyDiv.appendChild(contentDiv);
@@ -61,13 +66,15 @@ export default function contact(container) {
   formDiv.className = "md:w-1/2 w-full";
   const form = document.createElement("form");
   form.id = "contact-form";
-  form.className = "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700";
+  form.className =
+    "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700";
 
   // Nombre
   const nameDiv = document.createElement("div");
   const nameLabel = document.createElement("label");
   nameLabel.htmlFor = "contact-name";
-  nameLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  nameLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   nameLabel.textContent = "Nombre";
   const nameInput = document.createElement("input");
   nameInput.type = "text";
@@ -84,7 +91,8 @@ export default function contact(container) {
   const emailDiv = document.createElement("div");
   const emailLabel = document.createElement("label");
   emailLabel.htmlFor = "contact-email";
-  emailLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  emailLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   emailLabel.textContent = "Email";
   const emailInput = document.createElement("input");
   emailInput.type = "email";
@@ -101,7 +109,8 @@ export default function contact(container) {
   const messageDiv = document.createElement("div");
   const messageLabel = document.createElement("label");
   messageLabel.htmlFor = "contact-message";
-  messageLabel.className = "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
+  messageLabel.className =
+    "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300";
   messageLabel.textContent = "Mensaje";
   const messageInput = document.createElement("textarea");
   messageInput.id = "contact-message";
@@ -124,7 +133,8 @@ export default function contact(container) {
   // Mensaje de éxito
   const successMsg = document.createElement("div");
   successMsg.id = "contact-success";
-  successMsg.className = "hidden text-green-600 dark:text-green-400 text-center font-semibold mt-2";
+  successMsg.className =
+    "hidden text-green-600 dark:text-green-400 text-center font-semibold mt-2";
   successMsg.textContent = "¡Tu mensaje ha sido enviado!";
 
   // Añadir campos al form

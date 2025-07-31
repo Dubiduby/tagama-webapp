@@ -66,54 +66,37 @@ export function workshopCards(workshop, subcategory, category) {
     currentUser.createdWorkshops.includes(String(workshop.id))
   ) {
     optionsWrapper = document.createElement("div");
-    optionsWrapper.style.position = "absolute";
-    optionsWrapper.style.top = "8px";
-    optionsWrapper.style.right = "8px";
+    optionsWrapper.className = "absolute top-2 right-2";
 
     const optionsBtn = document.createElement("button");
-    optionsBtn.innerHTML = "⋮";
-    optionsBtn.style.background = "rgba(0,0,0,0.6)";
-    optionsBtn.style.color = "#fff";
-    optionsBtn.style.border = "none";
-    optionsBtn.style.borderRadius = "50%";
-    optionsBtn.style.width = "28px";
-    optionsBtn.style.height = "28px";
-    optionsBtn.style.cursor = "pointer";
-    optionsBtn.style.fontSize = "18px";
-    optionsBtn.style.lineHeight = "18px";
+    optionsBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-ellipsis-vertical-icon lucide-ellipsis-vertical"><circle cx="12" cy="12" r="1"/><circle cx="12" cy="5" r="1"/><circle cx="12" cy="19" r="1"/></svg>`;
+    optionsBtn.className = `
+    bg-white dark:bg-black/60 text-black dark:text-white border rounded-full
+    w-9 h-9 cursor-pointer text-base leading-[18px]
+    flex items-center justify-center
+  `;
 
     const dropdown = document.createElement("div");
-    dropdown.style.display = "none";
-    dropdown.style.position = "absolute";
-    dropdown.style.top = "35px";
-    dropdown.style.right = "0";
-    dropdown.style.background = "#fff";
-    dropdown.style.border = "1px solid #ddd";
-    dropdown.style.borderRadius = "6px";
-    dropdown.style.boxShadow = "0 2px 6px rgba(0,0,0,0.2)";
-    dropdown.style.minWidth = "110px";
-    dropdown.style.zIndex = "100";
+    dropdown.className = `
+    hidden absolute top-9 right-0 bg-[var(--color-bg)] border border-gray-200 rounded-md
+    shadow-md min-w-[110px] z-50
+  `;
 
     const editOption = document.createElement("button");
-    editOption.textContent = "✏️ Editar";
-    editOption.style.display = "block";
-    editOption.style.width = "100%";
-    editOption.style.padding = "6px 10px";
-    editOption.style.background = "none";
-    editOption.style.border = "none";
-    editOption.style.textAlign = "left";
-    editOption.style.cursor = "pointer";
+    editOption.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil-icon lucide-pencil"><path d="M21.174 6.812a1 1 0 0 0-3.986-3.987L3.842 16.174a2 2 0 0 0-.5.83l-1.321 4.352a.5.5 0 0 0 .623.622l4.353-1.32a2 2 0 0 0 .83-.497z"/><path d="m15 5 4 4"/></svg> Editar`;
+    editOption.className = `
+    flex gap-2 items-center w-full px-3 py-1.5 text-left text-sm text-[--color-grey]
+    hover:bg-dark-green/10 cursor-pointer
+    bg-transparent border-none
+  `;
 
     const deleteOption = document.createElement("button");
-    deleteOption.textContent = "🗑️ Eliminar";
-    deleteOption.style.display = "block";
-    deleteOption.style.width = "100%";
-    deleteOption.style.padding = "6px 10px";
-    deleteOption.style.background = "none";
-    deleteOption.style.border = "none";
-    deleteOption.style.textAlign = "left";
-    deleteOption.style.cursor = "pointer";
-    deleteOption.style.color = "red";
+    deleteOption.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-circle-x-icon lucide-circle-x"><circle cx="12" cy="12" r="10"/><path d="m15 9-6 6"/><path d="m9 9 6 6"/></svg> <p>Eliminar</p>`;
+    deleteOption.className = `
+    flex gap-2 items-center w-full px-3 py-1.5 text-left text-sm
+    hover:bg-dark-green/10 cursor-pointer text-red-600 dark:text-red-400
+    bg-transparent border-none
+  `;
 
     dropdown.appendChild(editOption);
     dropdown.appendChild(deleteOption);
@@ -226,7 +209,7 @@ export function workshopCards(workshop, subcategory, category) {
     });
   }
 
-  // Botón de bookmark (add/save) siempre presente, pero solo funcional si el usuario no es el creador
+  // Botón de bookmark
   const buttonAdd = document.createElement("button");
   buttonAdd.className =
     "absolute top-3 right-3 bg-white border-none rounded-full p-2 cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors duration-200 hover:bg-[#e0e0e0] dark:bg-[#141414]";
@@ -281,12 +264,11 @@ function renderButtonIcon() {
 
   // Card details
   const divCardDetails = document.createElement("div");
-  divCardDetails.className =
-    "flex flex-col  gap-x-4 gap-y-2 text-[0.95rem] ";
+  divCardDetails.className = "flex flex-col  gap-x-4 gap-y-2 text-[0.95rem] ";
 
   const dateSpan = document.createElement("span");
   dateSpan.className =
-    " text-[var(--color-text)] flex items-center gap-[0.4em] font-semibold";
+    " text-[var(--color-text)] flex items-center gap-[0.4em]";
   dateSpan.innerHTML = `  <svg xmlns="http://www.w3.org/2000/svg"
        width="18"
        height="18"
@@ -307,7 +289,7 @@ function renderButtonIcon() {
 
   const locationSpan = document.createElement("span");
   locationSpan.className =
-    " text-[var(--color-text)] flex  items-center gap-[0.2rem] font-semibold";
+    " text-[var(--color-text)] flex  items-center gap-[0.2rem]";
   locationSpan.innerHTML = ` <svg xmlns="http://www.w3.org/2000/svg"
        width="24"
        height="24"
@@ -325,7 +307,7 @@ function renderButtonIcon() {
 
   const durationSpan = document.createElement("span");
   durationSpan.className =
-    "text-[var(--color-text)] flex items-center gap-[0.4em] font-semibold";
+    "text-[var(--color-text)] flex items-center gap-[0.4em]";
 
   // const hours = Math.floor(workshop.duration / 60);
   // const minutes = workshop.duration % 60;
@@ -340,14 +322,11 @@ function renderButtonIcon() {
   durationSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>  ${formattedDuration}`;
 
   const spots = document.createElement("span");
-  spots.className =
-    "text-[var(--color-text)] flex items-center gap-[0.4em] font-semibold";
+  spots.className = "text-[var(--color-text)] flex items-center gap-[0.4em]";
   spots.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange">
   <path stroke-linecap="round" stroke-linejoin="round" d="M18 18.72a9.094 9.094 0 0 0 3.741-.479 3 3 0 0 0-4.682-2.72m.94 3.198.001.031c0 .225-.012.447-.037.666A11.944 11.944 0 0 1 12 21c-2.17 0-4.207-.576-5.963-1.584A6.062 6.062 0 0 1 6 18.719m12 0a5.971 5.971 0 0 0-.941-3.197m0 0A5.995 5.995 0 0 0 12 12.75a5.995 5.995 0 0 0-5.058 2.772m0 0a3 3 0 0 0-4.681 2.72 8.986 8.986 0 0 0 3.74.477m.94-3.197a5.971 5.971 0 0 0-.94 3.197M15 6.75a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm6 3a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Zm-13.5 0a2.25 2.25 0 1 1-4.5 0 2.25 2.25 0 0 1 4.5 0Z" />
 </svg>
-   ${
-    workshop.enrolled.length
-  }/${workshop.capacity}`;
+   ${workshop.enrolled.length}/${workshop.capacity}`;
 
   // Price
   const workshopPrice = document.createElement("span");
