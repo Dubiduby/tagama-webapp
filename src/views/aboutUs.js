@@ -1,7 +1,7 @@
 export default function aboutUs(container) {
   container.innerHTML = `
-    <section class="max-w-5xl mx-auto px-4 pt-28 pb-32 text-base text-gray-800 dark:text-gray-100">
-      <div class="space-y-16">
+    <section class="max-w-5xl mx-auto text-base text-gray-800 dark:text-gray-100">
+      <div class="space-y-16 pt-6 px-4">
 
         <!-- Título y descripción -->
         <header class="text-center">
@@ -12,7 +12,7 @@ export default function aboutUs(container) {
         </header>
 
         <!-- Idea fundacional -->
-        <section class="text-center space-y-4 pt-10">
+        <section class="text-center space-y-4 md:pt-10">
           <h2 class="text-2xl font-semibold text-[color:#5F7365] dark:text-[color:#a5b6ab]">Nacimos en Tenerife con una idea muy simple:</h2>
           <p class="text-gray-700 dark:text-gray-300 max-w-2xl mx-auto">
             ¿Y si existiera un lugar donde descubrir todos los workshops que pasan cerca, sin tener que buscarlos por todas partes?<br>
@@ -21,7 +21,7 @@ export default function aboutUs(container) {
         </section>
 
         <!-- Qué queremos / Lo que creemos -->
-        <section class="grid md:grid-cols-2 gap-8 pb-14">
+        <section class="grid md:grid-cols-2 gap-8 md:pb-14">
           <div class="bg-white dark:bg-[#2f2f2f] rounded-2xl shadow p-6 dark:border dark:border-dark-green">
             <h2 class="text-xl font-semibold text-[color:#5F7365] dark:text-[color:#a5b6ab] mb-4">Qué queremos</h2>
             <ul class="list-disc list-inside space-y-2 text-gray-700 dark:text-gray-300">

@@ -3,12 +3,12 @@
 @tailwind utilities;
 
 :root {
-  --color-bg: #f4f2f0; /* Light background color */
+  --color-bg: #f1ece9; /* Light background color */
   --color-2bg: #f7f6f6;
   --color-title: #1e1d1d;
   --color-text: #797b6c; /* Dark text color */
   --color-grey: #726f6f;
-  --color-footer: #f1e2c2;
+  --color-footer: #cfa28651;
 }
 
 .dark {
@@ -19,4 +19,4 @@
   --color-grey: #d8d8d8;
   --color-footer: #797b6c;
 }
-/* #1a1a1a */
+/* #f1e2c2 */

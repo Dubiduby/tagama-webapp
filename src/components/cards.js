@@ -21,7 +21,7 @@ export function workshopCards(workshop, subcategory, category) {
   // Card container
   const card = document.createElement("div");
   card.className =
-    "w-96 max-w-sm sm:max-w-md md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px] ";
+    "w-96 max-w-xs md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px] ";
   // "bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden w-96 flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px]";
 
   // Card image container
@@ -36,16 +36,17 @@ export function workshopCards(workshop, subcategory, category) {
 
   // --- TAGS SOBRE LA IMAGEN ---
   const tagsContainer = document.createElement("div");
-  tagsContainer.className = "absolute top-3 left-3 flex gap-2 z-10";
+  tagsContainer.className =
+    "absolute top-3 left-3 flex gap-2 z-10 max-w-[250px] md:max-w-[300px]";
 
   const workshopTagCat = document.createElement("span");
   workshopTagCat.className =
-    "bg-dark-green text-white rounded-[12px] px-3 py-[2px] text-[0.8rem] font-medium ";
+    "bg-dark-green text-white rounded-[12px] px-3 py-[2px] text-[0.75rem] md:text-[0.8rem] font-medium ";
   workshopTagCat.textContent = category && category.name ? category.name : "";
 
   const workshopTagSub = document.createElement("span");
   workshopTagSub.className =
-    "bg-[#ad5733] text-white rounded-[12px] px-2 py-[2px] text-[0.8rem] font-medium ";
+    "bg-[#ad5733] text-white rounded-[12px] px-2 py-[2px] text-[0.75rem] md:text-[0.8rem] font-medium ";
   workshopTagSub.textContent =
     subcategory && subcategory.name ? subcategory.name : "";
 
@@ -219,14 +220,14 @@ export function workshopCards(workshop, subcategory, category) {
     currentUser.createdWorkshops.includes(String(workshop.id));
 
   // Function to render the button icon based on saved status
-function renderButtonIcon() {
-  const currentUser = JSON.parse(localStorage.getItem("currentUser"));
-  const isSaved = currentUser?.savedWorkshops?.includes(String(workshop.id));
+  function renderButtonIcon() {
+    const currentUser = JSON.parse(localStorage.getItem("currentUser"));
+    const isSaved = currentUser?.savedWorkshops?.includes(String(workshop.id));
 
-  buttonAdd.innerHTML = isSaved
-    ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block object-contain text-black dark:text-white"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></svg>`
-    : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block object-contain text-black dark:text-white"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/><line x1="12" x2="12" y1="7" y2="13"/><line x1="15" x2="9" y1="10" y2="10"/></svg> `;
-}
+    buttonAdd.innerHTML = isSaved
+      ? `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block object-contain text-black dark:text-white"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2Z"/><path d="m9 10 2 2 4-4"/></svg>`
+      : `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 block object-contain text-black dark:text-white"><path d="m19 21-7-4-7 4V5a2 2 0 0 1 2-2h10a2 2 0 0 1 2 2v16z"/><line x1="12" x2="12" y1="7" y2="13"/><line x1="15" x2="9" y1="10" y2="10"/></svg> `;
+  }
 
   if (!isCreator) {
     renderButtonIcon();
@@ -260,7 +261,7 @@ function renderButtonIcon() {
   const titleCard = document.createElement("h3");
   titleCard.textContent = workshop.title;
   titleCard.className =
-    "mb-2 text-[1.15rem] text-[var(--color-title)] font-semibold line-clamp-2  break-words";
+    "mb-2 text-[1rem] md:text-[1.15rem] text-[var(--color-title)] font-semibold line-clamp-2  break-words";
 
   // Card details
   const divCardDetails = document.createElement("div");
@@ -268,7 +269,7 @@ function renderButtonIcon() {
 
   const dateSpan = document.createElement("span");
   dateSpan.className =
-    " text-[var(--color-text)] flex items-center gap-[0.4em]";
+    " text-[var(--color-text)] text-[14px] md:text-[1.2rem]flex items-center gap-[0.4em]";
   dateSpan.innerHTML = `  <svg xmlns="http://www.w3.org/2000/svg"
        width="18"
        height="18"
