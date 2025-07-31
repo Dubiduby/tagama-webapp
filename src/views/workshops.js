@@ -60,17 +60,15 @@ export default function workshops(container) {
   function filterWorkshopsByTab(workshops, currentUser, tab) {
     if (tab === "enrolled") {
       return workshops.filter((workshop) =>
-        currentUser.enrolledWorkshops?.includes(String(workshop.id))
+        currentUser.enrolledWorkshops?.includes(workshop.id)
       );
     }
     if (tab === "created") {
-      return workshops.filter(
-        (workshop) => String(workshop.userId) === String(currentUser.id)
-      );
+      return workshops.filter((workshop) => workshop.userId === currentUser.id);
     }
     if (tab === "saved") {
       return workshops.filter((workshop) =>
-        currentUser.savedWorkshops?.includes(String(workshop.id))
+        currentUser.savedWorkshops?.includes(workshop.id)
       );
     }
     return [];
@@ -91,7 +89,8 @@ export default function workshops(container) {
       tabCreateButton.innerHTML = "";
       const createBtn = document.createElement("button");
       createBtn.textContent = "+ Nuevo Taller";
-      createBtn.className = "px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-sm";
+      createBtn.className =
+        "px-6 py-3 bg-indigo-600 text-white rounded-lg font-medium hover:bg-indigo-700 transition-colors shadow-sm";
       tabCreateButton.appendChild(createBtn);
 
       createBtn.addEventListener("click", () => {
@@ -99,7 +98,7 @@ export default function workshops(container) {
           data: {},
           onSubmit: async (formData) => {
             const newWorkshop = await createWorkshop(formData);
-            currentUser.createdWorkshops.push(String(newWorkshop.id));
+            currentUser.createdWorkshops.push(newWorkshop.id);
 
             const updatedUser = await updateUser({
               createdWorkshops: currentUser.createdWorkshops,

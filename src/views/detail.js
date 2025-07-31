@@ -28,7 +28,7 @@ export default async function detail(container, id) {
     getCachedSubcategories(),
   ]);
 
-  const workshopDetail = workshopsCache.find((item) => Number(item.id) === Number(id));
+  const workshopDetail = workshopsCache.find((item) => item.id === id);
 
   const category = categories.find(
     (item) => Number(item.id) === Number(workshopDetail.categoryId)
@@ -45,13 +45,15 @@ export default async function detail(container, id) {
   // Back link
   const backLink = document.createElement("a");
   backLink.href = "/workshops";
-  backLink.className = "inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium mb-6 transition-colors";
+  backLink.className =
+    "inline-flex items-center text-indigo-600 hover:text-indigo-700 font-medium mb-6 transition-colors";
   backLink.innerHTML = `<svg class="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"></path></svg>Volver a Talleres`;
   container.appendChild(backLink);
 
   // Contenedor principal
   const detailContent = document.createElement("div");
-  detailContent.className = "max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8";
+  detailContent.className =
+    "max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-3 gap-8";
   container.appendChild(detailContent);
 
   // Columna principal (imagen, tags, título, etc.)
@@ -74,12 +76,14 @@ export default async function detail(container, id) {
   tagsDiv.className = "flex gap-2 flex-wrap";
 
   const subcategoryTag = document.createElement("span");
-  subcategoryTag.className = "px-3 py-1 bg-indigo-100 text-indigo-800 text-sm font-medium rounded-full";
+  subcategoryTag.className =
+    "px-3 py-1 bg-indigo-100 text-indigo-800 text-sm font-medium rounded-full";
   subcategoryTag.textContent = subcategory.name;
   tagsDiv.appendChild(subcategoryTag);
 
   const categoryTag = document.createElement("span");
-  categoryTag.className = "px-3 py-1 bg-gray-100 text-gray-800 text-sm font-medium rounded-full";
+  categoryTag.className =
+    "px-3 py-1 bg-gray-100 text-gray-800 text-sm font-medium rounded-full";
   categoryTag.textContent = category.name;
   tagsDiv.appendChild(categoryTag);
   mainColumn.appendChild(tagsDiv);
@@ -104,11 +108,13 @@ export default async function detail(container, id) {
   const tabsDiv = document.createElement("div");
   tabsDiv.className = "flex border-b border-gray-200";
   const overviewTab = document.createElement("button");
-  overviewTab.className = "flex-1 px-6 py-4 text-sm font-medium text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50";
+  overviewTab.className =
+    "flex-1 px-6 py-4 text-sm font-medium text-indigo-600 border-b-2 border-indigo-600 bg-indigo-50";
   overviewTab.dataset.tab = "overview";
   overviewTab.textContent = "Descripción";
   const requirementsTab = document.createElement("button");
-  requirementsTab.className = "flex-1 px-6 py-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors";
+  requirementsTab.className =
+    "flex-1 px-6 py-4 text-sm font-medium text-gray-500 border-b-2 border-transparent hover:text-gray-700 hover:border-gray-300 transition-colors";
   requirementsTab.dataset.tab = "requirements";
   requirementsTab.textContent = "Requisitos";
   tabsDiv.appendChild(overviewTab);
@@ -159,16 +165,20 @@ export default async function detail(container, id) {
     mapDiv.className = "w-full rounded-lg overflow-hidden";
     mapDiv.style.height = "50vh";
     mainColumn.appendChild(mapDiv);
-    
+
     // Verificar que las coordenadas existen antes de inicializar el mapa
     if (workshopDetail.coordinates) {
       console.log("Coordinates for map:", workshopDetail.coordinates);
-      initMap(workshopDetail.coordinates, workshopDetail.address || workshopDetail.place);
+      initMap(
+        workshopDetail.coordinates,
+        workshopDetail.address || workshopDetail.place
+      );
     } else {
       console.warn("No coordinates available for workshop:", workshopDetail.id);
       // Mostrar mensaje de que no hay mapa disponible
       const noMapDiv = document.createElement("div");
-      noMapDiv.className = "flex items-center justify-center h-full bg-gray-100 text-gray-500";
+      noMapDiv.className =
+        "flex items-center justify-center h-full bg-gray-100 text-gray-500";
       noMapDiv.textContent = "No hay mapa disponible para este workshop";
       mapDiv.appendChild(noMapDiv);
     }
@@ -235,7 +245,8 @@ export default async function detail(container, id) {
 
   // Botón enroll/cancel
   const enrollBtn = document.createElement("button");
-  enrollBtn.className = "w-full px-6 py-3 rounded-lg font-medium transition-colors";
+  enrollBtn.className =
+    "w-full px-6 py-3 rounded-lg font-medium transition-colors";
   if (isEnrolled) {
     enrollBtn.textContent = "Cancelar";
     enrollBtn.className += " bg-red-600 text-white hover:bg-red-700";
@@ -248,16 +259,18 @@ export default async function detail(container, id) {
 
   // Edit and delete buttons
   const editBtn = document.createElement("button");
-  editBtn.className = "w-full px-6 py-3 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors";
+  editBtn.className =
+    "w-full px-6 py-3 bg-gray-600 text-white rounded-lg font-medium hover:bg-gray-700 transition-colors";
   editBtn.textContent = "Editar";
   editBtn.style.display = "none";
   const deleteBtn = document.createElement("button");
-  deleteBtn.className = "w-full px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors";
+  deleteBtn.className =
+    "w-full px-6 py-3 bg-red-600 text-white rounded-lg font-medium hover:bg-red-700 transition-colors";
   deleteBtn.textContent = "Eliminar";
   deleteBtn.style.display = "none";
 
   // if is created workshop then hide enroll btn
-  if (currentUser.createdWorkshops.includes(String(id))) {
+  if (currentUser.createdWorkshops.includes(id)) {
     enrollBtn.style.display = "none";
     editBtn.style.display = "block";
     deleteBtn.style.display = "block";
@@ -271,13 +284,17 @@ export default async function detail(container, id) {
   [overviewTab, requirementsTab].forEach((tab) => {
     tab.addEventListener("click", () => {
       // Update tab styles
-      [overviewTab, requirementsTab].forEach(t => {
-        t.classList.remove("text-indigo-600", "border-indigo-600", "bg-indigo-50");
+      [overviewTab, requirementsTab].forEach((t) => {
+        t.classList.remove(
+          "text-indigo-600",
+          "border-indigo-600",
+          "bg-indigo-50"
+        );
         t.classList.add("text-gray-500", "border-transparent");
       });
       tab.classList.remove("text-gray-500", "border-transparent");
       tab.classList.add("text-indigo-600", "border-indigo-600", "bg-indigo-50");
-      
+
       // Update content visibility
       overviewDiv.style.display =
         tab.dataset.tab === "overview" ? "block" : "none";
@@ -287,7 +304,6 @@ export default async function detail(container, id) {
   });
 
   enrollBtn.addEventListener("click", async () => {
-    // Función interna para actualizar usuario y taller
     async function updateEnrollment(enroll) {
       if (enroll) {
         currentUser.enrolledWorkshops.push(id);
@@ -300,19 +316,25 @@ export default async function detail(container, id) {
           (uid) => uid !== currentUser.id
         );
       }
+      console.log(workshopDetail.enrolled);
       const [updatedWorkshop, updatedUser] = await Promise.all([
-        updateWorkshop({ id: id, enrolled: workshopDetail.enrolled }),
-        updateUser({ enrolledWorkshops: currentUser.enrolledWorkshops }),
+        updateWorkshop({
+          id: String(id),
+          enrolled: workshopDetail.enrolled,
+        }),
+        updateUser({
+          enrolledWorkshops: currentUser.enrolledWorkshops,
+        }),
       ]);
       localStorage.setItem("currentUser", JSON.stringify(updatedUser));
       updateWorkshopCache(updatedWorkshop);
       isEnrolled = enroll;
     }
 
-    // Función interna para actualizar el botón
     function updateButton(enrolled) {
       enrollBtn.textContent = enrolled ? "Cancelar" : "Inscribirse";
-      enrollBtn.className = "w-full px-6 py-3 rounded-lg font-medium transition-colors";
+      enrollBtn.className =
+        "w-full px-6 py-3 rounded-lg font-medium transition-colors";
       if (enrolled) {
         enrollBtn.className += " bg-red-600 text-white hover:bg-red-700";
       } else {
@@ -323,42 +345,24 @@ export default async function detail(container, id) {
 
     // Cancelar inscripción
     if (isEnrolled) {
-      let cancelToastId = null;
-      if (cancelToastId) return;
-      cancelToastId = Toastify({
-        text: `<span>¿Estás seguro de que quieres cancelar tu inscripción?</span>
-          <button id=\"confirm-cancel-btn\" style=\"margin-left:10px;padding:4px 10px;background:#e10505ff;color:#fff;border:none;border-radius:4px;cursor:pointer;\">Sí, cancelar</button>`,
-        duration: -1,
-        gravity: "top",
-        position: "center",
-        close: true,
-        escapeMarkup: false,
-        backgroundColor: "#e10505ff",
-        stopOnFocus: true,
-        callback: () => {
-          cancelToastId = null;
+      showConfirmModal({
+        message: "¿Estás seguro de que quieres cancelar tu inscripción?",
+        buttonText: "cancelar",
+        buttonColor: "red",
+        onConfirm: async () => {
+          enrollBtn.disabled = true;
+          enrollBtn.textContent = "Procesando...";
+          try {
+            await updateEnrollment(false);
+            showToast("¡Inscripción cancelada!", "success");
+            setTimeout(() => window.location.reload(), 1200);
+          } catch {
+            showToast("Error al cancelar la inscripción", "error");
+            updateButton(true);
+          }
         },
-      }).showToast();
-
-      setTimeout(() => {
-        const confirmBtn = document.getElementById("confirm-cancel-btn");
-        if (confirmBtn) {
-          confirmBtn.onclick = async (e) => {
-            e.stopPropagation();
-            enrollBtn.disabled = true;
-            enrollBtn.textContent = "Procesando...";
-            try {
-              await updateEnrollment(false);
-              showToast("¡Inscripción cancelada!", "success");
-              setTimeout(() => window.location.reload(), 1200);
-            } catch {
-              showToast("Error al cancelar la inscripción", "error");
-              updateButton(true);
-            }
-          };
-        }
-      }, 100);
-      return;
+      });
+      return; // <---- IMPORTANTE: Termina aquí para no seguir con inscripción
     }
 
     // Inscripción gratuita
