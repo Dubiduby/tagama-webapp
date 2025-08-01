@@ -17,11 +17,20 @@
         document.documentElement.classList.remove("dark");
       }
     </script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+
     <link rel="stylesheet" href="/src/assets/output.css" />
     <link rel="stylesheet" href="tailwind.config.js" />
     <title>Workshop Hub</title>
   </head>
-  <body class="bg-[--color-bg] text-[#222] min-h-screen flex flex-col">
+  <body
+    class="bg-[--color-bg] text-[#222] min-h-screen flex flex-col font-montserrat"
+  >
     <header
       id="header"
       class="fixed w-full z-50 transition-all duration-300"

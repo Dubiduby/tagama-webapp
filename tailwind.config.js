@@ -14,6 +14,10 @@ export default {
         "light-bg": "#f4f2f0",
         "dark-bg": "#1a1a1a",
       },
+
+      fontFamily: {
+        montserrat: ["Montserrat", "sans-serif"],
+      },
     },
   },
   plugins: [],
