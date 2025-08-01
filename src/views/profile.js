@@ -58,7 +58,7 @@ export default async function profile(container) {
 
   const avatar = $("img", {
     class:
-      "w-32 h-32 rounded-full object-cover border-4 border-indigo-200 dark:border-indigo-600 shadow-lg mx-auto mb-4",
+      "w-32 h-32 rounded-full object-cover border-4 border-gray dark:border-gray-700 shadow-lg mx-auto mb-4",
     src:
       user.avatarUrl ||
       "https://res.cloudinary.com/demo/image/upload/v1699999999/user.png",
