@@ -22,7 +22,7 @@ export default async function home(container) {
   searchInput.type = "text";
   searchInput.placeholder = "Buscar taller...";
   searchInput.className =
-    "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-[var(--color-bg)] dark:border-opacity-20 focus:border-light-orange focus:outline-none";
+    "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-[var(--color-2bg)] dark:border-opacity-20 focus:border-light-orange focus:outline-none";
 
   // button to show or hide items
   const filtersToggleBtn = document.createElement("button");
