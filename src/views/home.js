@@ -312,7 +312,8 @@ export default async function home(container) {
     //actual page text
     const pageInfo = document.createElement("span");
     pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
-    pageInfo.className = "text-base text-[#222] font-medium mx-3";
+    pageInfo.className =
+      "text-base text-dark-bg font-medium mx-3 dark:text-light-bg";
     paginationContainer.appendChild(pageInfo);
 
     // next button
