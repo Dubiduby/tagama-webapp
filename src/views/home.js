@@ -265,8 +265,7 @@ export default async function home(container) {
     // Render the workshopContainer
     workshopsContainer.innerHTML = "";
     if (paginatedWorkshops.length === 0) {
-      workshopsContainer.innerHTML =
-        "No hay talleres que coincidan con los filtros.";
+      workshopsContainer.innerHTML = `<p class="text-[--color-text]">No hay talleres que coincidan con los filtros.</p>`;
     } else {
       renderWorkshops(
         workshopsContainer,

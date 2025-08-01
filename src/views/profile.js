@@ -1,7 +1,7 @@
 import { getUserById, updateUserById, deleteUser } from "../api/apiUsers.js";
 import { validation } from "../utils/validations.js";
 import { showToast } from "../utils/toastify.js";
-import Toastify from "toastify-js";
+import { showConfirmModal } from "../components/modals/confirmModal.js";
 
 export default async function profile(container) {
   function $(tag, props = {}, ...children) {
@@ -33,7 +33,13 @@ export default async function profile(container) {
 
   const currentUser = JSON.parse(localStorage.getItem("currentUser"));
   if (!currentUser) {
-    container.appendChild($("p", { class: "text-center text-gray-600 dark:text-gray-400 mt-8" }, "No has iniciado sesión."));
+    container.appendChild(
+      $(
+        "p",
+        { class: "text-center text-gray-600 dark:text-gray-400 mt-8" },
+        "No has iniciado sesión."
+      )
+    );
     return;
   }
 
@@ -43,40 +49,46 @@ export default async function profile(container) {
   const wrapper = $("div", { class: "max-w-5xl mx-auto px-4 py-12" });
 
   // Layout flex
-  const flexDiv = $("div", { class: "flex flex-col md:flex-row gap-8 items-start" });
+  const flexDiv = $("div", {
+    class: "flex flex-col md:flex-row gap-8 items-start",
+  });
 
   // Sidebar (left)
   const sidebarDiv = $("div", { class: "md:w-1/3 w-full mb-8 px-2 md:mb-0" });
 
   const avatar = $("img", {
-    class: "w-32 h-32 rounded-full object-cover border-4 border-indigo-200 dark:border-indigo-600 shadow-lg mx-auto mb-4",
-    src: user.avatarUrl || "https://res.cloudinary.com/demo/image/upload/v1699999999/user.png",
+    class:
+      "w-32 h-32 rounded-full object-cover border-4 border-indigo-200 dark:border-indigo-600 shadow-lg mx-auto mb-4",
+    src:
+      user.avatarUrl ||
+      "https://res.cloudinary.com/demo/image/upload/v1699999999/user.png",
     alt: "Avatar",
   });
 
   // Icon edit image
- const editAvatarBtn = document.createElement("button");
-editAvatarBtn.className =
-  "absolute top-0 right-0 bg-[#ad5733] dark:bg-[#f49167] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition-colors shadow-md";
-editAvatarBtn.onclick = () => {
-  uploadSection.style.display = "flex";
-};
-editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white dark:text-dark-bg">
+  const editAvatarBtn = document.createElement("button");
+  editAvatarBtn.className =
+    "absolute top-0 right-0 bg-[#ad5733] dark:bg-[#f49167] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition-colors shadow-md";
+  editAvatarBtn.onclick = () => {
+    uploadSection.style.display = "flex";
+  };
+  editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" class="w-5 h-5 text-white dark:text-dark-bg">
   <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
 </svg>`;
-
 
   // Input y upload button
   const fileInput = $("input", {
     type: "file",
     accept: "image/*",
-    class: "mt-2 text-sm text-gray-600 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#ad5733] dark:file:bg-[#f49167] file:text-white hover:file:bg-[#797b6c] dark:hover:file:bg-[#ad5733]",
+    class:
+      "mt-2 text-sm text-gray-600 dark:text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-[#ad5733] dark:file:bg-[#f49167] file:text-white hover:file:bg-[#797b6c] dark:hover:file:bg-[#ad5733]",
   });
 
   const uploadBtn = $(
     "button",
     {
-      class: "px-4 py-2 bg-[#ad5733] dark:bg-[#f49167] text-white rounded-full text-sm font-medium hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition-colors",
+      class:
+        "px-4 py-2 bg-[#ad5733] dark:bg-[#f49167] text-white rounded-full text-sm font-medium hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition-colors",
       onclick: async () => {
         const file = fileInput.files[0];
         if (!file) return showToast("Selecciona una imagen", "info");
@@ -120,7 +132,8 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
   const uploadSection = $(
     "div",
     {
-      class: "flex flex-col gap-3 mt-4 p-4 bg-gray-50 dark:bg-[#141414] rounded-lg border border-gray-200 dark:border-gray-700",
+      class:
+        "flex flex-col gap-3 mt-4 p-4 bg-gray-50 dark:bg-[#141414] rounded-lg border border-gray-200 dark:border-gray-700",
       style: { display: "none" },
     },
     fileInput,
@@ -131,11 +144,26 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
   const userInfo = $(
     "div",
     { class: "text-center mb-6" },
-    $("h1", { class: "text-3xl md:text-4xl font-extrabold text-[#1e1d1d] dark:text-white mb-4" }, "Mi Perfil"),
+    $(
+      "h1",
+      {
+        class:
+          "text-3xl md:text-4xl font-extrabold text-[#1e1d1d] dark:text-white mb-4",
+      },
+      "Mi Perfil"
+    ),
     $("div", { class: "relative inline-block" }, avatar, editAvatarBtn),
     uploadSection,
-    $("h2", { class: "text-xl font-bold text-[#1e1d1d] dark:text-white mb-2" }, user.name),
-    $("p", { class: "text-[var(--color-gray)] dark:text-[var(--color-text)] mb-4" }, user.email),
+    $(
+      "h2",
+      { class: "text-xl font-bold text-[#1e1d1d] dark:text-white mb-2" },
+      user.name
+    ),
+    $(
+      "p",
+      { class: "text-[var(--color-gray)] dark:text-[var(--color-text)] mb-4" },
+      user.email
+    ),
     // counter workshops
     $(
       "div",
@@ -145,30 +173,60 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
         { class: "text-center" },
         $(
           "span",
-          { class: "block text-2xl font-bold text-[#ad5733] dark:text-[#f49167]" },
+          {
+            class:
+              "block text-2xl font-bold text-[#ad5733] dark:text-[#f49167]",
+          },
           user.enrolledWorkshops ? user.enrolledWorkshops.length : 0
         ),
-        $("span", { class: "text-sm text-[var(--color-gray)] dark:text-[var(--color-text)]" }, "Inscritos")
+        $(
+          "span",
+          {
+            class:
+              "text-sm text-[var(--color-gray)] dark:text-[var(--color-text)]",
+          },
+          "Inscritos"
+        )
       ),
       $(
         "div",
         { class: "text-center" },
         $(
           "span",
-          { class: "block text-2xl font-bold text-[#ad5733] dark:text-[#f49167]" },
+          {
+            class:
+              "block text-2xl font-bold text-[#ad5733] dark:text-[#f49167]",
+          },
           user.createdWorkshops ? user.createdWorkshops.length : 0
         ),
-        $("span", { class: "text-sm text-[var(--color-gray)] dark:text-[var(--color-text)]" }, "Creados")
+        $(
+          "span",
+          {
+            class:
+              "text-sm text-[var(--color-gray)] dark:text-[var(--color-text)]",
+          },
+          "Creados"
+        )
       ),
       $(
         "div",
         { class: "text-center" },
         $(
           "span",
-          { class: "block text-2xl font-bold text-[#ad5733] dark:text-[#f49167]" },
+          {
+            class:
+              "block text-2xl font-bold text-[#ad5733] dark:text-[#f49167]",
+          },
           user.savedWorkshops ? user.savedWorkshops.length : 0
         ),
-        $("span", { class: "text-sm text-[var(--color-gray)] dark:text-[var(--color-text)]" }, "Guardados")
+        $(
+          "span",
+          {
+            class:
+              "text-sm text-[var(--color-gray)] dark:text-[var(--color-text)]",
+          },
+          "Guardados"
+        )
       )
     )
   );
@@ -177,7 +235,8 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
   const logoutBtn = $(
     "button",
     {
-      class: "w-full mt-6 bg-[#797b6c] dark:bg-[#797b6c] text-white font-bold py-2 px-6 rounded-full hover:bg-[#ad5733] dark:hover:bg-[#f49167] transition",
+      class:
+        "w-full mt-6 bg-[#797b6c] dark:bg-[#797b6c] text-white font-bold py-2 px-6 rounded-full hover:bg-[#ad5733] dark:hover:bg-[#f49167] transition",
       onclick: () => {
         localStorage.removeItem("currentUser");
         window.location.href = "/login";
@@ -191,120 +250,155 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
 
   // form right
   const formDiv = $("div", { class: "md:w-2/3 w-full" });
-  const form = $(
-    "form",
-    {
-      class: "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700",
-      onsubmit: async (e) => {
-        e.preventDefault();
+  const form = $("form", {
+    class:
+      "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700",
+    onsubmit: async (e) => {
+      e.preventDefault();
 
-        // just update modified fields
-        const updatedUser = { ...user };
-        let hasChanges = false;
+      // just update modified fields
+      const updatedUser = { ...user };
+      let hasChanges = false;
 
-        // check if name changed
-        if (nameInput.value && nameInput.value !== user.name) {
-          updatedUser.name = nameInput.value;
-          hasChanges = true;
-        }
+      // check if name changed
+      if (nameInput.value && nameInput.value !== user.name) {
+        updatedUser.name = nameInput.value;
+        hasChanges = true;
+      }
 
-        // check if email changed
-        if (emailInput.value && emailInput.value !== user.email) {
-          updatedUser.email = emailInput.value;
-          hasChanges = true;
-        }
+      // check if email changed
+      if (emailInput.value && emailInput.value !== user.email) {
+        updatedUser.email = emailInput.value;
+        hasChanges = true;
+      }
 
-        // check if password changed
-        if (passInput.value && passInput.value !== user.password) {
-          if (passInput.value !== repeatInput.value) {
-            showToast("Las contraseñas no coinciden.", "error");
-            return;
-          }
-          updatedUser.password = passInput.value;
-          hasChanges = true;
-        }
-
-        // validate onle the fields to update
-        const fieldsToValidate = {};
-        if (updatedUser.name !== user.name) fieldsToValidate.name = updatedUser.name;
-        if (updatedUser.email !== user.email) fieldsToValidate.email = updatedUser.email;
-        if (updatedUser.password !== user.password) fieldsToValidate.password = updatedUser.password;
-
-        if (Object.keys(fieldsToValidate).length > 0) {
-          if (!validation(fieldsToValidate)) {
-            return;
-          }
-        }
-
-        if (!hasChanges) {
-          showToast("No hay cambios para guardar.", "info");
+      // check if password changed
+      if (passInput.value && passInput.value !== user.password) {
+        if (passInput.value !== repeatInput.value) {
+          showToast("Las contraseñas no coinciden.", "error");
           return;
         }
+        updatedUser.password = passInput.value;
+        hasChanges = true;
+      }
 
-        try {
-          const result = await updateUserById(user.id, updatedUser);
-          localStorage.setItem("currentUser", JSON.stringify(result));
-          showToast("¡Perfil actualizado!", "success");
-          
-          // clean only the updated fields
-          if (updatedUser.name !== user.name) nameInput.value = "";
-          if (updatedUser.email !== user.email) emailInput.value = "";
-          if (updatedUser.password !== user.password) {
-            passInput.value = "";
-            repeatInput.value = "";
-          }
-          
-          setTimeout(() => window.location.reload(), 1200);
-        } catch (err) {
-          showToast("Error al actualizar el perfil.", "error");
+      // validate onle the fields to update
+      const fieldsToValidate = {};
+      if (updatedUser.name !== user.name)
+        fieldsToValidate.name = updatedUser.name;
+      if (updatedUser.email !== user.email)
+        fieldsToValidate.email = updatedUser.email;
+      if (updatedUser.password !== user.password)
+        fieldsToValidate.password = updatedUser.password;
+
+      if (Object.keys(fieldsToValidate).length > 0) {
+        if (!validation(fieldsToValidate)) {
+          return;
         }
-      },
-    }
-  );
+      }
+
+      if (!hasChanges) {
+        showToast("No hay cambios para guardar.", "info");
+        return;
+      }
+
+      try {
+        const result = await updateUserById(user.id, updatedUser);
+        localStorage.setItem("currentUser", JSON.stringify(result));
+        showToast("¡Perfil actualizado!", "success");
+
+        // clean only the updated fields
+        if (updatedUser.name !== user.name) nameInput.value = "";
+        if (updatedUser.email !== user.email) emailInput.value = "";
+        if (updatedUser.password !== user.password) {
+          passInput.value = "";
+          repeatInput.value = "";
+        }
+
+        setTimeout(() => window.location.reload(), 1200);
+      } catch (err) {
+        showToast("Error al actualizar el perfil.", "error");
+      }
+    },
+  });
 
   function createInput(type, id, placeholder) {
     return $("input", {
       type: type,
       placeholder: placeholder,
-      class: "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400",
+      class:
+        "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400",
       id: id,
     });
   }
 
   // Name
   const nameDiv = $("div");
-  const nameLabel = $("label", { for: "profile-name", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300" }, "Nombre");
+  const nameLabel = $(
+    "label",
+    {
+      for: "profile-name",
+      class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300",
+    },
+    "Nombre"
+  );
   const nameInput = createInput("text", "profile-name", user.name);
   nameDiv.appendChild(nameLabel);
   nameDiv.appendChild(nameInput);
 
   // Email
   const emailDiv = $("div");
-  const emailLabel = $("label", { for: "profile-email", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300" }, "Email");
+  const emailLabel = $(
+    "label",
+    {
+      for: "profile-email",
+      class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300",
+    },
+    "Email"
+  );
   const emailInput = createInput("email", "profile-email", user.email);
   emailDiv.appendChild(emailLabel);
   emailDiv.appendChild(emailInput);
 
   // password
   const passDiv = $("div");
-  const passLabel = $("label", { for: "profile-password", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300" }, "Contraseña");
+  const passLabel = $(
+    "label",
+    {
+      for: "profile-password",
+      class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300",
+    },
+    "Contraseña"
+  );
   const passInput = createInput("password", "profile-password", "********");
   passDiv.appendChild(passLabel);
   passDiv.appendChild(passInput);
 
   // Repeat password
   const repeatDiv = $("div");
-  const repeatLabel = $("label", { for: "profile-repeat", class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300" }, "Repetir contraseña");
-  const repeatInput = createInput("password", "profile-repeat", "Repetir contraseña");
+  const repeatLabel = $(
+    "label",
+    {
+      for: "profile-repeat",
+      class: "block text-sm font-medium mb-1 text-gray-700 dark:text-gray-300",
+    },
+    "Repetir contraseña"
+  );
+  const repeatInput = createInput(
+    "password",
+    "profile-repeat",
+    "Repetir contraseña"
+  );
   repeatDiv.appendChild(repeatLabel);
   repeatDiv.appendChild(repeatInput);
 
   // cancel button
   const cancelBtn = $(
     "button",
-    { 
-      type: "button", 
-      class: "flex-1 bg-gray-500 text-white font-bold py-2 px-6 rounded-full hover:bg-gray-600 transition" 
+    {
+      type: "button",
+      class:
+        "flex-1 bg-gray-500 text-white font-bold py-2 px-6 rounded-full hover:bg-gray-600 transition",
     },
     "Cancelar"
   );
@@ -319,7 +413,11 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
   // cancel changes
   const submitBtn = $(
     "button",
-    { type: "submit", class: "flex-1 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition" },
+    {
+      type: "submit",
+      class:
+        "flex-1 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition",
+    },
     "Guardar cambios"
   );
 
@@ -329,42 +427,26 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
   buttonContainer.appendChild(cancelBtn);
 
   // danger zone
-  let deleteToastId = null;
   const deleteBtn = $(
     "button",
     {
-      class: "w-full bg-red-600 text-white font-bold py-2 px-6 rounded-full hover:bg-red-700 transition",
+      class:
+        "w-full bg-red-600 text-white font-bold py-2 px-6 rounded-full hover:bg-red-700 transition",
       onclick: () => {
-        if (deleteToastId) return;
-        deleteToastId = Toastify({
-          text: `
-          <span>¿Estás seguro de que quieres eliminar tu cuenta?</span>
-          <button id="confirm-delete-btn" style="margin-left:10px;padding:4px 10px;background:#ef4444;color:#fff;border:none;border-radius:4px;cursor:pointer;">Sí, eliminar</button>
-        `,
-          duration: 3000,
-          gravity: "top",
-          position: "center",
-          close: true,
-          escapeMarkup: false,
-          backgroundColor: "#fff0f0",
-          stopOnFocus: true,
-          callback: () => {
-            deleteToastId = null;
+        showConfirmModal({
+          message: "¿Estás seguro de que quieres eliminar tu cuenta?",
+          buttonText: "eliminar",
+          buttonColor: "red",
+          onConfirm: async () => {
+            await deleteUser(user.id);
+            localStorage.clear();
+            showToast("¡Cuenta eliminada!", "success");
+            setTimeout(() => (window.location.href = "/login"), 1200);
           },
-        }).showToast();
-
-        setTimeout(() => {
-          const confirmBtn = document.getElementById("confirm-delete-btn");
-          if (confirmBtn) {
-            confirmBtn.onclick = async (e) => {
-              e.stopPropagation();
-              await deleteUser(user.id);
-              localStorage.clear();
-              showToast("¡Cuenta eliminada!", "success");
-              setTimeout(() => (window.location.href = "/login"), 1200);
-            };
-          }
-        }, 100);
+          onCancel: () => {
+            console.log("Cancelado");
+          },
+        });
       },
     },
     "ELIMINAR CUENTA"
@@ -372,19 +454,25 @@ editAvatarBtn.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 
 
   const dangerArea = $(
     "div",
-    { class: "mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg" },
-    $("h4", { class: "text-lg font-semibold text-red-800 dark:text-red-400 mb-4" }, "Zona de peligro"),
+    {
+      class:
+        "mt-6 p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg",
+    },
+    $(
+      "h4",
+      { class: "text-lg font-semibold text-red-800 dark:text-red-400 mb-4" },
+      "Zona de peligro"
+    ),
     deleteBtn
   );
-
   form.appendChild(nameDiv);
   form.appendChild(emailDiv);
   form.appendChild(passDiv);
   form.appendChild(repeatDiv);
   form.appendChild(buttonContainer);
-  form.appendChild(dangerArea);
 
   formDiv.appendChild(form);
+  formDiv.appendChild(dangerArea);
 
   flexDiv.appendChild(sidebarDiv);
   flexDiv.appendChild(formDiv);

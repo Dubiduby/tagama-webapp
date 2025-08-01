@@ -2,7 +2,7 @@ export default async function landing(container) {
   container.innerHTML = "";
   container.className = "flex flex-col items-center gap-4";
   container.innerHTML = `
-<section class="">
+<section class="pb-10">
   <div class="max-w-5xl mx-auto flex flex-col items-center px-4">
     <div class="flex flex-col items-center text-center w-full">
       <div class="mb-6"><Logo size="lg" /></div>
