@@ -104,6 +104,7 @@ src/
    ```bash
    git clone [repository-url]
    cd tagama-workshops
+   npm install
    ```
 
 2. **Open the project**
@@ -111,6 +112,80 @@ src/
    ```bash
    # Use Live Server in VS Code or open index.html directly
    ```
+
+---
+
+## 🌐 App Routes Overview
+
+This web application provides a variety of routes to manage and explore workshops. Below is a summary of each endpoint and its purpose:
+
+---
+
+### `/` — Landing Page
+
+Introductory page of the app, with access to login or sign up.
+
+---
+
+### `/about` — About
+
+Explains the purpose of the platform, its mission, and who we are.
+
+---
+
+### `/login` — Login
+
+Allows registered users to access their accounts.
+
+---
+
+### `/signup` — Sign Up
+
+Form for new users to register and create an account.
+
+---
+
+### `/home` — All Workshops
+
+Displays all available workshops in card format. Includes filters by:
+
+- Category and subcategory
+- Date (upcoming or distant)
+- Price
+
+Clicking on a card opens its detail page. Users can also save workshops to their personal list.
+
+---
+
+### `/workshop/:id` — Workshop Details
+
+Shows complete information about a specific workshop:
+
+- Description and location (with map)
+- Register (payment flow included)
+- Cancel registration if already enrolled
+
+---
+
+### `/workshops` — User's Workshops
+
+Dashboard with tabs to view:
+
+- Enrolled workshops
+- Created workshops
+- Saved workshops
+
+Also includes a modal to create a new workshop and add it to the list.
+
+---
+
+### `/profile` — User Profile
+
+Displays and allows editing of the user's personal information. Features:
+
+- Edit profile and upload/change profile picture
+- Summary of enrolled, created, and saved workshops
+- Option to delete the account (with confirmation)
 
 ---
 
