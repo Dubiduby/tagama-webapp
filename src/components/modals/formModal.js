@@ -28,13 +28,13 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     modal.querySelector("div:last-child");
   content.innerHTML = "";
 
-  // Crear formulario
+  // Create form
   const form = document.createElement("form");
   form.id = "workshop-form";
   form.className =
     "p-6 flex flex-col gap-4 dark:border-solid dark:border-dark-green dark:border";
 
-  // Título
+  // Title
   const titleGroup = document.createElement("div");
   titleGroup.className = "mb-4";
 
@@ -77,7 +77,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   overviewGroup.appendChild(overviewTextarea);
   form.appendChild(overviewGroup);
 
-  // Requisitos
+  // Requirements
   const requirementsGroup = document.createElement("div");
   requirementsGroup.className = "mb-4";
 
@@ -98,7 +98,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   requirementsGroup.appendChild(requirementsTextarea);
   form.appendChild(requirementsGroup);
 
-  // Modo y lugar
+  // Mode and location
   const modeGroup = document.createElement("div");
   modeGroup.className = "mb-4";
 
@@ -130,7 +130,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   modeGroup.appendChild(modeLabel);
   modeGroup.appendChild(modeSelect);
 
-  // Grupo de lugar y dirección
+  // address
   const placeGroup = document.createElement("div");
   placeGroup.id = "place-group";
   placeGroup.className = "mt-4";
@@ -166,21 +166,21 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400";
   addressInput.setAttribute("autocomplete", "off");
 
-  // Campo oculto para las coordenadas
+  // hidden field for coordinates
   const coordinatesInput = document.createElement("input");
   coordinatesInput.id = "coordinates";
   coordinatesInput.name = "coordinates";
   coordinatesInput.type = "hidden";
-  // Manejar coordenadas existentes (pueden estar en formato string o objeto)
+  // Maneging existing coordinates(pueden estar en formato string o objeto)
   let coordinatesValue = "";
   if (data.coordinates) {
     if (typeof data.coordinates === "string") {
-      // Si es string, intentar parsear como JSON o como coordenadas separadas por coma
+      // if is string, try to parse as JSON
       try {
         const coords = JSON.parse(data.coordinates);
         coordinatesValue = JSON.stringify({ lat: coords.lat, lng: coords.lng });
       } catch {
-        // Si no es JSON válido, asumir que es formato "lat,lng"
+        // if not JSON then lat lng
         const [lat, lng] = data.coordinates.split(",");
         if (lat && lng) {
           coordinatesValue = JSON.stringify({
@@ -190,7 +190,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
         }
       }
     } else if (typeof data.coordinates === "object") {
-      // Si ya es un objeto, convertirlo al formato correcto
+      // If its an object then turn it to the correct format
       coordinatesValue = JSON.stringify({
         lat: data.coordinates.lat,
         lng: data.coordinates.lng,
@@ -199,7 +199,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   }
   coordinatesInput.value = coordinatesValue;
 
-  // Botón de geocodificación
+  // geocodification button
   const geocodeBtn = document.createElement("button");
   geocodeBtn.type = "button";
   geocodeBtn.textContent = "📍 Obtener coordenadas";
@@ -207,7 +207,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     "mt-2 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-4 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition text-sm";
   geocodeBtn.onclick = geocodeAddress;
 
-  // Indicador de estado
+  // Status indicator
   const geocodeStatus = document.createElement("div");
   geocodeStatus.id = "geocode-status";
   geocodeStatus.className = "mt-2 text-sm";
@@ -222,7 +222,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   modeGroup.appendChild(placeGroup);
   form.appendChild(modeGroup);
 
-  // Fecha
+  // Date
   const dateGroup = document.createElement("div");
   dateGroup.className = "mb-4";
 
@@ -247,7 +247,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   dateGroup.appendChild(dateInput);
   form.appendChild(dateGroup);
 
-  // Categoría y subcategoría
+  // Category y subcategory
   const categoryGroup = document.createElement("div");
   categoryGroup.className = "mb-4 flex gap-4";
 
@@ -288,11 +288,11 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   categoryGroup.appendChild(subcategoryDiv);
   form.appendChild(categoryGroup);
 
-  // Capacidad, duración y nivel en la misma fila
+  // Capacity, duration and level
   const detailsGroup = document.createElement("div");
   detailsGroup.className = "mb-4 flex gap-4";
 
-  // Capacidad
+  //Capacity
   const capacityDiv = document.createElement("div");
   capacityDiv.className = "flex-1";
   const capacityLabel = document.createElement("label");
@@ -314,7 +314,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   capacityDiv.appendChild(capacityInput);
   detailsGroup.appendChild(capacityDiv);
 
-  // Duración
+  // Duration
   const durationDiv = document.createElement("div");
   durationDiv.className = "flex-1";
   const durationLabel = document.createElement("label");
@@ -331,7 +331,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   durationInput.placeholder = "Ej: 1.5";
   durationInput.step = "0.1";
   durationInput.required = true;
-  
+
   durationInput.className =
     "w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#ad5733] dark:focus:ring-[#f49167] bg-white dark:bg-[#141414] text-gray-900 dark:text-white";
 
@@ -339,7 +339,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   durationDiv.appendChild(durationInput);
   detailsGroup.appendChild(durationDiv);
 
-  // Nivel
+  // level
   const levelDiv = document.createElement("div");
   levelDiv.className = "flex-1";
   const levelLabel = document.createElement("label");
@@ -379,7 +379,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   detailsGroup.appendChild(levelDiv);
   form.appendChild(detailsGroup);
 
-  // Precio en fila separada, más pequeño y centrado
+  // Price
   const priceGroup = document.createElement("div");
   priceGroup.className = "mb-4 text-center";
 
@@ -402,7 +402,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   priceGroup.appendChild(priceInput);
   form.appendChild(priceGroup);
 
-  // Imagen
+  // Image
   const imageGroup = document.createElement("div");
   imageGroup.className = "mb-4";
 
@@ -451,7 +451,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
   imageGroup.appendChild(imagePreview);
   form.appendChild(imageGroup);
 
-  // Botones de acción
+  // action buttons
   const buttonGroup = document.createElement("div");
   buttonGroup.className = "flex gap-4 mt-6";
 
@@ -474,7 +474,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
 
   content.appendChild(form);
 
-  // Cargar categorías
+  // load categories
   const categories = await getCategories();
   categories.forEach((category) => {
     const option = document.createElement("option");
@@ -484,12 +484,10 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     categorySelect.appendChild(option);
   });
 
-  // Cargar subcategorías
+  // load categories
   if (data.categoryId) {
-    // Si hay datos previos, cargar subcategorías de esa categoría
     await renderSubcategories(data.categoryId);
   } else if (categories.length > 0) {
-    // Si no hay datos previos, cargar subcategorías de la primera categoría
     await renderSubcategories(categories[0].id);
     categorySelect.value = categories[0].id;
   }
@@ -513,7 +511,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     await renderSubcategories(categoryId);
   });
 
-  // Lógica de subida de imagen
+  // upload image logic
   uploadBtn.addEventListener("click", async (event) => {
     event.preventDefault();
     const file = imageUploadInput.files[0];
@@ -546,18 +544,18 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     }
   });
 
-  // Envío del formulario
+  // form
   form.onsubmit = async (e) => {
     e.preventDefault();
     const currentUser = getCurrentUser();
     const formData = Object.fromEntries(new FormData(form));
-    // Solo enviar place, address y coordinates si es presencial
+    // Only send place, address and coordinates if its On site
     if (formData.mode !== "Presencial") {
       formData.location = "";
       formData.address = "";
       formData.coordinates = "";
     }
-    // Procesar coordenadas antes de enviar
+    // Process coordinates before sending
     let coordinates = null;
     if (formData.coordinates) {
       try {
@@ -570,7 +568,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     const workshop = {
       ...data,
       ...formData,
-      coordinates: coordinates, // Enviar como objeto, no como string
+      coordinates: coordinates, // Send as an object, no as a string
       date: dayjs(formData.date).unix(),
       instructorName: currentUser.name,
       enrolled: data.enrolled || [],
@@ -582,7 +580,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     closeModal();
   };
 
-  // Función para renderizar subcategorías
+  // render subcategories
   async function renderSubcategories(categoryId) {
     const subcategories = await getSubcategories();
     const filtered = subcategories.filter(
@@ -609,7 +607,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     }
   }
 
-  // Función de geocodificación con Nominatim
+  // geocodification function con Nominatim
   async function geocodeAddress() {
     const address = addressInput.value.trim();
     const location = placeInput.value.trim();
@@ -621,7 +619,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
       return;
     }
 
-    // Validación básica de formato de dirección
+    // address validation
     if (address && address.length < 3) {
       geocodeStatus.textContent =
         "❌ La dirección es demasiado corta. Añade más detalles";
@@ -630,7 +628,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
       return;
     }
 
-    // Para geocodificación, usar solo la dirección, no el lugar
+    // for geocodificación, use ony the address, not the place
     const fullAddress = address;
 
     geocodeBtn.disabled = true;
@@ -641,7 +639,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
     try {
       console.log("🔍 Buscando dirección:", fullAddress);
 
-      // Primera búsqueda con la dirección completa
+      // First search
       let response = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
           fullAddress
@@ -655,7 +653,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
       let data = await response.json();
       console.log("📡 Respuesta de Nominatim:", data);
 
-      // Si no hay resultados, intentar con una búsqueda más específica en Tenerife
+      // if no results, try a more specific search
       if (!data || data.length === 0) {
         console.log(
           "🔍 No se encontraron resultados, intentando con 'Tenerife'"
@@ -674,7 +672,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
         console.log("📡 Segunda respuesta:", data);
       }
 
-      // Si aún no hay resultados, intentar solo con la dirección y Tenerife
+      // if no result, just use address and tenerife
       if (!data || data.length === 0) {
         console.log("🔍 Intentando solo con la dirección y Tenerife:", address);
         response = await fetch(
@@ -696,11 +694,11 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
         const lat = parseFloat(result.lat);
         const lon = parseFloat(result.lon);
 
-        // Verificar la precisión del resultado
+        // check the precition
         const importance = parseFloat(result.importance || 0);
         const displayName = result.display_name || "";
 
-        // Guardar coordenadas como objeto con lat y lng
+        // keep coordenates as an object with lat a lng
         coordinatesInput.value = JSON.stringify({ lat: lat, lng: lon });
 
         if (importance > 0.02) {
@@ -725,7 +723,7 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
         geocodeStatus.className = "mt-2 text-sm text-red-600";
         showToast("No se encontraron coordenadas para esta dirección", "error");
 
-        // Sugerencias específicas para mejorar la búsqueda
+        // recomendations to improve the search
         setTimeout(() => {
           geocodeStatus.textContent =
             "💡 Sugerencias: Usa una de las direcciones de los ejemplos o añade 'España' al final";

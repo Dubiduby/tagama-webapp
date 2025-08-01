@@ -22,7 +22,7 @@ export async function router() {
   const container = document.getElementById("app");
   const currentUser = getCurrentUser();
 
-  // Se inyecta la navbar antes de la vista
+  // navbar injection before everything
   const header = document.getElementById("header");
   const navbarModule = await import("./components/navbar.js");
   navbarModule.default(header);
@@ -70,25 +70,19 @@ export async function router() {
   }
 }
 
-//Función navigate para utilizar navigate(/home) por ejemplo cuando se quiera redirigir a una página --------------------------------
-
 export function navigate(path) {
   history.pushState(null, "", path); //change the URL in the browser without reloading the page.
   router();
 }
 
-//Función handleLinks para que maneje los enlaces a otras páginas--------------------------------------------------------------------------
-
 export function handleLinks() {
-  //en vez de poner un listener en cada enlace, se pone uno solo en el body y se capturan todos los clics que ocurren dentro. (delegación de eventos)
-
   document.body.addEventListener("click", (event) => {
-    const link = event.target.closest("a[data-link]"); //busca el evento más cercano al que se hizo click que sea un a con el atributo data-link
+    const link = event.target.closest("a[data-link]");
     if (link) {
       console.log("SPA link clicked:", link.href);
       event.preventDefault();
       navigate(link.getAttribute("href"));
     }
   });
-  window.addEventListener("popstate", router); //Esto hace que cuando el usuario use los botones de "atrás" o "adelante", se llame a la función router para mostrar la vista correspondiente a la URL actual.
+  window.addEventListener("popstate", router); //for back a forward buttons
 }
