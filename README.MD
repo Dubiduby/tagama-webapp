@@ -239,6 +239,7 @@ This was a learning project developed in a bootcamp setting. While external cont
 - **Carolina Melian**
 - **Yesenia Medina**
 - **Tracy Medina**
+- **Sheila Castellano**
 
 ---
 
