@@ -288,7 +288,7 @@ export default async function home(container) {
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "Anterior";
     prevBtn.disabled = currentPage === 1;
-    prevBtn.className = "bg-white border-2 border-[#2563eb] text-[#2563eb] px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2563eb] hover:text-white hover:border-[#2563eb] focus-visible:bg-[#2563eb] focus-visible:text-white focus-visible:border-[#2563eb]";
+    prevBtn.className = "bg-dark-orange border-2 border-yellow-900 text-white px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#934728]  hover:border-yellow-900 focus-visible:bg-[#934728] focus-visible:text-white focus-visible:border-yellow-900 dark:bg-light-yellow  dark:text-dark-bg dark:hover:bg-[#d8c3a9] dark:border-dark-green dark:hover:border-dark-green dark:focus-visible:bg-[#d8c3a9] dark:focus-visible:text-white dark:focus-visible:border-dark-green ";
     prevBtn.onclick = () => {
       currentPage--;
       filterAndRender();
@@ -298,14 +298,14 @@ export default async function home(container) {
     // Texto de página actual
     const pageInfo = document.createElement("span");
     pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
-    pageInfo.className = "text-base text-[#222] font-medium mx-3";
+    pageInfo.className = "text-base text-dark-bg font-medium mx-3 dark:text-light-bg";
     paginationContainer.appendChild(pageInfo);
 
     // Botón siguiente
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Siguiente";
     nextBtn.disabled = currentPage === totalPages;
-    nextBtn.className = "bg-white border-2 border-[#2563eb] text-[#2563eb] px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#2563eb] hover:text-white hover:border-[#2563eb] focus-visible:bg-[#2563eb] focus-visible:text-white focus-visible:border-[#2563eb]";
+    nextBtn.className = "bg-dark-orange border-2 border-yellow-900 text-white px-4 py-1.5 rounded cursor-pointer text-base font-medium transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed hover:bg-[#934728] hover:text-white hover:border-yellow-900 focus-visible:bg-[#934728] focus-visible:text-white focus-visible:border-yellow-900 dark:bg-light-yellow  dark:text-dark-bg dark:hover:bg-[#d8c3a9] dark:border-dark-green dark:hover:border-dark-green dark:focus-visible:bg-[#d8c3a9] dark:focus-visible:text-white dark:focus-visible:border-dark-green";
     nextBtn.onclick = () => {
       currentPage++;
       filterAndRender();
