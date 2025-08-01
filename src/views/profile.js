@@ -45,15 +45,12 @@ export default async function profile(container) {
 
   const user = await getUserById(currentUser.id);
 
-  // Wrapper principal
   const wrapper = $("div", { class: "max-w-5xl mx-auto px-4 py-12" });
 
-  // Layout flex
   const flexDiv = $("div", {
     class: "flex flex-col md:flex-row gap-8 items-start",
   });
 
-  // Sidebar (left)
   const sidebarDiv = $("div", { class: "md:w-1/3 w-full mb-8 px-2 md:mb-0" });
 
   const avatar = $("img", {
@@ -65,7 +62,6 @@ export default async function profile(container) {
     alt: "Avatar",
   });
 
-  // Icon edit image
   const editAvatarBtn = document.createElement("button");
   editAvatarBtn.className =
     "absolute top-0 right-0 bg-[#ad5733] dark:bg-[#f49167] text-white rounded-full w-8 h-8 flex items-center justify-center text-sm hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition-colors shadow-md";
@@ -76,7 +72,6 @@ export default async function profile(container) {
   <path d="M21.731 2.269a2.625 2.625 0 0 0-3.712 0l-1.157 1.157 3.712 3.712 1.157-1.157a2.625 2.625 0 0 0 0-3.712ZM19.513 8.199l-3.712-3.712-12.15 12.15a5.25 5.25 0 0 0-1.32 2.214l-.8 2.685a.75.75 0 0 0 .933.933l2.685-.8a5.25 5.25 0 0 0 2.214-1.32L19.513 8.2Z" />
 </svg>`;
 
-  // Input y upload button
   const fileInput = $("input", {
     type: "file",
     accept: "image/*",
@@ -111,7 +106,6 @@ export default async function profile(container) {
           if (data.secure_url) {
             avatar.src = data.secure_url;
 
-            // Save new avatar image
             const updatedUser = { ...user, avatarUrl: data.secure_url };
             await updateUserById(user.id, updatedUser);
             localStorage.setItem("currentUser", JSON.stringify(updatedUser));
@@ -140,7 +134,6 @@ export default async function profile(container) {
     uploadBtn
   );
 
-  // user info
   const userInfo = $(
     "div",
     { class: "text-center mb-6" },
@@ -164,7 +157,7 @@ export default async function profile(container) {
       { class: "text-[var(--color-gray)] dark:text-[var(--color-text)] mb-4" },
       user.email
     ),
-    // counter workshops
+
     $(
       "div",
       { class: "grid grid-cols-3 gap-4 mt-6" },
@@ -231,7 +224,6 @@ export default async function profile(container) {
     )
   );
 
-  // logout button
   const logoutBtn = $(
     "button",
     {
@@ -248,7 +240,6 @@ export default async function profile(container) {
   sidebarDiv.appendChild(userInfo);
   sidebarDiv.appendChild(logoutBtn);
 
-  // form right
   const formDiv = $("div", { class: "md:w-2/3 w-full" });
   const form = $("form", {
     class:
@@ -256,23 +247,19 @@ export default async function profile(container) {
     onsubmit: async (e) => {
       e.preventDefault();
 
-      // just update modified fields
       const updatedUser = { ...user };
       let hasChanges = false;
 
-      // check if name changed
       if (nameInput.value && nameInput.value !== user.name) {
         updatedUser.name = nameInput.value;
         hasChanges = true;
       }
 
-      // check if email changed
       if (emailInput.value && emailInput.value !== user.email) {
         updatedUser.email = emailInput.value;
         hasChanges = true;
       }
 
-      // check if password changed
       if (passInput.value && passInput.value !== user.password) {
         if (passInput.value !== repeatInput.value) {
           showToast("Las contraseñas no coinciden.", "error");
@@ -282,7 +269,6 @@ export default async function profile(container) {
         hasChanges = true;
       }
 
-      // validate onle the fields to update
       const fieldsToValidate = {};
       if (updatedUser.name !== user.name)
         fieldsToValidate.name = updatedUser.name;
@@ -307,7 +293,6 @@ export default async function profile(container) {
         localStorage.setItem("currentUser", JSON.stringify(result));
         showToast("¡Perfil actualizado!", "success");
 
-        // clean only the updated fields
         if (updatedUser.name !== user.name) nameInput.value = "";
         if (updatedUser.email !== user.email) emailInput.value = "";
         if (updatedUser.password !== user.password) {
@@ -332,7 +317,6 @@ export default async function profile(container) {
     });
   }
 
-  // Name
   const nameDiv = $("div");
   const nameLabel = $(
     "label",
@@ -346,7 +330,6 @@ export default async function profile(container) {
   nameDiv.appendChild(nameLabel);
   nameDiv.appendChild(nameInput);
 
-  // Email
   const emailDiv = $("div");
   const emailLabel = $(
     "label",
@@ -360,7 +343,6 @@ export default async function profile(container) {
   emailDiv.appendChild(emailLabel);
   emailDiv.appendChild(emailInput);
 
-  // password
   const passDiv = $("div");
   const passLabel = $(
     "label",
@@ -374,7 +356,6 @@ export default async function profile(container) {
   passDiv.appendChild(passLabel);
   passDiv.appendChild(passInput);
 
-  // Repeat password
   const repeatDiv = $("div");
   const repeatLabel = $(
     "label",
@@ -392,7 +373,6 @@ export default async function profile(container) {
   repeatDiv.appendChild(repeatLabel);
   repeatDiv.appendChild(repeatInput);
 
-  // cancel button
   const cancelBtn = $(
     "button",
     {
@@ -410,7 +390,6 @@ export default async function profile(container) {
     showToast("Los cambios han sido cancelados.", "info");
   });
 
-  // cancel changes
   const submitBtn = $(
     "button",
     {
@@ -421,12 +400,10 @@ export default async function profile(container) {
     "Guardar cambios"
   );
 
-  // button container
   const buttonContainer = $("div", { class: "flex gap-4 mt-6" });
   buttonContainer.appendChild(submitBtn);
   buttonContainer.appendChild(cancelBtn);
 
-  // danger zone
   const deleteBtn = $(
     "button",
     {
@@ -443,9 +420,7 @@ export default async function profile(container) {
             showToast("¡Cuenta eliminada!", "success");
             setTimeout(() => (window.location.href = "/login"), 1200);
           },
-          onCancel: () => {
-            console.log("Cancelado");
-          },
+          onCancel: () => {},
         });
       },
     },

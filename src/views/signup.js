@@ -7,11 +7,9 @@ import { validation } from "../utils/validations.js";
 export default function signUp(container) {
   container.innerHTML = "";
 
-  // Wrapper principal centered
   const wrapper = document.createElement("div");
   wrapper.className = "max-w-md mx-auto px-4 pt-12 pb-18 md:pt-0";
 
-  // title subtitle centered on top
   const headerInfo = document.createElement("div");
   headerInfo.className = "text-center mb-8";
 
@@ -43,7 +41,6 @@ export default function signUp(container) {
     return input;
   }
 
-  // Name
   const nameDiv = document.createElement("div");
   const nameLabel = document.createElement("label");
   nameLabel.setAttribute("for", "signup-name");
@@ -54,7 +51,6 @@ export default function signUp(container) {
   nameDiv.appendChild(nameLabel);
   nameDiv.appendChild(nameInput);
 
-  // Email
   const emailDiv = document.createElement("div");
   const emailLabel = document.createElement("label");
   emailLabel.setAttribute("for", "signup-email");
@@ -65,7 +61,6 @@ export default function signUp(container) {
   emailDiv.appendChild(emailLabel);
   emailDiv.appendChild(emailInput);
 
-  // password
   const passwordDiv = document.createElement("div");
   const passwordLabel = document.createElement("label");
   passwordLabel.setAttribute("for", "signup-password");
@@ -80,7 +75,6 @@ export default function signUp(container) {
   passwordDiv.appendChild(passwordLabel);
   passwordDiv.appendChild(passwordInput);
 
-  // Repeat password
   const repeatDiv = document.createElement("div");
   const repeatLabel = document.createElement("label");
   repeatLabel.setAttribute("for", "signup-repeat");
@@ -95,14 +89,12 @@ export default function signUp(container) {
   repeatDiv.appendChild(repeatLabel);
   repeatDiv.appendChild(repeatInput);
 
-  //register button
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
   submitBtn.className =
     "mt-6 bg-[#ad5733] dark:bg-[#f49167] text-white dark:text-black font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
   submitBtn.textContent = "Crear cuenta";
 
-  // login text
   const loginText = document.createElement("p");
   loginText.className =
     "text-center text-sm mt-4 text-gray-600 dark:text-gray-400";
@@ -118,7 +110,6 @@ export default function signUp(container) {
   loginText.appendChild(document.createTextNode("¿Ya tienes una cuenta? "));
   loginText.appendChild(loginLink);
 
-  // add fields to the form
   form.appendChild(nameDiv);
   form.appendChild(emailDiv);
   form.appendChild(passwordDiv);

@@ -17,43 +17,43 @@ export default async function home(container) {
   const main = document.getElementById("main");
   main.className = "flex-1 py-20 md:py-20";
 
-  // Search
+
   const searchInput = document.createElement("input");
   searchInput.type = "text";
   searchInput.placeholder = "Buscar taller...";
   searchInput.className =
     "flex-1 min-w-0 max-w-[400px] p-2 text-base rounded border border-gray-200 bg-[var(--color-2bg)] dark:border-opacity-20 focus:border-light-orange focus:outline-none";
 
-  // button to show or hide items
+
   const filtersToggleBtn = document.createElement("button");
   filtersToggleBtn.textContent = "Filtros";
   filtersToggleBtn.className =
     "block px-6 py-1 bg-[var(--color-text)] text-[#fafafa] border-none rounded-full text-lg font-semibold cursor-pointer transition-colors duration-200 ml-2 whitespace-nowrap hover:bg-[#5f6155] dark:text-dark-bg dark:hover:bg-[#d8c3a9]";
 
-  // Search and filters container
+
   const searchContainer = document.createElement("div");
   searchContainer.className =
     "bg-[var(--color-bg)] w-full flex flex-row items-center gap-3 mb-3 max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] justify-center";
   searchContainer.appendChild(searchInput);
   searchContainer.appendChild(filtersToggleBtn);
 
-  // All filters container
+
   const allFiltersContainer = document.createElement("div");
   allFiltersContainer.className =
     "bg-[var(--color-bg)] w-full pt-10 max-w-[1100px] mx-auto flex flex-col items-center md:max-w-[900px] lg:max-w-[1100px]";
   allFiltersContainer.appendChild(searchContainer);
 
-  // Filters
+
   const filterContainer = document.createElement("div");
   filterContainer.className =
     "w-full flex flex-row justify-center gap-16 flex-wrap gap-3 items-center bg-white p-4 rounded-xl mb-6  max-w-[1100px] md:max-w-[900px] lg:max-w-[1100px] md:gap-4 md:p-6 lg:gap-6 lg:p-8 lg:rounded-2xl hidden dark:bg-dark-bg";
 
-  // show/hide filters when you click
+
   filtersToggleBtn.addEventListener("click", () => {
     filterContainer.classList.toggle("hidden");
   });
 
-  // Category
+
   const categoriesFilter = document.createElement("select");
   categoriesFilter.className =
     "min-w-[160px] md:max-w-[220px] mw-full flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)]  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none  dark:text-white dark:border-opacity-20 ";
@@ -69,7 +69,7 @@ export default async function home(container) {
     categoriesFilter.appendChild(option);
   });
 
-  // Subcategory
+
   const subcategoriesFilter = document.createElement("select");
   subcategoriesFilter.className =
     "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 bg-[var(--color-bg)] rounded  transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
@@ -84,13 +84,13 @@ export default async function home(container) {
     subcategoriesFilter.appendChild(option);
   });
 
-  // date by months
+
   const monthInput = document.createElement("input");
   monthInput.type = "month";
   monthInput.className =
     "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
 
-  // order
+
   const orderSelect = document.createElement("select");
   orderSelect.className =
     "min-w-[160px] md:max-w-[220px] flex-1 text-base p-2 border border-gray-200 rounded bg-[var(--color-bg)] transition-colors duration-200 w-full text-black focus:border-[#a78bfa] focus:outline-none dark:text-white dark:border-opacity-20";
@@ -106,7 +106,7 @@ export default async function home(container) {
     orderSelect.appendChild(option);
   });
 
-  // available spots
+
   const spotsCheckbox = document.createElement("input");
   spotsCheckbox.type = "checkbox";
   spotsCheckbox.className = "accent-[#6c2ccc]";
@@ -116,7 +116,7 @@ export default async function home(container) {
   spotsLabel.textContent = "Solo con plazas disponibles";
   spotsLabel.appendChild(spotsCheckbox);
 
-  // Button to reset
+
   const resetButton = document.createElement("button");
   resetButton.textContent = "Limpiar";
   resetButton.className = `
@@ -130,30 +130,29 @@ export default async function home(container) {
   dark:bg-dark-green dark:hover:bg-[#5f6155] dark:border-none
 `;
 
-  //clear and spots container
+
   const filterClearContainer = document.createElement("div");
   filterClearContainer.className =
     "w-full flex items-center justify-center gap-12  ";
   filterClearContainer.appendChild(spotsLabel);
   filterClearContainer.appendChild(resetButton);
 
-  // Add filters to container
+
   filterContainer.appendChild(categoriesFilter);
   filterContainer.appendChild(subcategoriesFilter);
   filterContainer.appendChild(monthInput);
   filterContainer.appendChild(orderSelect);
 
-  // filterContainer.appendChild(spotsLabel);
-  // filterContainer.appendChild(resetButton);
+
   filterContainer.appendChild(filterClearContainer);
   allFiltersContainer.appendChild(filterContainer);
 
-  // Workshops list
+
   const workshopsContainer = document.createElement("div");
   workshopsContainer.className =
     "w-full flex flex-wrap gap-8 justify-center items-center py-8";
 
-  // --- Pagination: global container ---
+
   const paginationContainer = document.createElement("div");
   paginationContainer.className = "flex justify-center items-center gap-3 mt-8";
 
@@ -161,7 +160,7 @@ export default async function home(container) {
   container.appendChild(workshopsContainer);
   container.appendChild(paginationContainer);
 
-  // Function to update subcat depending on categories
+
   function updateSubcategoriesOptions() {
     subcategoriesFilter.innerHTML = "";
     const defaultSubcategoryOption = document.createElement("option");
@@ -187,7 +186,7 @@ export default async function home(container) {
 
   updateSubcategoriesOptions();
 
-  // --- Pagination ---
+
   function getWorkshopsPerPage() {
     if (window.innerWidth < 600) {
       return 8;
@@ -202,28 +201,28 @@ export default async function home(container) {
 
   function filterAndRender() {
     let filtered = [...workshops];
-    //Search Filter
+
     const searchValue = searchInput.value.toLowerCase();
     if (searchValue) {
       filtered = filtered.filter((workshops) =>
         workshops.title.toLowerCase().includes(searchValue)
       );
     }
-    // Categories Filter
+
     const categoriesValue = categoriesFilter.value;
     if (categoriesValue) {
       filtered = filtered.filter(
         (workshops) => workshops.categoryId === Number(categoriesValue)
       );
     }
-    // Subcategories Filter
+
     const subcategoriesValue = subcategoriesFilter.value;
     if (subcategoriesValue) {
       filtered = filtered.filter(
         (workshops) => workshops.subcategoryId === Number(subcategoriesValue)
       );
     }
-    // Date Filter
+
     const monthValue = monthInput.value;
     if (monthValue) {
       filtered = filtered.filter(
@@ -231,14 +230,14 @@ export default async function home(container) {
           dayjs.unix(workshops.date).format("YYYY-MM") === monthValue
       );
     }
-    // Spots Filter
+
     if (spotsCheckbox.checked) {
       filtered = filtered.filter(
         (workshops) => workshops.enrolled.length < workshops.capacity
       );
     }
 
-    // Order by:
+
     const orderValue = orderSelect.value;
     if (orderValue === "recent") {
       filtered = filtered.sort((a, b) =>
@@ -254,7 +253,7 @@ export default async function home(container) {
       filtered = filtered.sort((a, b) => b.price - a.price);
     }
 
-    // --- Pagination ---
+
     const workshopsPerPage = getWorkshopsPerPage();
     totalPages = Math.ceil(filtered.length / workshopsPerPage);
     if (currentPage > totalPages) currentPage = totalPages || 1;
@@ -262,7 +261,7 @@ export default async function home(container) {
     const end = start + workshopsPerPage;
     const paginatedWorkshops = filtered.slice(start, end);
 
-    // Render the workshopContainer
+
     workshopsContainer.innerHTML = "";
     if (paginatedWorkshops.length === 0) {
       workshopsContainer.innerHTML = `<p class="text-[--color-text]">No hay talleres que coincidan con los filtros.</p>`;
@@ -275,9 +274,9 @@ export default async function home(container) {
       );
     }
 
-    // --- Pagination: render controls ---
+
     renderPaginationControls();
-    // --- end pagination ---
+
 
     resetButton.addEventListener("click", () => {
       searchInput.value = "";
@@ -292,11 +291,11 @@ export default async function home(container) {
     });
   }
 
-  // --- Pagination: controls ---
+
   function renderPaginationControls() {
     paginationContainer.innerHTML = "";
     if (totalPages <= 1) return;
-    // back button
+
     const prevBtn = document.createElement("button");
     prevBtn.textContent = "Anterior";
     prevBtn.disabled = currentPage === 1;
@@ -308,14 +307,14 @@ export default async function home(container) {
     };
     paginationContainer.appendChild(prevBtn);
 
-    //actual page text
+
     const pageInfo = document.createElement("span");
     pageInfo.textContent = `Página ${currentPage} de ${totalPages}`;
     pageInfo.className =
       "text-base text-dark-bg font-medium mx-3 dark:text-light-bg";
     paginationContainer.appendChild(pageInfo);
 
-    // next button
+
     const nextBtn = document.createElement("button");
     nextBtn.textContent = "Siguiente";
     nextBtn.disabled = currentPage === totalPages;
@@ -327,9 +326,9 @@ export default async function home(container) {
     };
     paginationContainer.appendChild(nextBtn);
   }
-  // --- end pagination ---
 
-  // Events in each filter
+
+
   searchInput.addEventListener("input", () => {
     currentPage = 1;
     filterAndRender();

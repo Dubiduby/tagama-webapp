@@ -24,8 +24,6 @@ export async function createNewUser(newUser) {
   }
 }
 
-//Login request
-
 export async function getUsers() {
   const url = `${baseUrl}`;
   try {
@@ -59,7 +57,6 @@ export function getCurrentUser() {
   }
 }
 
-//Data to update has to be in this format: for example -> updateUser({name: currentUser.name})
 export async function updateUser(DataToUpdate) {
   const currentUser = getCurrentUser();
   const url = `${baseUrl}/${currentUser.id}`;
@@ -80,27 +77,22 @@ export async function updateUser(DataToUpdate) {
   }
 }
 
-//profile
-
-//Fetches a user's data by their ID from MockAPI.
 export async function getUserById(id) {
   const res = await fetch(`${baseUrl}/${id}`);
   if (!res.ok) throw new Error("User not found");
   return await res.json();
 }
 
-//Updates a user's data in MockAPI by their ID.
 export async function updateUserById(id, userData) {
   const res = await fetch(`${baseUrl}/${id}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(userData)
+    body: JSON.stringify(userData),
   });
   if (!res.ok) throw new Error("Error updating user");
   return await res.json();
 }
 
-//Deletes a user from MockAPI by their ID.
 export async function deleteUser(id) {
   const res = await fetch(`${baseUrl}/${id}`, { method: "DELETE" });
   if (!res.ok) throw new Error("Error deleting user");

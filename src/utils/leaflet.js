@@ -13,23 +13,18 @@ L.Icon.Default.mergeOptions({
 });
 
 export function initMap(coordinates, location) {
-  // check if coordinates exists
   if (!coordinates) {
     console.warn("No coordinates provided for map");
     return;
   }
 
-  // turn coordinates to format
   let coordsArray;
 
   if (typeof coordinates === "object" && coordinates.lat && coordinates.lng) {
-    // object format {lat, lng}
     coordsArray = [coordinates.lat, coordinates.lng];
   } else if (Array.isArray(coordinates) && coordinates.length === 2) {
-    // array format [lat, lng]
     coordsArray = coordinates;
   } else if (typeof coordinates === "string") {
-    // string format "lat,lng"
     try {
       const coords = JSON.parse(coordinates);
       if (coords.lat && coords.lng) {
@@ -47,7 +42,6 @@ export function initMap(coordinates, location) {
     return;
   }
 
-  // check if coordinates are valid
   if (
     !coordsArray ||
     coordsArray.length !== 2 ||

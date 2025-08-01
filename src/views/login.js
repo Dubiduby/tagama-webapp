@@ -5,11 +5,9 @@ import { navigate } from "../router.js";
 export default function login(container) {
   container.innerHTML = "";
 
-  // Wrapper principal centered
   const wrapper = document.createElement("div");
   wrapper.className = "max-w-md mx-auto px-4 pt-12 pb-18 md:pb-10 md:pt-6";
 
-  // Title and subtitle centered
   const headerInfo = document.createElement("div");
   headerInfo.className = "text-center mb-8";
 
@@ -31,7 +29,6 @@ export default function login(container) {
   form.className =
     "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700";
 
-  // Funtion to create inputs
   function createInput(type, id, placeholder) {
     const input = document.createElement("input");
     input.type = type;
@@ -42,7 +39,6 @@ export default function login(container) {
     return input;
   }
 
-  // Email
   const emailDiv = document.createElement("div");
   const emailLabel = document.createElement("label");
   emailLabel.setAttribute("for", "login-email");
@@ -57,7 +53,6 @@ export default function login(container) {
   emailDiv.appendChild(emailLabel);
   emailDiv.appendChild(emailInput);
 
-  // password
   const passwordDiv = document.createElement("div");
   const passwordLabel = document.createElement("label");
   passwordLabel.setAttribute("for", "login-password");
@@ -72,14 +67,12 @@ export default function login(container) {
   passwordDiv.appendChild(passwordLabel);
   passwordDiv.appendChild(passwordInput);
 
-  // send button
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
   submitBtn.className =
     "mt-6 bg-[#ad5733] dark:bg-[#f49167] text-white dark:text-black font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
   submitBtn.textContent = "Iniciar Sesión";
 
-  // register text
   const signupText = document.createElement("p");
   signupText.className =
     "text-center text-sm mt-4 text-gray-600 dark:text-gray-400";
