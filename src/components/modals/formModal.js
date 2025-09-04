@@ -494,17 +494,19 @@ export async function createEditWorkshopModal({ data = {}, onSubmit }) {
       showToast("Selecciona una imagen", "error");
       return;
     }
+
+    const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+    const UPLOAD_PRESET = import.meta.env
+      .VITE_CLOUDINARY_UPLOAD_PRESET_WORKSHOPS;
+    const urlCloudinary = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
     const formData = new FormData();
     formData.append("file", file);
-    formData.append("upload_preset", "workshops");
+    formData.append("upload_preset", UPLOAD_PRESET);
     try {
-      const res = await fetch(
-        "https://api.cloudinary.com/v1_1/dpm2ylejh/image/upload",
-        {
-          method: "POST",
-          body: formData,
-        }
-      );
+      const res = await fetch(urlCloudinary, {
+        method: "POST",
+        body: formData,
+      });
       const data = await res.json();
       if (data.secure_url) {
         imageUrlInput.value = data.secure_url;
