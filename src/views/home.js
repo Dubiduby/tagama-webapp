@@ -327,6 +327,7 @@ export default async function home(container) {
     };
     paginationContainer.appendChild(nextBtn);
   }
+
   // --- end pagination ---
 
   // Events in each filter
