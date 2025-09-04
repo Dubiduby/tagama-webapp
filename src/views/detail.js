@@ -42,6 +42,10 @@ export default async function detail(container, id) {
   const formattedDuration =
     minutes === 0 ? `${hours}h` : `${hours}h ${minutes}min`;
 
+  const availableSpots =
+    workshopDetail.capacity - workshopDetail.enrolled.length;
+  console.log(availableSpots);
+
   const backLink = document.createElement("a");
   backLink.href = "/workshops";
   backLink.className =
@@ -265,7 +269,12 @@ export default async function detail(container, id) {
   const enrollBtn = document.createElement("button");
   enrollBtn.className =
     "w-full px-6 py-3 rounded-lg font-medium transition-colors";
-  if (isEnrolled) {
+  if (workshopDetail.enrolled.length >= workshopDetail.capacity) {
+    enrollBtn.textContent = "Completo";
+    enrollBtn.disabled = true;
+    enrollBtn.className +=
+      " bg-gray-400 text-white cursor-not-allowed dark:bg-gray-600";
+  } else if (isEnrolled) {
     enrollBtn.textContent = "Cancelar";
     enrollBtn.className +=
       " bg-red-500 text-white hover:bg-red-600 dark:bg-red-500 dark:hover:bg-red-600";

@@ -88,18 +88,20 @@ export default async function profile(container) {
         const file = fileInput.files[0];
         if (!file) return showToast("Selecciona una imagen", "info");
 
+        const CLOUD_NAME = import.meta.env.VITE_CLOUDINARY_CLOUD_NAME;
+        const UPLOAD_PRESET_PROFILE = import.meta.env
+          .VITE_CLOUDINARY_UPLOAD_PRESET_PROFILE;
+        const urlCloudinary = `https://api.cloudinary.com/v1_1/${CLOUD_NAME}/image/upload`;
+
         const formData = new FormData();
         formData.append("file", file);
-        formData.append("upload_preset", "profile_image");
+        formData.append("upload_preset", UPLOAD_PRESET_PROFILE);
 
         try {
-          const res = await fetch(
-            "https://api.cloudinary.com/v1_1/dpm2ylejh/image/upload",
-            {
-              method: "POST",
-              body: formData,
-            }
-          );
+          const res = await fetch(urlCloudinary, {
+            method: "POST",
+            body: formData,
+          });
 
           const data = await res.json();
 
