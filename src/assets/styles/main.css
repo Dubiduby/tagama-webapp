@@ -3,16 +3,16 @@
 @tailwind utilities;
 
 :root {
-  --color-bg: #f1ece9; /* Light background color */
+  --color-bg: #f1ece9;
   --color-2bg: #f7f6f6;
   --color-title: #1e1d1d;
-  --color-text: #797b6c; /* Dark text color */
+  --color-text: #797b6c; 
   --color-grey: #726f6f;
   --color-footer: #cfa28651;
 }
 
 .dark {
-  --color-bg: #141414 /* Dark background color */;
+  --color-bg: #141414;
   --color-2bg: #202020;
   --color-title: white;
   --color-text: #f1e2c2;

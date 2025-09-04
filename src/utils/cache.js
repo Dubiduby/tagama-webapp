@@ -7,7 +7,6 @@ const CACHE_KEYS = {
   subcategories: "cache_subcategories",
 };
 
-//Workshops cache
 export async function getCachedWorkshops() {
   const stored = localStorage.getItem(CACHE_KEYS.workshops);
   if (stored) {
@@ -23,7 +22,6 @@ export function clearWorkshopsCache() {
   localStorage.removeItem(CACHE_KEYS.workshops);
 }
 
-// categories cache
 export async function getCachedCategories() {
   const stored = localStorage.getItem(CACHE_KEYS.categories);
   if (stored) {
@@ -39,7 +37,6 @@ export function clearCategoriesCache() {
   localStorage.removeItem(CACHE_KEYS.categories);
 }
 
-// subcategories cache
 export async function getCachedSubcategories() {
   const stored = localStorage.getItem(CACHE_KEYS.subcategories);
   if (stored) {
@@ -58,7 +55,6 @@ export function clearSubcategoriesCache() {
   localStorage.removeItem(CACHE_KEYS.subcategories);
 }
 
-//clear all cache
 export function clearCache() {
   clearWorkshopsCache();
   clearCategoriesCache();

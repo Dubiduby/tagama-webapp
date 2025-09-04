@@ -86,7 +86,6 @@ export default function navbar(header) {
 
   `;
 
-  // Burger menu toggle
   const toggle = header.querySelector("#navbar-toggle");
   const links = header.querySelector("#navbar-links");
   if (toggle) {
@@ -97,7 +96,6 @@ export default function navbar(header) {
     });
   }
 
-  // Close burger menu after click in links (mobile)
   links.addEventListener("click", (event) => {
     if (event.target.matches("a[data-link]")) {
       links.classList.remove("flex");
@@ -106,7 +104,6 @@ export default function navbar(header) {
     }
   });
 
-  // Logout (desktop dropdown)
   const logout = header.querySelector("#logout-link");
   if (logout) {
     logout.addEventListener("click", (event) => {
@@ -116,7 +113,7 @@ export default function navbar(header) {
       navigate("/");
     });
   }
-  // Logout (mobile li)
+
   const logoutMobile = header.querySelector("#logout-link-mobile");
   if (logoutMobile) {
     logoutMobile.addEventListener("click", (event) => {
@@ -127,7 +124,6 @@ export default function navbar(header) {
     });
   }
 
-  // Dark mode toggle
   const darkToggle = header.querySelector("#toggle-dark");
   const darkIcon = darkToggle?.querySelector("#dark-icon");
   const lightIcon = darkToggle?.querySelector("#light-icon");

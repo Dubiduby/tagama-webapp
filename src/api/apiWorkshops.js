@@ -8,7 +8,7 @@ export async function getWorkshops() {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
     const workshops = await response.json();
-    console.log(workshops);
+
     return workshops;
   } catch (error) {
     console.error("Error fetching workshops", error);
@@ -29,9 +29,9 @@ export async function createWorkshop(workshopData) {
 
 export async function deleteWorkshop(id) {
   const url = `${baseUrl}/${id}`;
-  console.log("DELETE URL:", url); // Debug
+
   const response = await fetch(url, { method: "DELETE" });
-  console.log("DELETE status:", response.status);
+
   return response.ok;
 }
 
@@ -49,13 +49,13 @@ export async function updateWorkshop(dataToUpdate) {
       if (response.status === 404) {
         throw new Error(`Workshop with ID ${dataToUpdate.id} not found`);
       }
-      throw new Error(`Could not update workshop: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Could not update workshop: ${response.status} ${response.statusText}`
+      );
     }
     return await response.json();
   } catch (error) {
     console.error("Error updating workshop", error);
-    throw error; // Re-throw para que el error se maneje en el componente
+    throw error;
   }
 }
-
-
