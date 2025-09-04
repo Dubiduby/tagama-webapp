@@ -1,3 +1,4 @@
+// src/utils/render.js
 import { workshopCards } from "../components/cards.js";
 
 export function renderWorkshops(

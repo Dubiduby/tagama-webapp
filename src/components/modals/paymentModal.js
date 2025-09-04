@@ -1,12 +1,15 @@
 export function showPaymentModal(onSuccess, onCancel) {
+  // Overlay
   const overlay = document.createElement("div");
   overlay.className =
     "fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-[10000]";
 
+  // Modal
   const app = document.createElement("div");
   app.className =
     "relative bg-[var(--color-bg)] dark:bg-[var(--color-2bg)] text-[var(--color-text)] rounded-lg shadow-lg w-full max-w-md p-6";
 
+  // close button
   const closeBtn = document.createElement("button");
   closeBtn.textContent = "×";
   closeBtn.className =
@@ -17,14 +20,17 @@ export function showPaymentModal(onSuccess, onCancel) {
   });
   app.appendChild(closeBtn);
 
+  // Form
   const form = document.createElement("form");
   form.className = "space-y-4";
 
+  // title
   const title = document.createElement("h1");
   title.textContent = "Pago de servicios";
   title.className = "text-xl font-semibold text-[var(--color-title)]";
   form.appendChild(title);
 
+  // select
   const label = document.createElement("label");
   label.textContent = "Elige tu método de pago:";
   label.setAttribute("for", "proveedor");
@@ -49,6 +55,7 @@ export function showPaymentModal(onSuccess, onCancel) {
   });
   form.appendChild(select);
 
+  // creditcard fields
   const cardFields = document.createElement("div");
   cardFields.className = "space-y-3 hidden";
 
@@ -111,6 +118,7 @@ export function showPaymentModal(onSuccess, onCancel) {
   cardFields.appendChild(row);
   form.appendChild(cardFields);
 
+  // Bizum
   const bizumFields = document.createElement("div");
   bizumFields.className = "hidden space-y-2";
   const { wrapper: bizumWrap, input: bizumPhone } = makeInputGroup(
@@ -128,6 +136,7 @@ export function showPaymentModal(onSuccess, onCancel) {
   bizumFields.appendChild(bizumInfo);
   form.appendChild(bizumFields);
 
+  // PayPal
   const paypalFields = document.createElement("div");
   paypalFields.className = "hidden space-y-2";
   const { wrapper: paypalWrap, input: paypalEmail } = makeInputGroup(
@@ -144,6 +153,7 @@ export function showPaymentModal(onSuccess, onCancel) {
   paypalFields.appendChild(paypalInfo);
   form.appendChild(paypalFields);
 
+  // show fields
   function togglePaymentFields() {
     cardFields.classList.add("hidden");
     bizumFields.classList.add("hidden");
@@ -156,6 +166,7 @@ export function showPaymentModal(onSuccess, onCancel) {
   togglePaymentFields();
   select.addEventListener("change", togglePaymentFields);
 
+  // Format
   cardNumber.addEventListener("input", (e) => {
     let value = e.target.value.replace(/\s/g, "").replace(/\D/g, "");
     let formatted = value.match(/.{1,4}/g)?.join(" ") || value;
@@ -170,6 +181,7 @@ export function showPaymentModal(onSuccess, onCancel) {
     e.target.value = e.target.value.replace(/\D/g, "");
   });
 
+  // Payment button
   const button = document.createElement("button");
   button.id = "pagar";
   button.type = "submit";
@@ -178,11 +190,13 @@ export function showPaymentModal(onSuccess, onCancel) {
     "bg-dark-orange text-white px-4 py-2 rounded hover:bg-orange-700 transition";
   form.appendChild(button);
 
+  // status
   const status = document.createElement("div");
   status.id = "status";
   status.className = "text-sm mt-2 text-center";
   form.appendChild(status);
 
+  // send
   form.addEventListener("submit", async (e) => {
     e.preventDefault();
     const proveedor = select.value;

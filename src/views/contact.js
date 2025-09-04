@@ -6,21 +6,26 @@ export default function contact(container) {
   const wrapper = document.createElement("div");
   wrapper.className = "max-w-5xl mx-auto px-4 py-12";
 
+  // Layout flex for copy and form
   const flexDiv = document.createElement("div");
   flexDiv.className = "flex flex-col md:flex-row gap-8 items-start";
 
+  // Copy left
   const copyDiv = document.createElement("div");
   copyDiv.className = "md:w-1/2 w-full mb-8 px-2 md:mb-0";
 
+  // Title
   const title = document.createElement("h1");
   title.className =
     "text-3xl md:text-4xl font-extrabold text-[#1e1d1d] dark:text-white mb-4";
   title.textContent = "Contáctanos";
   copyDiv.appendChild(title);
 
+  // Content
   const contentDiv = document.createElement("div");
   contentDiv.className = "flex flex-col gap-2";
 
+  // first p
   const p1 = document.createElement("p");
   p1.className = "text-[var(--color-grey)] mb-2";
   p1.textContent =
@@ -33,18 +38,21 @@ export default function contact(container) {
   p1.appendChild(textNode);
   contentDiv.appendChild(p1);
 
+  // Email
   const emailP = document.createElement("p");
   emailP.className =
     "text-[var(--color-text)] dark:text-[var(--color-text)] mb-2 text-[#ad5733] dark:text-[#f49167] font-bold text-lg";
   emailP.textContent = "📩 hola@tagama.es";
   contentDiv.appendChild(emailP);
 
+  // Second p
   const p2 = document.createElement("p");
   p2.className = "text-[var(--color-grey)] mb-2";
   p2.textContent =
     "O rellena el formulario y te responderemos lo antes posible.";
   contentDiv.appendChild(p2);
 
+  // third p
   const p3 = document.createElement("p");
   p3.className = "text-[var(--color-text)] dark:text-[var(--color-text)]";
   p3.textContent =
@@ -53,6 +61,7 @@ export default function contact(container) {
 
   copyDiv.appendChild(contentDiv);
 
+  // form
   const formDiv = document.createElement("div");
   formDiv.className = "md:w-1/2 w-full";
   const form = document.createElement("form");
@@ -60,6 +69,7 @@ export default function contact(container) {
   form.className =
     "bg-white dark:bg-[#1a1a1a] rounded-2xl shadow p-6 flex flex-col gap-4 border border-gray-200 dark:border-gray-700";
 
+  // Name
   const nameDiv = document.createElement("div");
   const nameLabel = document.createElement("label");
   nameLabel.htmlFor = "contact-name";
@@ -77,6 +87,7 @@ export default function contact(container) {
   nameDiv.appendChild(nameLabel);
   nameDiv.appendChild(nameInput);
 
+  // Email
   const emailDiv = document.createElement("div");
   const emailLabel = document.createElement("label");
   emailLabel.htmlFor = "contact-email";
@@ -94,6 +105,7 @@ export default function contact(container) {
   emailDiv.appendChild(emailLabel);
   emailDiv.appendChild(emailInput);
 
+  // Message
   const messageDiv = document.createElement("div");
   const messageLabel = document.createElement("label");
   messageLabel.htmlFor = "contact-message";
@@ -111,12 +123,14 @@ export default function contact(container) {
   messageDiv.appendChild(messageLabel);
   messageDiv.appendChild(messageInput);
 
+  // Button
   const submitBtn = document.createElement("button");
   submitBtn.type = "submit";
   submitBtn.className =
     "mt-2 bg-[#ad5733] dark:bg-[#f49167] text-white font-bold py-2 px-6 rounded-full hover:bg-[#797b6c] dark:hover:bg-[#ad5733] transition";
   submitBtn.textContent = "Enviar";
 
+  // success message
   const successMsg = document.createElement("div");
   successMsg.id = "contact-success";
   successMsg.className =
@@ -136,6 +150,7 @@ export default function contact(container) {
   wrapper.appendChild(flexDiv);
   container.appendChild(wrapper);
 
+  // user logic
   form.addEventListener("submit", function (e) {
     e.preventDefault();
     const SERVICE_ID = "service_go50l25";
@@ -146,6 +161,7 @@ export default function contact(container) {
       window.emailjs
         .sendForm(SERVICE_ID, TEMPLATE_ID, form)
         .then(function () {
+          // send a welcome message to the user
           const userEmail = emailInput.value;
           const userName = nameInput.value;
           const userMessage = messageInput.value;

@@ -8,7 +8,7 @@ export async function getCategories() {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
     const workshops = await response.json();
-
+    console.log(workshops);
     return workshops;
   } catch (error) {
     console.error("Error fetching categories", error);
@@ -24,7 +24,7 @@ export async function getSubcategories() {
       throw new Error(`Error ${response.status}: ${response.statusText}`);
     }
     const workshops = await response.json();
-
+    console.log(workshops);
     return workshops;
   } catch (error) {
     console.error("Error fetching subcategories", error);

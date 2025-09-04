@@ -18,10 +18,12 @@ import {
 import { showConfirmModal } from "./modals/confirmModal.js";
 
 export function workshopCards(workshop, subcategory, category) {
+  // Card container
   const card = document.createElement("div");
   card.className =
     "w-96 max-w-xs md:max-w-lg lg:max-w-xl xl:max-w-2xl h-full flex-1 bg-[var(--color-2bg)]  rounded-2xl shadow-[0_2px_12px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col transition-transform transition-shadow duration-150 relative hover:-translate-y-1.5 hover:scale-[1.03] hover:shadow-[0_6px_24px_rgba(0,0,0,0.15)] dark:border-[#797b6c] border-[1px] ";
 
+  // Card image container
   const imageUrl = workshop.imageUrl
     ? workshop.imageUrl
     : new URL("../assets/images/no-image-default.jpg", import.meta.url).href;
@@ -31,6 +33,7 @@ export function workshopCards(workshop, subcategory, category) {
   divCardImage.className =
     "w-full h-[180px] md:h-[200px] bg-[#f3f3f3] flex items-center justify-center relative";
 
+  // --- TAGS on the image ---
   const tagsContainer = document.createElement("div");
   tagsContainer.className =
     "absolute top-3 left-3 flex gap-2 z-10 max-w-[250px] md:max-w-[300px]";
@@ -122,21 +125,24 @@ export function workshopCards(workshop, subcategory, category) {
         onSubmit: async (formData) => {
           try {
             let result;
-
+            // if workshop has id then try update
             if (formData.id) {
               try {
                 result = await updateWorkshop(formData);
                 showToast("Taller actualizado exitosamente", "success");
               } catch (error) {
+                // if it doesnt exist create a new one
                 if (error.message.includes("not found")) {
-                  delete formData.id;
+                  console.log("Workshop not found, creating new one...");
+                  delete formData.id; // Remove ID to create a new one
                   result = await createWorkshop(formData);
                   showToast("Taller creado exitosamente", "success");
                 } else {
-                  throw error;
+                  throw error; // Re-throw other errors
                 }
               }
             } else {
+              // no id then create
               result = await createWorkshop(formData);
               showToast("Taller creado exitosamente", "success");
             }
@@ -169,6 +175,7 @@ export function workshopCards(workshop, subcategory, category) {
               return;
             }
 
+            // Deshabilitate UI
             deleteOption.disabled = true;
             deleteOption.textContent = "Procesando...";
 
@@ -202,6 +209,7 @@ export function workshopCards(workshop, subcategory, category) {
     });
   }
 
+  // bookmark button
   const buttonAdd = document.createElement("button");
   buttonAdd.className =
     "absolute top-3 right-3 bg-white border-none rounded-full p-2 cursor-pointer shadow-[0_2px_6px_rgba(0,0,0,0.08)] transition-colors duration-200 hover:bg-[#e0e0e0] dark:bg-[#141414]";
@@ -210,6 +218,7 @@ export function workshopCards(workshop, subcategory, category) {
     currentUser.createdWorkshops &&
     currentUser.createdWorkshops.includes(String(workshop.id));
 
+  // Function to render the button icon based on saved status
   function renderButtonIcon() {
     const currentUser = JSON.parse(localStorage.getItem("currentUser"));
     const isSaved = currentUser?.savedWorkshops?.includes(String(workshop.id));
@@ -224,7 +233,7 @@ export function workshopCards(workshop, subcategory, category) {
     buttonAdd.addEventListener("click", (e) => {
       e.preventDefault();
       e.stopPropagation();
-
+      //always get de update user
       let currentUser = JSON.parse(localStorage.getItem("currentUser"));
       if (!currentUser.savedWorkshops) currentUser.savedWorkshops = [];
       const idx = currentUser.savedWorkshops.indexOf(String(workshop.id));
@@ -240,9 +249,11 @@ export function workshopCards(workshop, subcategory, category) {
       renderButtonIcon();
     });
   } else {
+    // if creator, unactive the button and hide
     buttonAdd.style.display = "none";
   }
 
+  // Card info
   const divCardInfo = document.createElement("div");
   divCardInfo.className = "p-4 flex-1 flex flex-col gap-2";
 
@@ -251,6 +262,7 @@ export function workshopCards(workshop, subcategory, category) {
   titleCard.className =
     "mb-2 text-[1rem] md:text-[1.15rem] text-[var(--color-title)] font-semibold line-clamp-2  break-words";
 
+  // Card details
   const divCardDetails = document.createElement("div");
   divCardDetails.className = "flex flex-col  gap-x-4 gap-y-2 text-[0.95rem] ";
 
@@ -298,6 +310,7 @@ export function workshopCards(workshop, subcategory, category) {
     "text-[var(--color-text)] flex items-center gap-[0.4em]";
   durationSpan.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange"><path d="M12 6v6l4 2"/><circle cx="12" cy="12" r="10"/></svg>  ${workshop.duration} h`;
 
+  // Spots
   const spots = document.createElement("span");
   spots.className = "text-[var(--color-text)] flex items-center gap-[0.4em]";
   spots.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" class="w-5 h-5 inline-block object-contain mr-1 align-middle text-dark-orange dark:text-light-orange">
@@ -305,6 +318,7 @@ export function workshopCards(workshop, subcategory, category) {
 </svg>
    ${workshop.enrolled.length}/${workshop.capacity}`;
 
+  // Price
   const workshopPrice = document.createElement("span");
   workshopPrice.textContent =
     workshop.price === 0 ? "Gratis" : `${workshop.price}€`;
@@ -317,6 +331,7 @@ export function workshopCards(workshop, subcategory, category) {
   price_spots.appendChild(spots);
   price_spots.appendChild(workshopPrice);
 
+  // Final structure
   card.appendChild(divCardImage);
   divCardImage.appendChild(img);
   divCardImage.appendChild(tagsContainer);
@@ -333,6 +348,7 @@ export function workshopCards(workshop, subcategory, category) {
 
   divCardDetails.appendChild(price_spots);
 
+  // Link for detail
   const cardLink = document.createElement("a");
   cardLink.href = `/workshops/${workshop.id}`;
   cardLink.setAttribute("data-link", "");
