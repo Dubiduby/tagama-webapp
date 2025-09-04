@@ -177,6 +177,7 @@ export default function workshops(container) {
     });
   }
 
+  // Tab event listeners
   workshopsWrapper
     .querySelector("#tab-enrolled")
     .addEventListener("click", (e) => {
