@@ -59,9 +59,12 @@ export async function router() {
     match.params.id
       ? module.default(container, match.params.id)
       : module.default(container);
+
+    window.scrollTo(0, 0);
   } else {
     const module = await import("./views/notfound.js");
     module.default(container);
+    window.scrollTo(0, 0);
   }
 }
 
